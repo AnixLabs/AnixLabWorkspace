@@ -1,8 +1,12 @@
 {
-  "extends": "./tsconfig.node.json",
+  "extends": "../../shared/config/typescript/tsconfig.node.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@shared/*": ["../../../shared/*"],
+      "@/*": ["./*"]
+    }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../shared", "tsup.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,6 +1,12 @@
 {
-  "extends": "../tsconfig.json",
-
+  "extends": "./config/typescript/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["./*"]
+    },
+    "composite": true
+  },
   "include": ["**/*"],
   "exclude": ["node_modules"]
 }
