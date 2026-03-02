@@ -1,11 +1,11 @@
 "use client";
 
 import { Input, PasswordInput } from "@shared/components/ui/Input";
-import { AgreeAndSubmitButton, SignUpErrors } from "./LoginSignup";
+import { AgreeAndSubmitButton, type SignUpErrors } from "./LoginSignup";
 
 import { signupSchema } from "@shared/lib/zod";
 import { useSearchParams } from "next/navigation";
-import { useState, ChangeEventHandler, useEffect, useTransition } from "react";
+import { useState, type ChangeEventHandler, useEffect, useTransition } from "react";
 import { toast } from "react-toastify";
 import { ZodError } from "zod";
 import { signUp } from "./client";
@@ -117,10 +117,11 @@ export default function SignUpForm() {
       } catch (err) {
         if (err instanceof ZodError) {
           setErrors(
-            err.issues.reduce(
-              (acc, { path, message }) => ({ ...acc, [path[0]]: message }),
-              {} as SignUpErrors,
-            ),
+            err.issues.reduce((acc, { path, message }) => {
+              const key = path[0];
+              if (key !== undefined) acc[key as keyof SignUpErrors] = message;
+              return acc;
+            }, {} as SignUpErrors),
           );
         } else {
           toast.error("An unexpected error occurred.");
