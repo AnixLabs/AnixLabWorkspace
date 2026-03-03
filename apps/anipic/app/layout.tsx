@@ -9,7 +9,7 @@ import SlideBar from "@/components/navigation/SlideBar";
 import Providers from "@shared/providers";
 import DefaultHead from "@shared/head";
 import { Suspense } from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 // Load Inter
 const inter = Inter({

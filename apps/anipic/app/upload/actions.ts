@@ -25,7 +25,7 @@ const uploadImageSchema = z.object({
             .split(",")
             .map((t) => t.trim())
             .filter(Boolean)
-        : []
+        : [],
     ),
 });
 
@@ -37,7 +37,7 @@ export type UploadImageState =
 
 export async function uploadImageAction(
   _prevState: UploadImageState,
-  formData: FormData
+  formData: FormData,
 ): Promise<UploadImageState> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -54,7 +54,7 @@ export async function uploadImageAction(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.issues[0].message,
+      error: parsed.error.issues[0]?.message ?? "Validation error",
     };
   }
 

@@ -1,4 +1,4 @@
-import SlideBarLayout, { MenuItem } from "@shared/components/navigation/SlideBarLayout";
+import SlideBarLayout, { type MenuItem } from "@shared/components/navigation/SlideBarLayout";
 import { Suspense } from "react";
 // import { PiResize } from "react-icons/pi";
 
