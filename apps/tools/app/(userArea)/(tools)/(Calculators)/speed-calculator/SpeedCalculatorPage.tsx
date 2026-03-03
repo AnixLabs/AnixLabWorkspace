@@ -16,8 +16,11 @@ export default function SpeedCalculatorPage() {
   const formattedResult = useMemo(() => {
     if (value === "" || isNaN(Number(value))) return null;
 
-    const metersPerSec = Number(value) * toMetersPerSecond[from];
-    const result = metersPerSec / toMetersPerSecond[to];
+    const fromFactor = toMetersPerSecond[from] ?? 1;
+    const toFactor = toMetersPerSecond[to] ?? 1;
+
+    const metersPerSec = Number(value) * fromFactor;
+    const result = metersPerSec / toFactor;
 
     if (result === Infinity) return "∞";
     if (result === 0) return "0";

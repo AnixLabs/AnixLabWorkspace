@@ -1,5 +1,5 @@
 import Section, { CardSection } from "@shared/components/ui/Section";
-import { tools, ToolType } from ".";
+import { tools, type ToolType } from ".";
 import { CardButton } from "@shared/components/ui/Button";
 
 export function ToolsList() {

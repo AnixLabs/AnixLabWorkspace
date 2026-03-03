@@ -60,9 +60,11 @@ export default function Resizer() {
         image.onload = () => {
           setImages((prev) => {
             const updated = [...prev];
-            updated[index].width = image.width;
-            updated[index].height = image.height;
-
+            const item = updated[index];
+            if (item) {
+              item.width = image.width;
+              item.height = image.height;
+            }
             return updated;
           });
           setMaxWidth((p) => (image.width > p ? image.width : p));
@@ -100,6 +102,7 @@ export default function Resizer() {
       }
 
       const img = updatedImages[index];
+      if (!img) return;
       const image = new window.Image();
       image.onload = () => {
         let w = img.width;
@@ -138,17 +141,20 @@ export default function Resizer() {
               setTimeout(processNext, 50);
               return;
             }
+            const item = updatedImages[index];
+            if (!item) return;
+
             const resizedUrl = URL.createObjectURL(blob);
-            updatedImages[index].resizedBlob = blob;
-            updatedImages[index].resizedWidth = w;
-            updatedImages[index].resizedHeight = h;
-            updatedImages[index].resizedUrl = resizedUrl;
+            item.resizedBlob = blob;
+            item.resizedWidth = w;
+            item.resizedHeight = h;
+            item.resizedUrl = resizedUrl;
 
             index++;
-            setTimeout(processNext, 100); // <- delay here to free up the UI thread
+            setTimeout(processNext, 100);
           },
           finalMime,
-          finalQuality
+          finalQuality,
         );
       };
       image.src = img.url;

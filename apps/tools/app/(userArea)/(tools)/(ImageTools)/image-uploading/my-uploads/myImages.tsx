@@ -88,7 +88,7 @@ export default function MyImages() {
           return prev.map((group, index) =>
             index === pageNum - 1
               ? group.map((item) => (item.alias === alias ? { ...item, adsLabel: ad } : item))
-              : group
+              : group,
           );
         });
 
@@ -256,7 +256,7 @@ export default function MyImages() {
             Previous
           </button>
         )}
-        {images[0]?.length * pageNum < total && (
+        {(images[0]?.length ?? 0) * pageNum < total && (
           <button
             className={`hover:scale-105 transition-all duration-300 ${
               pageNum == 1 ? "rounded-lg" : "rounded-r-lg"

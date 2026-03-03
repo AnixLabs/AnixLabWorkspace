@@ -190,9 +190,11 @@ export default function QRCodeGenerator() {
   ) => {
     const { name, value }: { name: string; value: string | boolean } = e.target;
 
+    if (!content) return;
+
     setQrData((prev) => ({
       ...prev,
-      [content]: { ...prev[content], [name]: value },
+      [content]: { ...(prev[content] ?? {}), [name]: value },
     }));
   };
 
