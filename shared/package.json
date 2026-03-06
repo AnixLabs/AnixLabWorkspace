@@ -7,7 +7,7 @@
     "./*": "./*"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "lint": "eslint && tsc --noEmit"
   },
   "dependencies": {
     "next": "^16.1.6",
@@ -18,7 +18,7 @@
     "@eslint/js": "^9.39.2",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
-    "eslint-config-next": "16.0.10",
+    "eslint-config-next": "^16.1.6",
     "globals": "^17.4.0",
     "typescript-eslint": "^8.56.1"
   }
