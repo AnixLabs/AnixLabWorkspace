@@ -1,21 +1,22 @@
+// eslint/next.mjs
 import { defineConfig, globalIgnores } from "eslint/config";
+import base from "./base.mjs";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
-const eslintConfig = defineConfig([
+export default defineConfig([
+  base,
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
+
+  // Override default ignores
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
-
-    // ✅ Add this line to ignore the public directory:
     "public/**",
+    "node_modules/**",
+    "dist/**",
   ]),
 ]);
-
-export default eslintConfig;
