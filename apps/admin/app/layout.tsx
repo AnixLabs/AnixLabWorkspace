@@ -7,7 +7,7 @@ import SlideBar from "@/components/navigations/SlideBar";
 import Providers from "@shared/providers";
 import DefaultHead from "@shared/head";
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env.BASE_URL!;
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -44,7 +44,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
