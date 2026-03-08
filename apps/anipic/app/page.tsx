@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ImageGrid, { SafeImages } from "@/components/imageGrid";
+import ImageGrid, { type SafeImages } from "@/components/imageGrid";
 import { IMAGE_LIMIT_PER_PAGE } from "@/utils/const";
 import getAniPicModel from "@/lib/db/models/AniPic";
 import { cacheLife, cacheTag } from "next/cache";

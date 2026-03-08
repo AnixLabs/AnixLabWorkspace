@@ -1,6 +1,6 @@
 "use client";
 
-import { createRoot, Root } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import React, { useState } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";

@@ -34,7 +34,7 @@ export function buildSeoTitle(tags: string[] = []) {
     "oil painting",
   ];
 
-  const subject = clean.find((t) => subjects.some((s) => t.includes(s))) ?? clean[0];
+  const subject = clean.find((t) => subjects.some((s) => t.includes(s))) ?? clean[0] ?? "AI";
 
   const style = clean.find((t) => styles.includes(t));
 

@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { EncryptJWT } from "jose";
-import getShortUrlModel, { ShortUrl } from "@shared/lib/db/models/ShortUrl";
+import getShortUrlModel, { type ShortUrl } from "@shared/lib/db/models/ShortUrl";
 
 const secretKey = new TextEncoder().encode(process.env.URL_SHORTENER_TOKEN);
 

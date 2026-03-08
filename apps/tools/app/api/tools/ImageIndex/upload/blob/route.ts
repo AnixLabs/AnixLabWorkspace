@@ -1,7 +1,7 @@
 // app/api/tools/ImageIndex/upload/route.ts
 
 import { auth } from "@shared/auth";
-import { handleUpload, HandleUploadBody } from "@vercel/blob/client";
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 

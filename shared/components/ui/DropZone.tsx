@@ -65,8 +65,9 @@ export default function DropZone({
       else if (type === "application/pdf") label = "PDFs";
       else label = main + " files";
 
-      if (!categoryMap[label]) categoryMap[label] = new Set();
-      if (sub !== "*") categoryMap[label].add(sub);
+      const set = categoryMap[label] ?? new Set<string>();
+      categoryMap[label] = set;
+      if (sub !== "*") set.add(sub);
     });
 
     // Convert category map to string
@@ -84,7 +85,7 @@ export default function DropZone({
       "file-too-large": `File size should not exceed ${mb} MB.`,
       "too-many-files": `You can upload a maximum of ${maxItem} files.`,
     }),
-    [acceptedTypesStr, mb, maxItem]
+    [acceptedTypesStr, mb, maxItem],
   );
 
   const onDropAccepted = useCallback(
@@ -109,13 +110,15 @@ export default function DropZone({
 
       if (multiple && newFiles.length > maxItem) {
         newFiles = newFiles.slice(0, maxItem);
-        setCustomErrors([errorMap["too-many-files"]]);
+        const tooManyError = errorMap["too-many-files"];
+        if (tooManyError) setCustomErrors([tooManyError]);
       } else {
         setCustomErrors([]);
       }
+
       setFiles(newFiles);
     },
-    [files, maxItem, multiple, errorMap]
+    [files, maxItem, multiple, errorMap],
   );
 
   // Remove url on unmount
@@ -140,19 +143,26 @@ export default function DropZone({
       if (file.size > maxSize) errors.push("file-too-large");
       // if (!allowedExts.includes(`.${ext}`)) errors.push("wrong-extension");
       const mimeAccepted = Object.keys(accept).some((mime) => {
-        if (mime.endsWith("/*")) return file.type.startsWith(mime.split("/")[0]);
+        if (mime.endsWith("/*")) {
+          const base = mime.split("/")[0];
+          return base !== undefined && file.type.startsWith(base);
+        }
         return file.type === mime;
       });
+
       if (!mimeAccepted) errors.push("file-invalid-type");
 
       if (errors.length) {
-        const messages = errors.map((code) => errorMap[code]);
+        const messages = errors
+          .map((code) => errorMap[code])
+          .filter((m): m is string => m !== undefined);
         setCustomErrors((prev) => Array.from(new Set([...prev, ...messages])));
         return {
           code: "custom-error",
           message: "Custom validation failed",
         };
       }
+
       return null;
     },
   });
@@ -161,7 +171,7 @@ export default function DropZone({
     const isImage = file.type.startsWith("image/");
     // const isPdf = file.type === "application/pdf";
     const extMatch = file.name?.match(/\.(\w+)$/);
-    const ext = extMatch ? extMatch[1].toUpperCase() : "FILE";
+    const ext = extMatch?.[1]?.toUpperCase() ?? "FILE";
 
     let thumb;
     if (isImage) {
@@ -197,6 +207,7 @@ export default function DropZone({
           onClick={(e) => {
             e.stopPropagation();
             const fileToRemove = files[i];
+            if (!fileToRemove) return;
             if (fileToRemove.url) {
               URL.revokeObjectURL(fileToRemove.url);
             }

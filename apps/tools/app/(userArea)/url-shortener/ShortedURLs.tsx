@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteShortUrl, editShortUrl, modifyAds } from "./action";
 import { ErrorText } from "@shared/components/ui/Paragraph";
-import { Urls } from "./types";
+import type { Urls } from "./types";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useSession } from "@shared/auth/client";

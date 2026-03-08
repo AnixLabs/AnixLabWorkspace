@@ -1,7 +1,7 @@
-import Link, { LinkProps } from "next/link";
+import Link, { type LinkProps } from "next/link";
 import { twMerge } from "tailwind-merge";
 import { AiOutlineLoading } from "react-icons/ai";
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
 import Image from "next/image";
 
 export function Button({

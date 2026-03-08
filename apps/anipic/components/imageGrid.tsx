@@ -14,8 +14,10 @@ function reorder<T>(items: T[]) {
   const result: T[] = [];
 
   for (let i = 0; i < half; i++) {
-    if (items[i]) result.push(items[i]);
-    if (items[i + half]) result.push(items[i + half]);
+    const a = items[i];
+    const b = items[i + half];
+    if (a !== undefined) result.push(a);
+    if (b !== undefined) result.push(b);
   }
 
   return result;

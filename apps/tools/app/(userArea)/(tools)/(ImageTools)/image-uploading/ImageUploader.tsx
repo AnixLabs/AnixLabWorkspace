@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { upload } from "@vercel/blob/client";
 import { Button } from "@shared/components/ui/Button";
 import { CopyInput } from "@shared/components/ui/Input";
-import DropZone, { ExtendedFile } from "@shared/components/ui/DropZone";
+import DropZone, { type ExtendedFile } from "@shared/components/ui/DropZone";
 import Hr from "@shared/components/ui/Hr";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { IoMdCloudUpload } from "react-icons/io";

@@ -5,7 +5,7 @@ import { WorkBox } from "@shared/components/ui/Boxes";
 import { Button } from "@shared/components/ui/Button";
 import Section, { Card, CardSection } from "@shared/components/ui/Section";
 import { FeaturedTools, ToolsList } from "@/components/tools/toolsList";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { IfLoggedIn, IfLoggedOut } from "@shared/auth/LoggedInWrapper";
 
 export const metadata: Metadata = { alternates: { canonical: "/" }, addToSitemap: true };

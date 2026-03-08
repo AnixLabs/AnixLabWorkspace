@@ -10,7 +10,7 @@ import { WorkBox } from "@shared/components/ui/Boxes";
 import { CopyInput, Input } from "@shared/components/ui/Input";
 import { ErrorText } from "@shared/components/ui/Paragraph";
 import { Button } from "@shared/components/ui/Button";
-import { Urls } from "./types";
+import type { Urls } from "./types";
 import { AiOutlineLoading } from "react-icons/ai";
 
 export default function UrlShortener() {
