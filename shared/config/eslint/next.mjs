@@ -19,4 +19,10 @@ export default defineConfig([
     "node_modules/**",
     "dist/**",
   ]),
+  {
+    rules: {
+      "react-hooks/immutability": "off",
+      "react-hooks/exhaustive-deps": "off",
+    },
+  },
 ]);

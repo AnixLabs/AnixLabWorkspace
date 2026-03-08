@@ -6,7 +6,8 @@
     "build": "turbo run build",
     "start": "turbo run start",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "check": "turbo run check"
   },
   "dependencies": {
     "@babel/parser": "^7.29.0",

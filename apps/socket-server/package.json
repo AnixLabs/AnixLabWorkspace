@@ -6,7 +6,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsup",
     "start": "node dist/index.js",
-    "lint": "eslint && tsc --noEmit"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@repo/shared": "workspace:*",

@@ -6,7 +6,8 @@
     "dev": "next dev --port 3007",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint && tsc --noEmit"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@repo/shared": "workspace:*",
