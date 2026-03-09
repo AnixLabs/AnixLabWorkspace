@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function SignOutPage() {
+export default function SignOutPage() {
   async function handleSignOut() {
     "use server";
     await auth.api.signOut({ headers: await headers() });
