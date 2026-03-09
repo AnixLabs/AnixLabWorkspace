@@ -39,4 +39,4 @@
 // const PORT = 4000;
 // server.listen(PORT, () => console.log(`🎮 Game backend running on port ${PORT}`));
 
-console.log("Started!");
+console.info("Started!");
