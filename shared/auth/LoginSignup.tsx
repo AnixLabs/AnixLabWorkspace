@@ -12,14 +12,14 @@ import LogInForm from "./LogInForm";
 import { authClient, useSession } from "./client";
 import { FcGoogle } from "react-icons/fc";
 
-type SignUpFormData = {
+interface SignUpFormData {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
   refer?: string;
-};
+}
 
 // Errors are optional strings for each field
 export type SignUpErrors = Partial<Record<keyof SignUpFormData, string>>;
@@ -35,7 +35,8 @@ export default function LoginSignup() {
   if (session) return null;
 
   const doSocialLogin = async (formData: FormData) => {
-    const action = formData.get("action")?.toString();
+    const action = formData.get("action");
+    if (!action || typeof action !== "string") return;
 
     const goNext = searchParams.get("next") ?? window.location.pathname;
 

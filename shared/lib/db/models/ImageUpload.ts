@@ -1,4 +1,4 @@
-import { Schema, Model, Connection } from "mongoose";
+import { Schema, type Model, type Connection } from "mongoose";
 import connectToImageUploadDb from "../connections/imageUploadDb";
 
 export interface ImageUpload {
@@ -28,9 +28,9 @@ let cachedModel: Model<ImageUpload> | null = null;
 
 export default async function getImageUploadModel(): Promise<Model<ImageUpload>> {
   const conn: Connection = await connectToImageUploadDb();
-  if (!cachedModel) {
-    cachedModel =
-      conn.models.ImageUpload || conn.model<ImageUpload>("ImageUpload", imageUploadSchema);
-  }
+
+  cachedModel ??=
+    conn.models.ImageUpload ?? conn.model<ImageUpload>("ImageUpload", imageUploadSchema);
+
   return cachedModel;
 }

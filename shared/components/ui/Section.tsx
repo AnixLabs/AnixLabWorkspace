@@ -138,8 +138,8 @@ export function Card({
           <Image
             src={image.toString()}
             alt={title || "Feature Image"}
-            width={imageWidth || 96}
-            height={imageHeight || 96}
+            width={imageWidth ?? 96}
+            height={imageHeight ?? 96}
             loading="lazy"
             className="object-contain w-full h-full"
           />

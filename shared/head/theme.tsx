@@ -1,9 +1,8 @@
-import Script from "next/script";
-
 export default function ThemeHead() {
   return (
-    <Script id="theme-loader" strategy="beforeInteractive">
-      {`
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
         (function () {
           try {
             var root = document.documentElement;
@@ -118,7 +117,8 @@ export default function ThemeHead() {
             console.error("Theme load failed:", e);
           }
         })();
-      `}
-    </Script>
+      `,
+      }}
+    />
   );
 }

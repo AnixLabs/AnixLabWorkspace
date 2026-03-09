@@ -7,10 +7,10 @@ import { Input } from "./ui/Input";
 import { cn } from "@shared/utils/cn";
 import { IoClose } from "react-icons/io5";
 
-type BaseOption = {
+interface BaseOption {
   header?: React.ReactNode;
   icon?: React.ReactNode;
-};
+}
 
 type DialogProps = React.PropsWithChildren<
   BaseOption & {
@@ -101,7 +101,7 @@ const alert = (message: React.ReactNode, options?: BaseOption) =>
     };
 
     return (
-      <Dialog visible={visible} header={options?.header || "Alert"} icon={options?.icon}>
+      <Dialog visible={visible} header={options?.header ?? "Alert"} icon={options?.icon}>
         <div className="mb-4">{message}</div>
         <div className="text-center">
           <Button onClick={handleClose}>OK</Button>
@@ -165,7 +165,7 @@ const getInput = (message: string, placeholder = "", options?: BaseOption) =>
   });
 
 // custom (open)
-export type PopupOpenComponentProps<T> = { close: (value: T | undefined) => void };
+export interface PopupOpenComponentProps<T> { close: (value: T | undefined) => void }
 type PopupOptions = BaseOption & { closable?: false };
 
 const open = <T,>(

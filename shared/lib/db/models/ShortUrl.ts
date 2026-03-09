@@ -1,4 +1,4 @@
-import { Schema, Model, Connection } from "mongoose";
+import { Schema, type Model, type Connection } from "mongoose";
 import connectToShortUrlDb from "../connections/shortUrlDb";
 
 export interface ShortUrl {
@@ -34,8 +34,8 @@ let cachedModel: Model<ShortUrl> | null = null;
 
 export default async function getShortUrlModel(): Promise<Model<ShortUrl>> {
   const conn: Connection = await connectToShortUrlDb();
-  if (!cachedModel) {
-    cachedModel = conn.models.ShortUrl || conn.model<ShortUrl>("ShortUrl", shortUrlSchema);
-  }
+
+  cachedModel ??= conn.models.ShortUrl ?? conn.model<ShortUrl>("ShortUrl", shortUrlSchema);
+
   return cachedModel;
 }

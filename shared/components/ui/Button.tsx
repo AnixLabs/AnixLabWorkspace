@@ -1,79 +1,113 @@
-import Link, { type LinkProps } from "next/link";
+import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import { AiOutlineLoading } from "react-icons/ai";
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  LabelHTMLAttributes,
+  ReactNode,
+} from "react";
 import Image from "next/image";
+import type { LinkProps } from "next/link";
 
-export function Button({
-  children,
-  loading = false,
+interface CommonProps {
+  loading?: boolean;
+  loadingText?: string;
+  loadingSvg?: ReactNode;
+  svg?: ReactNode;
+  className?: string;
+  children?: ReactNode;
+}
+
+type ButtonAsButton = { as?: "button" } & CommonProps & ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonAsAnchor = { as?: "a" } & CommonProps & LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>;
+type ButtonAsLabel = { as?: "label" } & CommonProps & LabelHTMLAttributes<HTMLLabelElement>;
+
+export type ButtonProps = ButtonAsButton | ButtonAsAnchor | ButtonAsLabel;
+
+const baseClass = "inline-flex justify-center items-center m-2 py-2.5 px-4 text-white font-bold outline-0 border-0 rounded-md overflow-hidden max-w-xs cursor-pointer transition-all duration-500 bg-theme-450 select-none min-h-8";
+const activeClass = "hover:shadow-[inset_3px_3px_10px,inset_-3px_-3px_10px] hover:shadow-theme-600";
+const disabledClass = "cursor-not-allowed opacity-75";
+
+function ButtonInner({
+  loading,
   loadingText = "Loading...",
-  className = "",
-  svg,
   loadingSvg = <AiOutlineLoading className="text-white animate-spin" />,
-  as = "button", // 'button' by default
-  ...props
-}: ButtonProps) {
-  const isAnchor = "href" in props;
-  const isLabel = "htmlFor" in props;
-
-  const Component = isAnchor ? Link : isLabel ? "label" : "button";
-
+  svg,
+  children,
+}: CommonProps) {
   return (
-    <Component
+    <span
       className={twMerge(
-        `inline-flex justify-center items-center m-2 py-2.5 px-4 text-white font-bold outline-0 border-0 rounded-md overflow-hidden max-w-xs cursor-pointer transition-all duration-500 bg-theme-450 select-none min-h-8`,
-        loading || (props as any).disabled
-          ? "cursor-not-allowed opacity-75"
-          : "hover:shadow-[inset_3px_3px_10px,inset_-3px_-3px_10px] hover:shadow-theme-600",
-        className
+        "inline-flex justify-center items-center gap-2 whitespace-nowrap transition-all duration-500",
+        loading && "[&_svg]:w-4 [&_svg]:h-4",
       )}
-      {...{
-        ...(props as any),
-        ...(!isAnchor && !isLabel && { disabled: loading || (props as any).disabled }),
-      }}
     >
-      <span
-        className={twMerge(
-          "inline-flex justify-center items-center gap-2 whitespace-nowrap transition-all duration-500",
-          loading && "[&_svg]:w-4 [&_svg]:h-4"
-        )}
-      >
-        {loading ? (
-          <>
-            {loadingSvg}
-            {loadingText}
-          </>
-        ) : (
-          <>
-            {svg}
-            {children}
-          </>
-        )}
-      </span>
-    </Component>
+      {loading ? (
+        <>
+          {loadingSvg}
+          {loadingText}
+        </>
+      ) : (
+        <>
+          {svg}
+          {children}
+        </>
+      )}
+    </span>
   );
 }
 
-// IconButton Wrapper
-export const IconButton = ({
-  className,
-  ...props
-}: ButtonProps & {
-  children?: React.ReactNode;
-}) => {
+export function Button(props: ButtonProps) {
+  const {
+    children,
+    loading = false,
+    loadingText = "Loading...",
+    loadingSvg,
+    svg,
+    className = "",
+    ...rest
+  } = props;
+
+  const innerProps = { loading, loadingText, loadingSvg, svg, children };
+  const isDisabled = loading || ("disabled" in rest && rest.disabled === true);
+  const mergedClass = twMerge(baseClass, isDisabled ? disabledClass : activeClass, className);
+
+  if ("href" in rest) {
+    const { as: _as, ...linkRest } = rest as ButtonAsAnchor;
+    return (
+      <Link className={mergedClass} {...linkRest}>
+        <ButtonInner {...innerProps} />
+      </Link>
+    );
+  }
+
+  if ("htmlFor" in rest) {
+    const { as: _as, ...labelRest } = rest as ButtonAsLabel;
+    return (
+      <label className={mergedClass} {...labelRest}>
+        <ButtonInner {...innerProps} />
+      </label>
+    );
+  }
+
+  const { as: _as, ...buttonRest } = rest as ButtonAsButton;
   return (
-    <Button
-      className={twMerge(
-        "inline-block shrink-0 bg-transparent rounded-full p-2 m-0 aspect-square hover:shadow-[inset_1px_1px_5px,inset_-1px_-1px_5px] hover:shadow-theme-500/50 text-inherit",
-        className
-      )}
-      {...props}
-    >
-      {props.children}
-    </Button>
+    <button className={mergedClass} disabled={isDisabled} {...buttonRest}>
+      <ButtonInner {...innerProps} />
+    </button>
   );
-};
+}
+
+export const IconButton = ({ className, ...props }: ButtonProps) => (
+  <Button
+    className={twMerge(
+      "inline-block shrink-0 bg-transparent rounded-full p-2 m-0 aspect-square hover:shadow-[inset_1px_1px_5px,inset_-1px_-1px_5px] hover:shadow-theme-500/50 text-inherit",
+      className,
+    )}
+    {...props}
+  />
+);
 
 type CardButtonProps = {
   image: string | URL;
@@ -83,8 +117,8 @@ type CardButtonProps = {
   imageWidth?: number;
   imageHeight?: number;
   isNew?: boolean;
-} & React.AnchorHTMLAttributes<HTMLAnchorElement> & // native <a> attributes
-  LinkProps; // next/link specific props
+} & AnchorHTMLAttributes<HTMLAnchorElement> &
+  LinkProps;
 
 export function CardButton({
   image,
@@ -105,11 +139,10 @@ export function CardButton({
         "dark:shadow-[inset_20px_20px_18px_rgba(255,255,255,.07),inset_-20px_-20px_18px_rgba(0,0,0,.9)]",
         "hover:shadow-[0px_3px_10px_rgba(0,0,0,.20),inset_20px_20px_18px_rgba(0,0,0,.07),inset_-20px_-20px_18px_rgba(255,255,255,.9)]",
         "dark:hover:shadow-[0px_-1px_10px_rgba(255,255,255,.10),inset_20px_20px_18px_rgba(0,0,0,.9),inset_-20px_-20px_18px_rgba(255,255,255,.07)]",
-        className
+        className,
       )}
       {...props}
     >
-      {/* Ribbon */}
       {isNew && (
         <div className="absolute z-10 top-0 left-0 w-10 aspect-square grid place-items-center">
           <div className="absolute -rotate-45 bg-linear-to-r from-red-600 to-red-500 text-white font-bold text-[10px] px-8 py-0.5 text-center ring-2 ring-red-600 border border-white shadow-md">
@@ -121,14 +154,14 @@ export function CardButton({
         <div
           className={twMerge(
             "w-1/4 max-w-24 aspect-square shrink-0 flex items-center justify-center overflow-hidden",
-            imageClassName
+            imageClassName,
           )}
         >
           <Image
             src={image.toString()}
             alt={title || "Feature Image"}
-            width={imageWidth || 96}
-            height={imageHeight || 96}
+            width={imageWidth ?? 96}
+            height={imageHeight ?? 96}
             className="object-contain w-full h-full"
           />
         </div>
@@ -140,34 +173,3 @@ export function CardButton({
     </Link>
   );
 }
-
-type CommonProps = {
-  loading?: boolean;
-  loadingText?: ReactNode;
-  loadingSvg?: ReactNode;
-  svg?: ReactNode;
-  className?: string;
-  rootClassName?: string;
-  children?: ReactNode;
-};
-
-// Base variants
-type ButtonAsButton = {
-  as?: "button";
-} & CommonProps &
-  ButtonHTMLAttributes<HTMLButtonElement>;
-
-type ButtonAsAnchor = {
-  as: "a";
-  href: string;
-} & CommonProps &
-  AnchorHTMLAttributes<HTMLAnchorElement>;
-
-type ButtonAsLabel = {
-  as: "label";
-  htmlFor: string;
-} & CommonProps &
-  LabelHTMLAttributes<HTMLLabelElement>;
-
-// Full discriminated union
-export type ButtonProps = ButtonAsButton | ButtonAsAnchor | ButtonAsLabel;

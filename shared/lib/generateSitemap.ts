@@ -68,7 +68,7 @@ export function generateSitemap(options: {
             traverse(ast, {
               ExportNamedDeclaration(path) {
                 const decl = path.node.declaration;
-                if (decl && decl.type === "VariableDeclaration") {
+                if (decl?.type === "VariableDeclaration") {
                   for (const d of decl.declarations) {
                     if (
                       d.type === "VariableDeclarator" &&

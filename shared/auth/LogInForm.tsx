@@ -17,7 +17,7 @@ export default function LogInForm() {
 
   const [signInError, setSignInError] = useState<SignUpErrors>({});
 
-  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+  function handleSignIn(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSignInError({});
     startTransition(async () => {

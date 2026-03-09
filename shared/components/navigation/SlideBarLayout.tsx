@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { IconButton } from "../ui/Button";
-import React, { useEffect, useRef, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import Hr from "../ui/Hr";
 import { twJoin, twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
@@ -14,7 +14,7 @@ import { IoLogoInstagram, IoPower } from "react-icons/io5";
 import { PiTelegramLogo, PiYoutubeLogo } from "react-icons/pi";
 import { signOut, useSession } from "@shared/auth/client";
 
-type MenuItemDefault = {
+interface MenuItemDefault {
   label: string;
   icon?: React.ReactNode;
   url?: string;
@@ -22,7 +22,7 @@ type MenuItemDefault = {
   hr?: boolean;
   showOnLoggedIn?: boolean;
   showOnLoggedOut?: boolean;
-};
+}
 export type MenuItem = MenuItemDefault & {
   subMenu?: MenuItem[];
 };
@@ -54,7 +54,7 @@ const commonMenu: MenuItem[] = [
     label: "Logout",
     icon: <IoPower />,
     onClick: () =>
-      signOut({
+      void signOut({
         fetchOptions: {
           onSuccess: () => {
             window.location.reload();
@@ -96,18 +96,24 @@ export default function SlideBarLayout({
   }
   // Add menu items based on session state
   const filteredMenu = updatedMenu.filter(
-    (item) => !((!session && item.showOnLoggedIn) || (session && item.showOnLoggedOut))
+    (item) => !((!session && item.showOnLoggedIn) ?? (session && item.showOnLoggedOut)),
   );
   // Auto-close sidebar on route change if on mobile
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      setShowSideBar(false);
-      if (checkboxRef.current) {
-        checkboxRef.current.checked = false;
-      }
-    }
-  }, [pathname]);
   const [showSideBar, setShowSideBar] = useState(false);
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) return;
+
+    // DOM manipulation is fine in effects
+    if (checkboxRef.current) {
+      checkboxRef.current.checked = false;
+    }
+
+    // setState is the issue — use flushSync or move to event
+    startTransition(() => {
+      setShowSideBar(false);
+    });
+  }, [pathname]);
   return (
     <>
       {/* SideBar Input */}
@@ -303,7 +309,7 @@ function SideBarItem({ item, showSideBar }: { item: MenuItem; showSideBar: boole
               "list hidden opacity-0 invisible pl-7 relative",
               showSideBar
                 ? "md:h-[calc(100%-18.5px)] peer-checked:block peer-checked:relative peer-checked:opacity-100 peer-checked:visible "
-                : "md:m-0 md:overflow-hidden md:block md:absolute md:left-5 md:top-1 p-0.5 pl-4 pt-2 bg-transparent md:opacity-0 md:invisible md:z-10"
+                : "md:m-0 md:overflow-hidden md:block md:absolute md:left-5 md:top-1 p-0.5 pl-4 pt-2 bg-transparent md:opacity-0 md:invisible md:z-10",
             )}
           >
             {showSideBar && <span className="border-l absolute h-[calc(100%-20px)] left-3.5 " />}
@@ -311,7 +317,7 @@ function SideBarItem({ item, showSideBar }: { item: MenuItem; showSideBar: boole
               className={twJoin(
                 "ml-2",
                 !showSideBar &&
-                  "md:px-2.5 md:py-2 md:rounded-3xl md:rounded-tl-sm md:bg-theme-100 md:dark:bg-neutral-900 md:shadow"
+                  "md:px-2.5 md:py-2 md:rounded-3xl md:rounded-tl-sm md:bg-theme-100 md:dark:bg-neutral-900 md:shadow",
               )}
             >
               {item.subMenu.map((subItem, i) => {
@@ -321,7 +327,7 @@ function SideBarItem({ item, showSideBar }: { item: MenuItem; showSideBar: boole
                     itemProp="name"
                     className={twMerge(
                       `relative block whitespace-nowrap overflow-hidden text-ellipsis grow shrink-0 *:text-inherit hover:*:text-theme-450`,
-                      showSideBar ? "overflow-visible w-full mt-2" : "rounded-none"
+                      showSideBar ? "overflow-visible w-full mt-2" : "rounded-none",
                     )}
                   >
                     {!showSideBar && i !== 0 && <Hr className="my-1" />}
@@ -353,7 +359,7 @@ function SideBarItem({ item, showSideBar }: { item: MenuItem; showSideBar: boole
           aria-label={item.label}
           className={twJoin(
             "flex items-center gap-2 relative w-full rounded-lg cursor-pointer py-2.5 px-1 hover:bg-black/10 transition-all duration-300 text-inherit",
-            showSideBar ? "hover:text-theme-450" : "md:max-w-10 md:rounded-full"
+            showSideBar ? "hover:text-theme-450" : "md:max-w-10 md:rounded-full",
           )}
           onClick={item.onClick}
         >
@@ -362,14 +368,14 @@ function SideBarItem({ item, showSideBar }: { item: MenuItem; showSideBar: boole
             className={twMerge(
               "n block whitespace-nowrap overflow-hidden text-ellipsis grow shrink-0 text-left",
               !showSideBar &&
-                "md:absolute md:left-5 md:top-1 p-0.5 pl-4 pt-2 bg-transparent  md:opacity-0 md:invisible md:z-10 md:hover:opacity-100 md:hover:visible"
+                "md:absolute md:left-5 md:top-1 p-0.5 pl-4 pt-2 bg-transparent  md:opacity-0 md:invisible md:z-10 md:hover:opacity-100 md:hover:visible",
             )}
             itemProp="name"
           >
             <span
               className={twJoin(
                 !showSideBar &&
-                  "md:block md:py-2 md:px-3 md:rounded-full md:rounded-tl-sm md:bg-theme-100 md:dark:bg-neutral-900 hover:text-theme-450 md:shadow"
+                  "md:block md:py-2 md:px-3 md:rounded-full md:rounded-tl-sm md:bg-theme-100 md:dark:bg-neutral-900 hover:text-theme-450 md:shadow",
               )}
             >
               {item.label}

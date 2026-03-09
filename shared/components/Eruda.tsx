@@ -2,16 +2,15 @@
 "use client";
 
 import Script from "next/script";
-// declare global variable for eruda
+
 declare global {
   interface Window {
-    eruda: any;
+    eruda: { init: () => void } | undefined;
   }
 }
 
 export default function ErudaScript() {
   const handleErudaLoad = () => {
-    // Initialize Eruda only after the script has loaded
     if (typeof window.eruda !== "undefined") {
       window.eruda.init();
     } else {
@@ -20,12 +19,10 @@ export default function ErudaScript() {
   };
 
   return (
-    <>
-      <Script
-        src="https://cdn.jsdelivr.net/npm/eruda"
-        strategy="afterInteractive"
-        onLoad={handleErudaLoad}
-      />
-    </>
+    <Script
+      src="https://cdn.jsdelivr.net/npm/eruda"
+      strategy="afterInteractive"
+      onLoad={handleErudaLoad}
+    />
   );
 }

@@ -12,7 +12,7 @@ let clientPromise: Promise<MongoClient>;
 
 // Extend NodeJS global type to avoid TS errors
 declare global {
-  // eslint-disable-next-line no-var
+   
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
