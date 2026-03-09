@@ -17,11 +17,11 @@ export async function POST(request: Request) {
       body,
       request,
       onBeforeGenerateToken: async () => {
-        if (!session || !session.user) {
+        if (!session?.user) {
           throw new Error("Unauthorized");
         }
 
-        return {
+        return Promise.resolve({
           allowedContentTypes: [
             "image/jpeg",
             "image/jpg",
@@ -32,14 +32,14 @@ export async function POST(request: Request) {
           ],
           maximumSizeInBytes: 10 * 1024 * 1024, // 10MB
           addRandomSuffix: true,
-        };
+        });
       },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
+      onUploadCompleted: ({ blob, tokenPayload }) => {
         // Get notified of client upload completion
         // ⚠️ This will not work on `localhost` websites,
         // Use ngrok or similar to get the full upload flow
 
-        console.log("blob upload completed", blob, tokenPayload);
+        console.info("blob upload completed", blob, tokenPayload);
 
         try {
           // Run any logic after the file upload completed
@@ -49,6 +49,8 @@ export async function POST(request: Request) {
           console.error(error);
           throw new Error("Could not update user");
         }
+
+        return Promise.resolve();
       },
     });
 

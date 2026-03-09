@@ -11,6 +11,12 @@ import Hr from "@shared/components/ui/Hr";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { IoMdCloudUpload } from "react-icons/io";
 
+interface UploadResponseByBlob {
+  success: boolean;
+  error?: string;
+  imageUrl: string;
+}
+
 export default function ImageUploader() {
   const [image, setImage] = useState<ExtendedFile | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -47,17 +53,17 @@ export default function ImageUploader() {
         body: JSON.stringify({ image: newBlob.url, name: image.name }),
       });
 
-      const data = await res.json();
+      const data = (await res.json()) as UploadResponseByBlob;
 
       if (!data.success) {
-        toast.error(data.error || "Upload failed");
+        toast.error(data.error ?? "Upload failed");
         return;
       }
 
-      console.log(newBlob);
+      console.info(newBlob);
       setUploadedURL(data.imageUrl);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Failed to upload image");
     } finally {
       setUploading(false);
@@ -65,7 +71,7 @@ export default function ImageUploader() {
   };
 
   const acceptedTypes = Object.fromEntries(
-    ["png", "jpeg", "gif", "apng", "tiff"].map((ext) => [`image/${ext}`, []])
+    ["png", "jpeg", "gif", "apng", "tiff"].map((ext) => [`image/${ext}`, []]),
   );
 
   return (
@@ -89,7 +95,7 @@ export default function ImageUploader() {
 
       {!uploadedURL && image && (
         <Button
-          onClick={handleUpload}
+          onClick={() => void handleUpload()}
           className="flex flex-col justify-center items-center gap-2 mt-4 "
           disabled={uploading || !image}
           loading={uploading}

@@ -13,6 +13,7 @@ import {
   reverseText,
   reverseWords,
 } from "./functions";
+import { toast } from "react-toastify";
 
 type reverseT = "word" | "each-word-letter" | "full" | null;
 type flipT = "upside-down" | "mirror" | null;
@@ -51,10 +52,12 @@ export default function ReverseTextPage() {
           title: "Reverse Text Generator",
           text: payload,
         });
-      } catch {}
+      } catch {
+        toast.error("Failed to share text. Please try copying it instead.");
+      }
     } else {
       await navigator.clipboard.writeText(payload);
-      alert("Copied to clipboard!");
+      toast.info("Text copied to clipboard!");
     }
   };
 
@@ -136,7 +139,7 @@ export default function ReverseTextPage() {
 
       {/* Share */}
       <div className="flex justify-center gap-2">
-        <Button onClick={shareText}>Share / Copy</Button>
+        <Button onClick={() => void shareText()}>Share / Copy</Button>
       </div>
     </Section>
   );

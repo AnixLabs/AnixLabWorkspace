@@ -114,7 +114,7 @@ export const metadata: Metadata = {
   addToSitemap: true,
 };
 
-export default async function QrCode() {
+export default function QrCode() {
   return (
     <>
       {/* <IfLoggedIn> */}

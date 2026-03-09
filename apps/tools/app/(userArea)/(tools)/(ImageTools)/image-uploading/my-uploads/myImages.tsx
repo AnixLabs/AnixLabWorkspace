@@ -9,12 +9,32 @@ import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useSession } from "@shared/auth/client";
 
-type UploadedImage = {
+interface UploadedImage {
   alias: string;
   extension: string;
   adsLabel: 0 | 1 | 2 | 3;
   createdAt: string;
-};
+}
+
+interface ImageResult {
+  images: UploadedImage[];
+  totalImagesCount: number;
+  IMGUR_IMAGE_URL: string;
+  IMAGE_INDEX_URL: string;
+}
+
+interface GetAllByUserResponse {
+  success: boolean;
+  results: ImageResult;
+  message?: string;
+  error?: string;
+}
+
+interface DeleteResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
 
 export default function MyImages() {
   const { data: session } = useSession();
@@ -44,7 +64,7 @@ export default function MyImages() {
           body: JSON.stringify({ page: pageN }),
         });
 
-        const data = await response.json();
+        const data = (await response.json()) as GetAllByUserResponse;
         if (data?.success) {
           const results = data.results;
           setImages((prev) => {
@@ -66,7 +86,7 @@ export default function MyImages() {
         setPageLoading(false);
       }
     };
-    getURLs(pageNum);
+    void getURLs(pageNum);
   }, [images, pageNum]);
 
   const modifyAds = async (alias: UploadedImage["alias"], ad: UploadedImage["adsLabel"]) => {
@@ -80,7 +100,7 @@ export default function MyImages() {
         body: JSON.stringify({ alias, ad }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as GetAllByUserResponse;
       if (data?.success) {
         setImages((prev) => {
           if (!prev[pageNum - 1]) return prev; // Ensure the page index exists
@@ -92,9 +112,9 @@ export default function MyImages() {
           );
         });
 
-        toast.success(data.message || "Ads updated successfully");
+        toast.success(data.message ?? "Ads updated successfully");
       } else {
-        toast.error(data.message || "Something went wrong!");
+        toast.error(data.message ?? "Something went wrong!");
       }
     } catch (error) {
       toast.error("Failed to update.");
@@ -129,18 +149,18 @@ export default function MyImages() {
         body: JSON.stringify({ alias: selectedUrl.alias }),
       });
 
-      const res = await response.json();
+      const res = (await response.json()) as DeleteResponse;
 
       if (res?.success) {
-        toast.success(res.message);
+        toast.success(res.message ?? "Image deleted successfully");
         // Remove the page and all pages after it
         setImages((prev) => prev.slice(0, pageNum - 1));
       } else {
-        toast.error(res.error || "Failed to delete URL.");
+        toast.error(res.error ?? "Failed to delete URL.");
       }
     } catch (err) {
       const error = err as Error;
-      toast.error(error.message || "Error deleting image.");
+      toast.error(error.message ?? "Error deleting image.");
       console.error("Delete Error:", error);
     } finally {
       setDeleteLoading(false);
@@ -194,7 +214,7 @@ export default function MyImages() {
                         key={`${image.alias}-${value}`}
                         disabled={adsLoading || image.adsLabel === value}
                         className="cursor-pointer flex items-center gap-2"
-                        onClick={() => modifyAds(image.alias, value as 0 | 1 | 2 | 3)}
+                        onClick={() => void modifyAds(image.alias, value as UploadedImage["adsLabel"])}
                       >
                         <span
                           className={`w-4 h-4 rounded-full mr-1.5 border-[3.5px] border-theme-150 outline outline-theme-450 ${
@@ -305,7 +325,7 @@ export default function MyImages() {
           <div className="flex justify-end items-center text-white font-bold *:px-4 *:py-2 *:rounded-full *:transition-all *:duration-300">
             <Button
               className="bg-red-600"
-              onClick={handleDelete}
+              onClick={() => void handleDelete()}
               disabled={deleteLoading}
               loading={deleteLoading}
               loadingText="Deleting..."

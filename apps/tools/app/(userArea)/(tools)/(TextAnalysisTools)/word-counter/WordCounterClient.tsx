@@ -9,7 +9,7 @@ import { cn } from "@shared/utils/cn";
 import copyToClipboard from "@shared/utils/CopyToClipboard";
 import { useMemo, useState } from "react";
 
-type Keyword = { word: string; count: number };
+interface Keyword { word: string; count: number }
 
 export default function WordCounterClient() {
   const [text, setText] = useState("");
@@ -36,7 +36,7 @@ export default function WordCounterClient() {
     for (const w of words) {
       const lower = w.toLowerCase();
       if (lower.length < 1) continue;
-      freq.set(lower, (freq.get(lower) || 0) + 1);
+      freq.set(lower, (freq.get(lower) ?? 0) + 1);
     }
     return Array.from(freq.entries())
       .map(([word, count]) => ({ word, count }))

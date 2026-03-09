@@ -97,7 +97,7 @@ export const metadata = {
   addToSitemap: true,
 };
 
-export default async function ImageUploading() {
+export default function ImageUploading() {
   const Drops = [
     {
       title: "Shorten, Share, and Track",

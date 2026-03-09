@@ -24,9 +24,9 @@ const ClearDataPage = () => {
 
     // Clear cache (not directly possible through JS but can be done by clearing specific URLs or using service worker)
     if ("caches" in window) {
-      caches.keys().then((cacheNames) => {
+      void caches.keys().then((cacheNames) => {
         cacheNames.forEach((cacheName) => {
-          caches.delete(cacheName);
+          void caches.delete(cacheName);
         });
       });
     }

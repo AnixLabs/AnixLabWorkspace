@@ -677,7 +677,6 @@ function Frame({ frame, children }: { frame: QrFrame; children: React.ReactNode 
   useEffect(() => {
     if (!textRef.current || !childWidth) return;
     const textWidth = textRef.current.scrollWidth;
-    console.log("textWidth", textWidth);
     const INC = 0.06; // Increment to reduce scale
 
     setScale((prevScale) => {

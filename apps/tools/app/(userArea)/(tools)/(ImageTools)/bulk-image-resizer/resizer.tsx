@@ -35,10 +35,6 @@ export default function Resizer() {
   const [maxHeight, setMaxHeight] = useState(16);
   const [loading, setLoading] = useState({ resize: false, downloadAll: false });
 
-  useEffect(() => {
-    console.log(quality, loading);
-  }, [quality, loading]);
-
   const handleFileChange = (files: File[]) => {
     const newImages: ImageFile[] = files.map((f) => {
       const uid = crypto.randomUUID();
@@ -80,7 +76,7 @@ export default function Resizer() {
     setHeightInput(widthType === "pixels" ? maxHeight : 100);
   }, [maxWidth, maxHeight, widthType]);
 
-  const handleResize = async () => {
+  const handleResize = () => {
     setLoading((p) => ({ ...p, resize: true }));
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -259,14 +255,12 @@ export default function Resizer() {
           </div>
           <div className="flex gap-2 flex-wrap justify-around">
             <Checkbox
-              type="checkbox"
               checked={maintainAspect}
               onChange={() => setMaintainAspect(!maintainAspect)}
               label="Maintain Aspect"
               disabled={loading.resize || loading.downloadAll}
             />
             <Checkbox
-              type="checkbox"
               checked={isCompress}
               onChange={() => setIsCompress(!isCompress)}
               label="Reduce Quality"
@@ -275,7 +269,6 @@ export default function Resizer() {
           </div>
           {isCompress && (
             <SliderWithTooltip
-              type="range"
               min={20}
               max={100}
               value={quality}
@@ -288,7 +281,7 @@ export default function Resizer() {
             </Button>
             {images.filter((img) => img.resizedUrl).length >= 2 && (
               <Button
-                onClick={handleDownloadAll}
+                onClick={() => void handleDownloadAll()}
                 disabled={bulkDownloadLoading}
                 className="bg-green-500"
               >

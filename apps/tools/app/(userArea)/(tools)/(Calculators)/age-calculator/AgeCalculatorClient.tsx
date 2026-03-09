@@ -102,7 +102,6 @@ export default function AgeCalculator() {
       {/* Till now toggle */}
       <div className="flex items-center gap-2 mb-4">
         <Checkbox
-          type="checkbox"
           id="tillNow"
           checked={tillNow}
           onChange={(e) => setTillNow(e.target.checked)}
@@ -149,7 +148,6 @@ export default function AgeCalculator() {
       {/* Toggle Difference */}
       <div className="flex items-center gap-2 mb-4">
         <Checkbox
-          type="checkbox"
           id="showDiff"
           checked={showDiff}
           onChange={(e) => setShowDiff(e.target.checked)}

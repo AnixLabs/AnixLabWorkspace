@@ -6,6 +6,16 @@ import { del } from "@vercel/blob";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
+interface ImgurUploadResponse {
+  data: {
+    id: string;
+    deletehash: string;
+    error?: string;
+  };
+  success: boolean;
+  status: number;
+}
+
 const blobBaseUrl = process.env.BLOB_BASE_URL;
 if (!blobBaseUrl) {
   throw new Error("BLOB_BASE_URL is not defined");
@@ -23,7 +33,7 @@ const isAllowed = (imageUrl: string) => {
 };
 
 export async function POST(req: Request) {
-  const { image, name } = await req.json();
+  const { image, name } = (await req.json()) as { image: string; name: string };
 
   if (!image || !name) {
     return Response.json({ error: "Image and name are required" }, { status: 400 });
@@ -31,20 +41,20 @@ export async function POST(req: Request) {
 
   try {
     const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-    if (!session || !session.user) {
+      headers: await headers(),
+    });
+    if (!session?.user) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
     const uploadedBy = session.user.id;
 
     if (!isAllowed(image)) {
-      console.log("Invalid Image URL:", image);
+      console.error("Invalid Image URL:", image);
       return Response.json({ error: "Invalid Image!" }, { status: 401 });
     }
 
     // Extract file extension & check format
-    const ext = name.split(".").pop().toLowerCase();
+    const ext = name.split(".").pop()?.toLowerCase() ?? "";
 
     const formData = new FormData();
     formData.append("image", image);
@@ -59,10 +69,10 @@ export async function POST(req: Request) {
       redirect: "follow",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as ImgurUploadResponse;
 
     if (!response.ok) {
-      throw new Error(data?.data?.error || "Failed to upload image");
+      throw new Error(data?.data?.error ?? "Failed to upload image");
     }
 
     const ImageUpload = await getImageUploadModel();
@@ -85,7 +95,7 @@ export async function POST(req: Request) {
         success: true,
         imageUrl: `${process.env.BASE_URL}/i/${img.alias}`,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error in Uploading ImageIndex:", error);
@@ -93,7 +103,7 @@ export async function POST(req: Request) {
     // Return an error response in case of failure
     return NextResponse.json(
       { success: false, message: "Failed to Upload Image" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     // Close the database connection
