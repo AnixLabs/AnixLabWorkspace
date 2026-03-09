@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { buildSeoTitle } from "@/utils/seo/buildSeoUsingTags";
 import { Button } from "@shared/components/ui/Button";
 
-type Params = { params: Promise<{ page: string }> };
+interface Params { params: Promise<{ page: string }> }
 
 /* --------------------------- Static Params --------------------------- */
 export async function generateStaticParams() {

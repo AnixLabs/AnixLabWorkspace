@@ -60,7 +60,7 @@ const importantLinks = [
   },
 ];
 
-export default async function Footer() {
+export default function Footer() {
   return (
     <footer className="mb-8 mt-12">
       <Section className="text-center border border-gray-200/50 dark:border-neutral-600/60">
