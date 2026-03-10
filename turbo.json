@@ -50,6 +50,19 @@
       "cache": false,
       "persistent": true
     },
-    "lint": {}
+    "lint": {
+      "dependsOn": ["^lint"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig*.json"],
+      "outputs": []
+    },
+    "check": {
+      "dependsOn": ["lint", "typecheck"],
+      "outputs": []
+    }
   }
 }

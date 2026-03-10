@@ -57,11 +57,11 @@ export function PopUpBox({
   children,
   id = "",
   visible = true,
-  className = "",
+  // className = "",
   header,
   svg,
   closeable = false,
-  onClose = () => {},
+  onClose = () => undefined,
   ...props
 }: PopupBoxProps) {
   const [isScrollable, setIsScrollable] = useState(false);
@@ -147,7 +147,7 @@ export function PopUpBox({
               </Button>
             )}
 
-            <div className="mx-auto mb-1 w-6">{svg || <IoDocumentTextOutline />}</div>
+            <div className="mx-auto mb-1 w-6">{svg ?? <IoDocumentTextOutline />}</div>
 
             <div className="text-lg md:text-xl font-bold mb-2 text-center">{header}</div>
 
@@ -190,7 +190,7 @@ function DoubleDownIcon() {
 export function Note({
   children,
   className = "",
-  type,
+  // type,
   ...props
 }: {
   children: React.ReactNode;
@@ -199,7 +199,7 @@ export function Note({
 } & React.HTMLProps<HTMLDivElement>) {
   return (
     <div
-      className="my-2 relative pt-5 pl-12 pr-5 bg-theme-100 dark:bg-neutral-800 rounded-xl overflow-hidden"
+      className={cn("my-2 relative pt-5 pl-12 pr-5 bg-theme-100 dark:bg-neutral-800 rounded-xl overflow-hidden", className)}
       {...props}
     >
       <div className="absolute w-14 h-14 bg-black/5 rounded-full -top-3 -left-3" />

@@ -25,7 +25,7 @@ export const reverseEachWordLettering = (text: string) =>
 // --- Flip logic ---
 const flip = (text: string, map: Record<string, string>) =>
   Array.from(text)
-    .map((ch) => map[ch] || ch)
+    .map((ch) => map[ch] ?? ch)
     .join("");
 
 export const flipTextUpsideDown = (text: string) => flip(text, upsideDownMap);

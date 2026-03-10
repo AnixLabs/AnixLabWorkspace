@@ -1,11 +1,11 @@
 "use client";
 
 import { Input, PasswordInput } from "@shared/components/ui/Input";
-import { AgreeAndSubmitButton, SignUpErrors } from "./LoginSignup";
+import { AgreeAndSubmitButton, type SignUpErrors } from "./LoginSignup";
 
 import { signupSchema } from "@shared/lib/zod";
 import { useSearchParams } from "next/navigation";
-import { useState, ChangeEventHandler, useEffect, useTransition } from "react";
+import { useState, type ChangeEventHandler, useEffect, useTransition } from "react";
 import { toast } from "react-toastify";
 import { ZodError } from "zod";
 import { signUp } from "./client";
@@ -27,7 +27,9 @@ export function resolveCallbackURL(origin: string, input?: string): string {
     if (url.origin === origin) {
       return url.origin + url.pathname + url.search;
     }
-  } catch {}
+  } catch {
+    console.warn("Invalid callback URL:", input);
+  }
 
   return fallback;
 }
@@ -56,18 +58,21 @@ export default function SignUpForm() {
   type SignUpFormData = typeof formData; // whatever shape your formData has
 
   const handleFormChange: ChangeEventHandler<HTMLFormElement> = (e) => {
-    const { name, value } = e.target;
-    const key = name as keyof SignUpFormData;
+    const target = e.target as unknown as HTMLInputElement;
+    const name = target.name as keyof SignUpFormData;
+    const value = target.value;
 
-    const updatedData = { ...formData, [key]: value };
+    const updatedData: SignUpFormData = { ...formData, [name]: value };
     const validation = signupSchema.safeParse(updatedData);
 
     setErrors((prev) => {
-      const { [key]: _, ...rest } = prev;
+      const rest = Object.fromEntries(
+        Object.entries(prev).filter(([k]) => k !== name),
+      ) as Partial<SignUpErrors>;
       const issue = validation.success
         ? null
-        : validation.error.issues.find((err) => err.path[0] === key);
-      return issue ? { ...rest, [key]: issue.message } : rest;
+        : validation.error.issues.find((err) => err.path[0] === name);
+      return issue ? { ...rest, [name]: issue.message } : rest;
     });
 
     setFormData(updatedData);
@@ -82,7 +87,7 @@ export default function SignUpForm() {
     }
   }, [timer]);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setErrors({});
@@ -100,10 +105,10 @@ export default function SignUpForm() {
           },
           {
             onSuccess: () => {
-              pop.alert("Check your email to verify your account");
+              void pop.alert("Check your email to verify your account");
             },
             onError: (ctx) => {
-              const errCode = ctx.error.code;
+              const errCode = ctx.error.code as string | undefined;
 
               if (errCode === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
                 setErrors({ email: "Email already exists" });
@@ -117,10 +122,11 @@ export default function SignUpForm() {
       } catch (err) {
         if (err instanceof ZodError) {
           setErrors(
-            err.issues.reduce(
-              (acc, { path, message }) => ({ ...acc, [path[0]]: message }),
-              {} as SignUpErrors,
-            ),
+            err.issues.reduce((acc, { path, message }) => {
+              const key = path[0];
+              if (key !== undefined) acc[key as keyof SignUpErrors] = message;
+              return acc;
+            }, {} as SignUpErrors),
           );
         } else {
           toast.error("An unexpected error occurred.");

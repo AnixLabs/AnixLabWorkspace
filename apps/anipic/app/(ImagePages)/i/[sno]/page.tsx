@@ -7,7 +7,7 @@ import { DownloadButton } from "./ImageClientAction";
 import { buildSeoDescription, buildSeoTitle } from "@/utils/seo/buildSeoUsingTags";
 import { capitalize } from "@/utils/capitalize";
 
-type Props = { params: Promise<{ sno: string }> };
+interface Props { params: Promise<{ sno: string }> }
 
 async function getImage(sno: number) {
   "use cache";

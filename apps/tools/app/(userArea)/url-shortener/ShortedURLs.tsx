@@ -8,10 +8,20 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteShortUrl, editShortUrl, modifyAds } from "./action";
 import { ErrorText } from "@shared/components/ui/Paragraph";
-import { Urls } from "./types";
+import type { Urls } from "./types";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useSession } from "@shared/auth/client";
+
+interface GetByUserResponse {
+  success: boolean;
+  results: {
+    urls: Urls[];
+    totalUrlsCount: number;
+    BASE_URL: string;
+  };
+  error?: string;
+}
 
 export default function ShortedURLs({
   urls,
@@ -48,7 +58,7 @@ export default function ShortedURLs({
           body: JSON.stringify({ page: pageNum }),
         });
 
-        const data = await response.json();
+        const data = (await response.json()) as GetByUserResponse;
         if (data?.success) {
           const results = data.results;
           setUrls((prevUrls) => [...prevUrls, ...results.urls]); // Append new data
@@ -64,16 +74,16 @@ export default function ShortedURLs({
         setLoading(false);
       }
     };
-    getURLs(page);
+    void getURLs(page);
   }, [page, setTotal, setUrls]);
 
-  const modifyWaiting = async (alias: string, ad: number) => {
+  const modifyWaiting = async (alias: string, ad: Urls["adsLabel"]) => {
     setAdsLoading(true);
     try {
-      const data = await modifyAds({ alias, ad });
+      const data = await modifyAds({ alias, ad: ad });
       if (data?.success) {
         setUrls((prevUrls) =>
-          prevUrls.map((item) => (item.alias === alias ? { ...item, adsLabel: ad } : item))
+          prevUrls.map((item) => (item.alias === alias ? { ...item, adsLabel: ad } : item)),
         );
         toast.success(data.message || "Waiting updated successfully");
       } else {
@@ -113,7 +123,7 @@ export default function ShortedURLs({
         setUrls((prev) => prev.filter((url) => url.alias !== selectedUrl.alias)); // Remove from state
         setTotal((p) => --p);
       } else {
-        toast.warn(res.message || "Failed to delete URL.");
+        toast.warn(res.message ?? "Failed to delete URL.");
       }
     } catch (error) {
       toast.error("Error deleting URL.");
@@ -167,8 +177,8 @@ export default function ShortedURLs({
         toast.success(res.message);
         setUrls((prev) =>
           prev.map((url) =>
-            url.alias === selectedUrl.alias ? { ...url, longUrl: editedUrl } : url
-          )
+            url.alias === selectedUrl.alias ? { ...url, longUrl: editedUrl } : url,
+          ),
         );
       } else {
         toast.warn(res.message || "Failed to update URL.");
@@ -256,7 +266,7 @@ export default function ShortedURLs({
                         <button
                           key={i}
                           disabled={adsLoading}
-                          onClick={() => modifyWaiting(url.alias, i)}
+                          onClick={() => void modifyWaiting(url.alias, i)}
                           className="cursor-pointer"
                         >
                           <span
@@ -314,7 +324,7 @@ export default function ShortedURLs({
           <div className="flex justify-end items-center text-white font-bold mt-5">
             <Button
               className="bg-red-600 hover:scale-105"
-              onClick={handleDelete}
+              onClick={() => void handleDelete()}
               loading={deleteLoading}
               loadingText="Deleting..."
             >
@@ -363,7 +373,7 @@ export default function ShortedURLs({
           </div>
           <div className="flex justify-end items-center text-white font-bold mb-px mr-1">
             <Button
-              onClick={handleEdit}
+              onClick={() => void handleEdit()}
               disabled={!editedUrl || editedUrl === selectedUrl.longUrl}
               loading={editLoading}
               loadingText="Saving..."

@@ -1,4 +1,4 @@
-import ContentLoader, { IContentLoaderProps } from "react-content-loader";
+import ContentLoader, { type IContentLoaderProps } from "react-content-loader";
 
 const Article = (props: IContentLoaderProps) => (
   <ContentLoader viewBox="0 0 400 160" height={160} width={400} {...props}>

@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 const uri = process.env.MONGODB_URI_ANIPIC;
 
-const cached = global._aniPicDb || { conn: null, promise: null };
+const cached = global._aniPicDb ?? { conn: null, promise: null };
 
 export default async function connectToAniPicDb() {
   if (!uri) throw new Error("❌ MONGODB_URI_ANIPIC not found");
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    console.log("🔄 Connecting to aniPic DB...");
+    console.info("🔄 Connecting to aniPic DB...");
     cached.promise = mongoose
       .createConnection(uri, {
         dbName: "aniPicDb",
@@ -17,7 +17,7 @@ export default async function connectToAniPicDb() {
       })
       .asPromise()
       .then((conn) => {
-        console.log("✅ Connected to aniPic DB");
+        console.info("✅ Connected to aniPic DB");
         return conn;
       });
   }

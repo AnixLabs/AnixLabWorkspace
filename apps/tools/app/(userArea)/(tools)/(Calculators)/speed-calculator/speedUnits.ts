@@ -1,4 +1,4 @@
-import { SelectOption } from "@shared/components/ui/Input";
+import type { SelectOption } from "@shared/components/ui/Input";
 
 export const units: SelectOption[] = [
   { label: "Foot per minute (ft/min)", value: "ft_min" },

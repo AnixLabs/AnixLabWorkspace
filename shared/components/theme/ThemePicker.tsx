@@ -65,7 +65,7 @@ export default function ThemePicker({ className = "" }) {
 
   const setMode = (m: string) => {
     let mode = m;
-    let isSystem = mode === "system";
+    const isSystem = mode === "system";
 
     localStorage.setItem("themeMode", mode);
     setCookie("themeMode", mode);
@@ -84,7 +84,7 @@ export default function ThemePicker({ className = "" }) {
   const setThemeColor = (index: number) => {
     const colorClass = `theme${index}`;
     // Remove old theme color classes
-    document.documentElement.classList.remove(...(document.documentElement.className.match(/theme\d+/g) || []));
+    document.documentElement.classList.remove(...(document.documentElement.className.match(/theme\d+/g) ?? []));
     document.documentElement.classList.add(colorClass); // Apply the new theme to documentElement
 
     localStorage.setItem("themeColor", colorClass);

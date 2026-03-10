@@ -52,7 +52,7 @@ export function DownloadButton({ sno }: { sno: number }) {
     <button
       aria-label="Download"
       className="cursor-pointer disabled:opacity-60"
-      onClick={handleDownload}
+      onClick={() => void handleDownload()}
       disabled={loading}
     >
       {loading ? <AiOutlineLoading className="animate-spin" /> : <SlCloudDownload />}

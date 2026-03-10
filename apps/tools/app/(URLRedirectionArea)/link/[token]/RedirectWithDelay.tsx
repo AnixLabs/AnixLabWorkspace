@@ -10,7 +10,7 @@ export default function RedirectWithDelay({
   adsLabel?: number;
 }) {
   const router = useRouter();
-  const delay = [10, 3, 5, 15][adsLabel || 0]; // Default to 10s if adsLabel is invalid
+  const delay = [10, 3, 5, 15][adsLabel ?? 0] ?? 10; // Default to 10s if adsLabel is invalid
   const [countdown, setCountdown] = useState(delay);
 
   useEffect(() => {

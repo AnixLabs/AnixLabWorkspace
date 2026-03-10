@@ -1,4 +1,4 @@
-import ContentLoader, { IContentLoaderProps } from "react-content-loader";
+import ContentLoader, { type IContentLoaderProps } from "react-content-loader";
 
 const ImageContent = (props: IContentLoaderProps) => {
   return (

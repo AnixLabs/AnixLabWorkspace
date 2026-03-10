@@ -33,12 +33,12 @@ export async function POST(req: Request) {
       headers: await headers(),
     });
 
-    if (!session || !session.user) {
+    if (!session?.user) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
     const { id } = session.user;
 
-    const { page } = await req.json(); // Destructure directly from req.json()
+    const { page } = (await req.json()) as { page?: number }; // Destructure directly from req.json()
 
     const limit = 12;
     const skip = page ? (page - 1) * limit : 0;

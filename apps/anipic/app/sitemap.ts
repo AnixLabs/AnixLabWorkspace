@@ -3,7 +3,7 @@ import { IMAGE_LIMIT_PER_PAGE } from "@/utils/const";
 import type { MetadataRoute } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 
-const baseUrl = process.env.BASE_URL || "https://anipic.anix7.in";
+const baseUrl = process.env.BASE_URL ?? "https://anipic.anix7.in";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";

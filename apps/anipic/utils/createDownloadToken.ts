@@ -23,7 +23,7 @@ export function createDownloadToken(data: {
 
   const payload = JSON.stringify({
     ...data,
-    exp: data.exp || Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 day expiry
+    exp: data.exp ?? Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 day expiry
   });
 
   const cipher = crypto.createCipheriv("aes-256-gcm", SECRET_KEY, iv);

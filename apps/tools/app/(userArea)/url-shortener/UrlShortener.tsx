@@ -10,7 +10,7 @@ import { WorkBox } from "@shared/components/ui/Boxes";
 import { CopyInput, Input } from "@shared/components/ui/Input";
 import { ErrorText } from "@shared/components/ui/Paragraph";
 import { Button } from "@shared/components/ui/Button";
-import { Urls } from "./types";
+import type { Urls } from "./types";
 import { AiOutlineLoading } from "react-icons/ai";
 
 export default function UrlShortener() {
@@ -155,7 +155,7 @@ export default function UrlShortener() {
                 type="text"
                 placeholder="Enter 6 characters"
                 autoComplete="off"
-                onChange={handleAlias}
+                onChange={(e) => void handleAlias(e)}
                 maxLength={6}
               />
 
@@ -173,7 +173,7 @@ export default function UrlShortener() {
                 disabled={
                   !!((isAlias && (!alias || aliasError)) || !longUrl || urlError || submitLoading)
                 }
-                onClick={handleSubmit}
+                onClick={() => void handleSubmit()}
                 loading={submitLoading}
               >
                 Submit

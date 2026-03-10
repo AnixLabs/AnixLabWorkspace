@@ -1,4 +1,4 @@
-import ImageGrid, { SafeImages } from "@/components/imageGrid";
+import ImageGrid, { type SafeImages } from "@/components/imageGrid";
 import { IMAGE_LIMIT_PER_PAGE } from "@/utils/const";
 import getAniPicModel from "@/lib/db/models/AniPic";
 import type { Metadata } from "next";
@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { buildSeoTitle } from "@/utils/seo/buildSeoUsingTags";
 import { Button } from "@shared/components/ui/Button";
 
-type Params = { params: Promise<{ page: string }> };
+interface Params { params: Promise<{ page: string }> }
 
 /* --------------------------- Static Params --------------------------- */
 export async function generateStaticParams() {

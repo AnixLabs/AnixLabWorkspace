@@ -1,21 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export type SafeImages = {
+export interface SafeImages {
   sno: number;
   thumbnailUrl: string;
   width: number;
   height: number;
   title: string;
-};
+}
 
 function reorder<T>(items: T[]) {
   const half = Math.ceil(items.length / 2);
   const result: T[] = [];
 
   for (let i = 0; i < half; i++) {
-    if (items[i]) result.push(items[i]);
-    if (items[i + half]) result.push(items[i + half]);
+    const a = items[i];
+    const b = items[i + half];
+    if (a !== undefined) result.push(a);
+    if (b !== undefined) result.push(b);
   }
 
   return result;

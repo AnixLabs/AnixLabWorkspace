@@ -35,10 +35,6 @@ export default function Resizer() {
   const [maxHeight, setMaxHeight] = useState(16);
   const [loading, setLoading] = useState({ resize: false, downloadAll: false });
 
-  useEffect(() => {
-    console.log(quality, loading);
-  }, [quality, loading]);
-
   const handleFileChange = (files: File[]) => {
     const newImages: ImageFile[] = files.map((f) => {
       const uid = crypto.randomUUID();
@@ -60,9 +56,11 @@ export default function Resizer() {
         image.onload = () => {
           setImages((prev) => {
             const updated = [...prev];
-            updated[index].width = image.width;
-            updated[index].height = image.height;
-
+            const item = updated[index];
+            if (item) {
+              item.width = image.width;
+              item.height = image.height;
+            }
             return updated;
           });
           setMaxWidth((p) => (image.width > p ? image.width : p));
@@ -78,7 +76,7 @@ export default function Resizer() {
     setHeightInput(widthType === "pixels" ? maxHeight : 100);
   }, [maxWidth, maxHeight, widthType]);
 
-  const handleResize = async () => {
+  const handleResize = () => {
     setLoading((p) => ({ ...p, resize: true }));
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -100,6 +98,7 @@ export default function Resizer() {
       }
 
       const img = updatedImages[index];
+      if (!img) return;
       const image = new window.Image();
       image.onload = () => {
         let w = img.width;
@@ -138,17 +137,20 @@ export default function Resizer() {
               setTimeout(processNext, 50);
               return;
             }
+            const item = updatedImages[index];
+            if (!item) return;
+
             const resizedUrl = URL.createObjectURL(blob);
-            updatedImages[index].resizedBlob = blob;
-            updatedImages[index].resizedWidth = w;
-            updatedImages[index].resizedHeight = h;
-            updatedImages[index].resizedUrl = resizedUrl;
+            item.resizedBlob = blob;
+            item.resizedWidth = w;
+            item.resizedHeight = h;
+            item.resizedUrl = resizedUrl;
 
             index++;
-            setTimeout(processNext, 100); // <- delay here to free up the UI thread
+            setTimeout(processNext, 100);
           },
           finalMime,
-          finalQuality
+          finalQuality,
         );
       };
       image.src = img.url;
@@ -253,14 +255,12 @@ export default function Resizer() {
           </div>
           <div className="flex gap-2 flex-wrap justify-around">
             <Checkbox
-              type="checkbox"
               checked={maintainAspect}
               onChange={() => setMaintainAspect(!maintainAspect)}
               label="Maintain Aspect"
               disabled={loading.resize || loading.downloadAll}
             />
             <Checkbox
-              type="checkbox"
               checked={isCompress}
               onChange={() => setIsCompress(!isCompress)}
               label="Reduce Quality"
@@ -269,7 +269,6 @@ export default function Resizer() {
           </div>
           {isCompress && (
             <SliderWithTooltip
-              type="range"
               min={20}
               max={100}
               value={quality}
@@ -282,7 +281,7 @@ export default function Resizer() {
             </Button>
             {images.filter((img) => img.resizedUrl).length >= 2 && (
               <Button
-                onClick={handleDownloadAll}
+                onClick={() => void handleDownloadAll()}
                 disabled={bulkDownloadLoading}
                 className="bg-green-500"
               >

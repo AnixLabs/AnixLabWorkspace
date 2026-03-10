@@ -8,7 +8,7 @@ export const metadata = {
   addToSitemap: true,
 };
 
-export default async function Home() {
+export default function Home() {
   const Drops = [
     {
       title: "Anix7 - Tools",

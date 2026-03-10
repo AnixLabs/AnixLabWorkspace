@@ -1,7 +1,7 @@
-import { IProps } from "react-qrcode-logo";
+import type { IProps } from "react-qrcode-logo";
 
 // ✅ Types for images
-export type ImageItem = {
+export interface ImageItem {
   url: string;
   type: string; // MIME type, e.g. "image/jpeg"
   width: number;
@@ -10,41 +10,41 @@ export type ImageItem = {
   resizedUrl?: string;
   resizedWidth?: number;
   resizedHeight?: number;
-};
+}
 
 // ✅ Types for loading state
-export type LoadingState = {
+export interface LoadingState {
   resize: boolean;
   [key: string]: boolean;
-};
+}
 
 // ✅ Resize options
 export type WidthType = "percent" | "pixel";
 
-export type ResizeOptions = {
+export interface ResizeOptions {
   widthType: WidthType;
   widthInput?: number;
   heightInput?: number;
   maintainAspect: boolean;
   isCompress: boolean;
   quality: number; // 1–100
-};
+}
 
 // ✅ Return type for resize handler
 export type ResizeHandler = () => Promise<void>;
 
-export type QrFrame = {
+export interface QrFrame {
   type: number; // 0 for no frame, 1 for frame with text, etc.
   bg: string; // Background color
   text: string; // Optional text for the frame
   font: string; // Font family for the text
   color: string; // Color of the frame
-};
+}
 
-export type QrSettings = {
+export interface QrSettings {
   frame: QrFrame;
   qr: IProps; // QR code properties from react-qrcode-logo
-};
+}
 
 export type DesignTab = "Frame" | "Style" | "Logo" | "Advance";
 
@@ -59,7 +59,7 @@ export type contentTab =
   | "Phone"
   | "Location";
 
-export type QrData = {
+export interface QrData {
   URL?: {
     url: string;
   };
@@ -101,16 +101,16 @@ export type QrData = {
     longitude: number;
     query?: string; // optional place name
   };
-};
+}
 
 export type oneEye = [number, number, number, number];
 export type eyeRadius = [oneEye, oneEye, oneEye];
 
-export type InnerOuterRadii = {
+export interface InnerOuterRadii {
   inner: number | [number, number, number, number];
   outer: number | [number, number, number, number];
-};
-export type InnerOuterEyeColor = {
+}
+export interface InnerOuterEyeColor {
   inner: string;
   outer: string;
-};
+}

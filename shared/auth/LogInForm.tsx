@@ -4,7 +4,7 @@ import { signInSchema } from "@shared/lib/zod";
 import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 import { ZodError } from "zod";
-import { AgreeAndSubmitButton, SignUpErrors } from "./LoginSignup";
+import { AgreeAndSubmitButton, type SignUpErrors } from "./LoginSignup";
 import { useSearchParams } from "next/navigation";
 import { Input, PasswordInput } from "@shared/components/ui/Input";
 import { signIn } from "./client";
@@ -17,7 +17,7 @@ export default function LogInForm() {
 
   const [signInError, setSignInError] = useState<SignUpErrors>({});
 
-  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+  function handleSignIn(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSignInError({});
     startTransition(async () => {

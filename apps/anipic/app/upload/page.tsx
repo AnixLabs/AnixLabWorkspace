@@ -15,11 +15,11 @@ export default function UploadPage() {
 
   type UrlType = "originalUrl" | "displayUrl" | "thumbnailUrl";
 
-  type ImgMeta = {
+  interface ImgMeta {
     url: string;
     width: number;
     height: number;
-  };
+  }
 
   type ImgType = Record<UrlType, ImgMeta | null>;
 

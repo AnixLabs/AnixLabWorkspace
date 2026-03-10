@@ -18,12 +18,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       name = "text",
       className = "",
       maxLength = 512,
-      onChange = () => {},
+      onChange = () => undefined,
       label = "",
       labelClassName = "",
       ...props
     },
-    ref
+    ref,
   ) => {
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -44,7 +44,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <label
             className={twMerge(
               "text-xs text-theme-450 font-semibold absolute -top-2.5 left-1.5",
-              labelClassName
+              labelClassName,
             )}
           >
             {label}
@@ -56,7 +56,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           name={name}
           className={twMerge(
             "w-full h-9 p-2 my-1.5 outline-hidden border hover:border-theme-450 focus:border-theme-450 focus:shadow-[0px_0px_5px_0px] focus:shadow-theme-450 select-none rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-500 disabled:placeholder:text-gray-500",
-            className
+            className,
           )}
           maxLength={maxLength}
           onChange={handleChange}
@@ -64,7 +64,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
@@ -76,7 +76,7 @@ export function CopyInput({ value, className = "", ...props }: React.HTMLProps<H
       <svg
         role="button"
         viewBox="0 0 24 24"
-        onClick={() => copyToClipboard((value || "").toString())}
+        onClick={() => copyToClipboard((value ?? "").toString())}
         className="fill-theme-450 absolute top-1/2 -translate-y-1/2 right-1 hover:scale-110 cursor-pointer transition-all duration-500"
       >
         <path d="M16 20H8a3 3 0 0 1-3-3V7a1 1 0 0 0-2 0v10a5 5 0 0 0 5 5h8a1 1 0 0 0 0-2Zm5-11.06a1.31 1.31 0 0 0-.06-.27v-.09a1.07 1.07 0 0 0-.19-.28l-6-6a1.07 1.07 0 0 0-.28-.19h-.09L14.06 2H10a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8.94Zm-6-3.53L17.59 8H16a1 1 0 0 1-1-1ZM19 15a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3v3a3 3 0 0 0 3 3h3Z" />
@@ -123,7 +123,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
         </button>
       </div>
     );
-  }
+  },
 );
 
 PasswordInput.displayName = "PasswordInput";
@@ -140,14 +140,22 @@ export function ColorInput({ value = "#000000", className = "", ...props }) {
   );
 }
 
+type ColorWithInputProps = {
+  value?: string;
+  placeholder?: string;
+  className?: string;
+  onChange?: (color: string) => void;
+  debounceTime?: number;
+} & Omit<React.HTMLProps<HTMLDivElement>, "onChange">;
+
 export function ColorWithInput({
   value = "#ffffff",
   placeholder = "Enter Hex Color Code",
   className = "",
-  onChange = (color: string) => {},
+  onChange = (_color: string) => undefined,
   debounceTime = 300,
   ...props
-}) {
+}: ColorWithInputProps) {
   const [localColor, setLocalColor] = useState(value);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -158,14 +166,14 @@ export function ColorWithInput({
 
   // Debounced onChange
   useEffect(() => {
-    clearTimeout(debounceRef.current as NodeJS.Timeout);
+    clearTimeout(debounceRef.current!);
     debounceRef.current = setTimeout(() => {
       if (localColor.length === 7 && localColor !== value) {
         onChange(localColor);
       }
     }, debounceTime);
 
-    return () => clearTimeout(debounceRef.current as NodeJS.Timeout);
+    return () => clearTimeout(debounceRef.current!);
   }, [localColor, debounceTime, onChange, value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,15 +192,24 @@ export function ColorWithInput({
   );
 }
 
+type SliderWithTooltipProps = {
+  min?: number;
+  max?: number;
+  value?: number;
+  step?: number;
+  name?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Function to update parent state
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange">;
+
 export function SliderWithTooltip({
   min = 1,
   max = 50,
   value = 25,
   step = 1,
   name = "range",
-  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {}, // Function to update parent state
+  onChange = (_e: React.ChangeEvent<HTMLInputElement>) => undefined, // Function to update parent state
   ...props
-}) {
+}: SliderWithTooltipProps) {
   const [v, setV] = useState(value);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,7 +267,7 @@ export function TextArea({
   const ref = useRef<NodeJS.Timeout | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    clearTimeout(ref.current as NodeJS.Timeout);
+    clearTimeout(ref.current!);
     setCount(e.target.value.length);
     ref.current = setTimeout(() => props.onChange?.(e), debounceTime);
   };
@@ -300,7 +317,7 @@ export function Select({
         <label
           className={twMerge(
             "text-xs text-theme-450 font-semibold absolute -top-2.5 left-1.5",
-            labelClassName
+            labelClassName,
           )}
         >
           {label}
@@ -325,14 +342,21 @@ export function Select({
   );
 }
 
+type CheckboxProps = {
+  label?: string;
+  name?: string;
+  className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Function to update parent state
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange">;
+
 export function Checkbox({
   label = "",
   checked = false,
   name = "checkbox",
   className = "",
-  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {}, // Function to update parent state
+  onChange = (_e: React.ChangeEvent<HTMLInputElement>) => undefined, // Function to update parent state
   ...props
-}) {
+}: CheckboxProps) {
   const [ck, setCk] = useState(checked);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
@@ -359,12 +383,12 @@ export function Checkbox({
 export function OTPInput({
   value = "",
   maxLength = 6,
-  onChange = (e: string) => {},
+  onChange = (_e: string) => undefined,
   className = "",
   ...props
 }) {
   const [otp, setOtp] = useState(
-    value.split("").slice(0, maxLength).concat(Array(maxLength).fill("")).slice(0, maxLength)
+    value.split("").slice(0, maxLength).concat(Array(maxLength).fill("")).slice(0, maxLength),
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 

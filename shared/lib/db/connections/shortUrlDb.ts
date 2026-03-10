@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const uri = process.env.MONGODB_URI_SHORTURLS;
 
-const cached = global._shortUrlDb || { conn: null, promise: null };
+const cached = global._shortUrlDb ?? { conn: null, promise: null };
 
 export default async function connectToShortUrlDb() {
   if (!uri) throw new Error("❌ MONGODB_URI_SHORTURLS not found");
@@ -10,7 +10,7 @@ export default async function connectToShortUrlDb() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    console.log("🔄 Connecting to ShortUrl DB...");
+    console.info("🔄 Connecting to ShortUrl DB...");
     cached.promise = mongoose
       .createConnection(uri, {
         dbName: "ShortUrlsDB",
@@ -18,7 +18,7 @@ export default async function connectToShortUrlDb() {
       })
       .asPromise()
       .then((conn) => {
-        console.log("✅ Connected to ShortUrl DB");
+        console.info("✅ Connected to ShortUrl DB");
         return conn;
       });
   }

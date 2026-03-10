@@ -139,7 +139,7 @@ const Drops = [
     image: "/assets/img/multi-device.png",
   },
 ];
-export default async function ImageUploading() {
+export default function ImageUploading() {
   return (
     <>
       <IfLoggedIn>

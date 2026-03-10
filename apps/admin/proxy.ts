@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@shared/auth";
 
@@ -18,7 +18,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2️⃣ Fetch session (Better Auth way)
+  // Fetch session
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -29,7 +29,7 @@ export async function proxy(req: NextRequest) {
   const isApiRoute = nextUrl.pathname.startsWith("/api");
   const isPage = !isApiRoute;
 
-  // 3️⃣ Unauthorized logic
+  // Unauthorized logic
   if (!isAdmin) {
     // API or non-GET page
     if (isApiRoute || (isPage && method !== "GET")) {
