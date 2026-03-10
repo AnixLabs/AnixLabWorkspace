@@ -96,7 +96,7 @@ export default function SlideBarLayout({
   }
   // Add menu items based on session state
   const filteredMenu = updatedMenu.filter(
-    (item) => !((!session && item.showOnLoggedIn) ?? (session && item.showOnLoggedOut)),
+    (item) => !((!session && item.showOnLoggedIn) || (session && item.showOnLoggedOut)),
   );
   // Auto-close sidebar on route change if on mobile
   const [showSideBar, setShowSideBar] = useState(false);
