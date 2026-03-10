@@ -1,7 +1,7 @@
 "use client";
 
 import DropZone from "@shared/components/ui/DropZone";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import JSZip from "jszip";
 import { Checkbox, Input, SliderWithTooltip } from "@shared/components/ui/Input";
 import { Button } from "@shared/components/ui/Button";
@@ -35,7 +35,7 @@ export default function Resizer() {
   const [maxHeight, setMaxHeight] = useState(16);
   const [loading, setLoading] = useState({ resize: false, downloadAll: false });
 
-  const handleFileChange = (files: File[]) => {
+  const handleFileChange = useCallback((files: File[]) => {
     const newImages: ImageFile[] = files.map((f) => {
       const uid = crypto.randomUUID();
       const url = URL.createObjectURL(f);
@@ -47,7 +47,7 @@ export default function Resizer() {
       });
     });
     setImages(newImages);
-  };
+  }, []);
 
   useEffect(() => {
     images.forEach((img, index) => {

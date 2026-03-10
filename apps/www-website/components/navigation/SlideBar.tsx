@@ -1,6 +1,7 @@
 "use client";
 
-import SlideBarLayout from "@shared/components/navigation/SlideBarLayout";
+import SlideBarLayout from "@shared/components/navigation/slidebar/layout";
+import type { MenuItem } from "@shared/components/navigation/slidebar/types";
 
 import { RxImage } from "react-icons/rx";
 import { PiResize } from "react-icons/pi";
@@ -8,7 +9,7 @@ import { IoQrCodeOutline, IoSettingsOutline } from "react-icons/io5";
 import { RiHomeHeartLine, RiQuestionAnswerLine } from "react-icons/ri";
 import { HiOutlineLink } from "react-icons/hi2";
 
-const menuItem = [
+const menuItem: MenuItem[] = [
   {
     label: "Anix7 Tools",
     icon: <IoSettingsOutline />,
