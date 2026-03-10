@@ -1,4 +1,4 @@
-import { Connection } from "mongoose";
+import { type Connection } from "mongoose";
 
 interface CachedConnection {
   conn: Connection | null;
@@ -8,7 +8,7 @@ interface CachedConnection {
 // Extend the NodeJS global object to include
 declare global {
   // Avoid TS error on redeclaration in hot reload
-  // eslint-disable-next-line no-var
+   
   var _imageUploadDb: CachedConnection | undefined;
   var _shortUrlDb: CachedConnection | undefined;
 }

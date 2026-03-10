@@ -5,12 +5,21 @@ import { redirect } from "next/navigation";
 
 async function createUser(formData: FormData) {
   "use server";
-  const name = formData.get("name")?.toString();
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
-  const role = formData.get("role")?.toString() as "user" | "admin" | undefined;
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const role = formData.get("role");
 
-  if (!name || !email || !password || !role) return;
+  if (
+    typeof name !== "string" ||
+    !name ||
+    typeof email !== "string" ||
+    !email ||
+    typeof password !== "string" ||
+    !password ||
+    (role !== "user" && role !== "admin")
+  )
+    return;
 
   const result = await auth.api.createUser({
     body: { name, email, password, role },

@@ -1,4 +1,4 @@
-export type ToolType = {
+export interface ToolType {
   category: "Calculator" | "Image" | "Text Analysis" | "Other";
   hot?: true;
   isNew?: true;
@@ -6,7 +6,7 @@ export type ToolType = {
   description: string;
   image: string;
   link: string;
-};
+}
 
 export const tools: ToolType[] = [
   {

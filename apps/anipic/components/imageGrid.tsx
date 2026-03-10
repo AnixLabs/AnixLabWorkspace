@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export type SafeImages = {
+export interface SafeImages {
   sno: number;
   thumbnailUrl: string;
   width: number;
   height: number;
   title: string;
-};
+}
 
 function reorder<T>(items: T[]) {
   const half = Math.ceil(items.length / 2);

@@ -7,8 +7,9 @@ import { Button } from "./Button";
 import Link from "next/link";
 import { IoClose } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import Image from "next/image";
 
-type DropZoneProps = {
+interface DropZoneProps {
   accept?: Record<string, string[]>;
   multiple?: boolean;
   maxItem?: number;
@@ -17,7 +18,7 @@ type DropZoneProps = {
   label?: string;
   disabled?: boolean;
   className?: string;
-};
+}
 
 // Custom file type with extra fields
 export type ExtendedFile = File & {
@@ -33,7 +34,7 @@ export default function DropZone({
   multiple = false,
   maxItem = 5,
   maxSize = 10 * 1024 * 1024, // 10 MB
-  onFilesChange = () => {},
+  onFilesChange = () => undefined,
   label = "Drag & drop some files here, or click to select files",
   disabled = false,
   className = "",
@@ -44,12 +45,12 @@ export default function DropZone({
 
   useEffect(() => {
     onFilesChange(files);
-  }, [files]);
+  }, [files, onFilesChange]);
 
   const mb = (maxSize / 1024 / 1024).toFixed(1);
-  const allowedExts = Object.values(accept)
-    .flat()
-    .map((e) => e.toLowerCase());
+  // const allowedExts = Object.values(accept)
+  //   .flat()
+  //   .map((e) => e.toLowerCase());
 
   const acceptedTypesStr = useMemo(() => {
     const categoryMap: Record<string, Set<string>> = {};
@@ -129,7 +130,7 @@ export default function DropZone({
     return () => {
       previousFiles.forEach((f) => f.url && URL.revokeObjectURL(f.url));
     };
-  }, []);
+  }, [files]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept,
@@ -139,7 +140,7 @@ export default function DropZone({
     disabled,
     validator: (file) => {
       const errors: string[] = [];
-      const ext = file.name?.split(".").pop()?.toLowerCase();
+      // const ext = file.name?.split(".").pop()?.toLowerCase();
       if (file.size > maxSize) errors.push("file-too-large");
       // if (!allowedExts.includes(`.${ext}`)) errors.push("wrong-extension");
       const mimeAccepted = Object.keys(accept).some((mime) => {
@@ -170,12 +171,21 @@ export default function DropZone({
   const previews = files.map((file, i) => {
     const isImage = file.type.startsWith("image/");
     // const isPdf = file.type === "application/pdf";
-    const extMatch = file.name?.match(/\.(\w+)$/);
+    const extMatch = /\.(\w+)$/.exec(file.name);
     const ext = extMatch?.[1]?.toUpperCase() ?? "FILE";
 
     let thumb;
-    if (isImage) {
-      thumb = <img src={file.url} alt={file.name} className="w-20 h-20 object-cover rounded-md" />;
+    if (isImage && file.url) {
+      thumb = (
+        <Image
+          src={file.url}
+          alt={file.name}
+          width={80}
+          height={80}
+          className="object-cover rounded-md"
+          unoptimized
+        />
+      );
     }
     // else if (isPdf) {
     //   thumb = (
@@ -204,7 +214,7 @@ export default function DropZone({
       >
         <Button
           className="absolute z-10 bg-red-400 text-white w-5 h-5 min-h-5 p-3 rounded-full -top-4 -right-2"
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
             const fileToRemove = files[i];
             if (!fileToRemove) return;
@@ -302,7 +312,7 @@ export default function DropZone({
               // previewFile.type !== "application/pdf" &&
               <div className="flex flex-col items-center text-white">
                 <div className="text-6xl font-bold mb-4">
-                  {(previewFile.name.match(/\.(\w+)$/)?.[1] || "FILE").toUpperCase()}
+                  {(/\.(\w+)$/.exec(previewFile.name)?.[1] ?? "FILE").toUpperCase()}
                 </div>
                 <div className="text-xl wrap-anywhere">{previewFile.name}</div>
               </div>

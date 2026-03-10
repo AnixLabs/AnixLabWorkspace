@@ -155,7 +155,7 @@ export default function UrlShortener() {
                 type="text"
                 placeholder="Enter 6 characters"
                 autoComplete="off"
-                onChange={handleAlias}
+                onChange={(e) => void handleAlias(e)}
                 maxLength={6}
               />
 
@@ -173,7 +173,7 @@ export default function UrlShortener() {
                 disabled={
                   !!((isAlias && (!alias || aliasError)) || !longUrl || urlError || submitLoading)
                 }
-                onClick={handleSubmit}
+                onClick={() => void handleSubmit()}
                 loading={submitLoading}
               >
                 Submit

@@ -30,7 +30,7 @@ export default function ThemeAdder() {
     const colorClass = localStorage.getItem("themeColor");
     if (colorClass) {
       // Remove old theme color classes
-      root.classList.remove(...(root.className.match(/theme\d+/g) || []));
+      root.classList.remove(...(root.className.match(/theme\d+/g) ?? []));
       root.classList.add(colorClass);
     }
 

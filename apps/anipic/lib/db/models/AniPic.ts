@@ -1,5 +1,5 @@
 import "server-only";
-import { Schema, Model, Connection } from "mongoose";
+import { Schema, type Model, type Connection } from "mongoose";
 import connectToAniPicDb from "../connections/aniPicDb";
 
 export interface AniPic {
@@ -62,8 +62,6 @@ let cachedModel: Model<AniPic> | null = null;
 
 export default async function getAniPicModel(): Promise<Model<AniPic>> {
   const conn: Connection = await connectToAniPicDb();
-  if (!cachedModel) {
-    cachedModel = conn.models.AniPic || conn.model<AniPic>("AniPic", aniPicSchema);
-  }
+  cachedModel ??= conn.models.AniPic ?? conn.model<AniPic>("AniPic", aniPicSchema);
   return cachedModel;
 }

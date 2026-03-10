@@ -5,6 +5,7 @@ import { auth } from "@shared/auth";
 import { disallowedDomains } from "./disallowedDomains";
 import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
 import { headers } from "next/headers";
+import type { Urls } from "./types";
 
 export async function checkAlias({ alias }: { alias: string }) {
   try {
@@ -52,7 +53,7 @@ export async function checkAlias({ alias }: { alias: string }) {
   }
 }
 
-async function isValidURL(url: string) {
+function isValidURL(url: string) {
   const disallowedPattern = `^https:\\/\\/(?:${disallowedDomains.join("|")})\\b`;
   const disallowedRegex = new RegExp(disallowedPattern, "i");
 
@@ -71,7 +72,7 @@ async function generateAlias() {
   do {
     alias = Array.from(
       { length: 6 },
-      () => characters[Math.floor(Math.random() * characters.length)]
+      () => characters[Math.floor(Math.random() * characters.length)],
     ).join("");
   } while (await ShortUrl.findOne({ alias }));
 
@@ -84,7 +85,7 @@ export async function createShortUrl({ longUrl, alias }: { longUrl: string; alia
       headers: await headers(),
     });
 
-    if (!session || !session.user) {
+    if (!session?.user) {
       return { success: false, message: "Unauthorized" };
     }
     const uploadedBy = session.user.id;
@@ -106,7 +107,7 @@ export async function createShortUrl({ longUrl, alias }: { longUrl: string; alia
       return { success: false, message: "Long URL is required" };
     }
 
-    if (!(await isValidURL(longUrl))) {
+    if (!isValidURL(longUrl)) {
       // If the URL is not valid
       return { success: false, message: "This URL Not Allowed!" };
     }
@@ -130,7 +131,7 @@ export async function createShortUrl({ longUrl, alias }: { longUrl: string; alia
     }
 
     // Generate a unique alias (6 characters long)
-    const newAlias = alias || (await generateAlias());
+    const newAlias = alias ?? (await generateAlias());
 
     // Create a new ShortUrl record
     const shortUrl = new ShortUrl({
@@ -162,7 +163,7 @@ export async function createShortUrl({ longUrl, alias }: { longUrl: string; alia
   }
 }
 
-export async function modifyAds({ alias, ad }: { alias: string; ad: number }) {
+export async function modifyAds({ alias, ad }: { alias: string; ad: Urls["adsLabel"] }) {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -175,7 +176,7 @@ export async function modifyAds({ alias, ad }: { alias: string; ad: number }) {
       return { success: false, message: "Invalid waiting type" };
     }
     // Return False if alias is empty
-    if (!alias || alias.trim().length !== 6 || !/^[a-zA-Z0-9]+$/.test(alias))
+    if (alias?.trim().length !== 6 || !/^[a-zA-Z0-9]+$/.test(alias))
       return { success: false, message: "Invalid Request!" };
 
     // Get the URL using the alias
@@ -206,9 +207,9 @@ export async function deleteShortUrl({ alias }: { alias: string }) {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session || !session.user) return { success: false, error: "Unauthorized" };
+    if (!session?.user) return { success: false, error: "Unauthorized" };
 
-    if (!alias || alias.trim().length !== 6 || !/^[a-zA-Z0-9]+$/.test(alias))
+    if (alias?.trim().length !== 6 || !/^[a-zA-Z0-9]+$/.test(alias))
       return { success: false, error: "Invalid Request!" };
 
     const ShortUrl = await getShortUrlModel();
@@ -233,7 +234,7 @@ export async function editShortUrl({ editedUrl, alias }: { editedUrl: string; al
       headers: await headers(),
     });
 
-    if (!session || !session.user) {
+    if (!session?.user) {
       return { success: false, message: "Unauthorized" };
     }
     const uploadedBy = session.user.id;
@@ -251,7 +252,7 @@ export async function editShortUrl({ editedUrl, alias }: { editedUrl: string; al
       return { success: false, message: "Long URL is required" };
     }
 
-    if (!(await isValidURL(editedUrl))) {
+    if (!isValidURL(editedUrl)) {
       // If the URL is not valid
       return { success: false, message: "This URL Not Allowed!" };
     }

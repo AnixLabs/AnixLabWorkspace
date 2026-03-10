@@ -20,17 +20,13 @@ type MoreIconType =
       component: React.ReactNode;
     };
 
-export type NavBarType = {
+export interface NavBarType {
   appName?: string;
   appSubName?: string;
   moreIcon?: MoreIconType[];
-};
+}
 
-export default async function Navbar({
-  appName = "Anix7",
-  appSubName = "",
-  moreIcon = [],
-}: NavBarType) {
+export default function Navbar({ appName = "Anix7", appSubName = "", moreIcon = [] }: NavBarType) {
   return (
     <>
       <header className="w-full z-20 sticky top-0 shadow-xs border-b md:dark:border-b-gray-900/25">

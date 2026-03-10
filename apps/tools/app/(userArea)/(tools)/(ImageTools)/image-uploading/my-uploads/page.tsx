@@ -2,7 +2,7 @@ import { Button } from "@shared/components/ui/Button";
 import MyImages from "./myImages";
 import { TiArrowBackOutline } from "react-icons/ti";
 
-export default async function MyImg() {
+export default function MyImg() {
   return (
     <>
       <Button href="/image-uploading">

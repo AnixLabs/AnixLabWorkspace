@@ -25,6 +25,8 @@ if (!AUTH_GOOGLE_SECRET) {
 // MongoDB
 let mongoClient: MongoClient;
 
+const g = globalThis as typeof globalThis & { mongoClient?: MongoClient };
+
 function getMongoClient() {
   if (!mongoClient) {
     const uri = process.env.MONGODB_URI_AUTH;
@@ -33,8 +35,7 @@ function getMongoClient() {
     mongoClient = new MongoClient(uri);
 
     if (NODE_ENV !== "production") {
-      // reuse global for dev HMR
-      (globalThis as any).mongoClient = mongoClient;
+      g.mongoClient = mongoClient;
     }
   }
 
@@ -87,7 +88,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
       if (NODE_ENV === "development") {
-        console.log("Test Verification Email: ", url);
+        console.info("Test Verification Email: ", url);
         return;
       }
 
@@ -129,7 +130,7 @@ export const auth = betterAuth({
         else if (type === "forget-password") subject = "Reset your password";
 
         if (NODE_ENV === "development") {
-          console.log(subject, ": ", otp);
+          console.info(subject, ": ", otp);
           return;
         }
 
