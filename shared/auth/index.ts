@@ -152,3 +152,6 @@ export const auth = betterAuth({
     nextCookies(), // ⚠️ Must be last
   ],
 });
+
+// Inferred types from better-auth
+export type AuthServerSession = typeof auth.$Infer.Session;
