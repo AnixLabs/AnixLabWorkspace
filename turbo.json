@@ -45,6 +45,11 @@
         "PORT"
       ]
     },
+    "core-server#build": {
+      "dependsOn": ["^build", "core-server#check"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**"]
+    },
     "start": {
       "dependsOn": ["^start"],
       "cache": false,
