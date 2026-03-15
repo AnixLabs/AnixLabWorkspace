@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import { Server as SocketServer } from "socket.io";
 import { config } from "./config";
 import { loggerConfig } from "./lib/logger";
+import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 
 // Plugins
 import errorPlugin from "./plugins/error.plugin";
@@ -18,6 +19,10 @@ async function bootstrap() {
     logger: loggerConfig,
     disableRequestLogging: config.NODE_ENV === "production",
   });
+
+  // Zod schema validation and serialization
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
 
   // Plugins - order matters
   await app.register(errorPlugin);

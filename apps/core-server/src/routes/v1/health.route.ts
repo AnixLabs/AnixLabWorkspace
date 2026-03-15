@@ -1,19 +1,17 @@
-import type { FastifyInstance, FastifySchema } from "fastify";
+import { z } from "zod";
+import type { FastifyPluginCallbackZod } from "fastify-type-provider-zod";
 
-const schema: FastifySchema = {
+const schema = {
   response: {
-    200: {
-      type: "object",
-      properties: {
-        status: { type: "string" },
-        uptime: { type: "number" },
-        timestamp: { type: "string" },
-      },
-    },
+    200: z.object({
+      status: z.literal("ok"),
+      uptime: z.number(),
+      timestamp: z.iso.datetime(),
+    }),
   },
 };
 
-export default function healthRoutes(app: FastifyInstance) {
+const healthRoutes: FastifyPluginCallbackZod = (app) => {
   app.get("/health", { schema }, async (_request, reply) => {
     return reply.send({
       status: "ok",
@@ -21,4 +19,6 @@ export default function healthRoutes(app: FastifyInstance) {
       timestamp: new Date().toISOString(),
     });
   });
-}
+};
+
+export default healthRoutes;
