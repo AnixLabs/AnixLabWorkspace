@@ -1,6 +1,5 @@
 import fp from "fastify-plugin";
 import type { FastifyInstance } from "fastify";
-import { config } from "@/config";
 import { auth } from "@shared/auth";
 import { fromNodeHeaders } from "better-auth/node";
 
@@ -10,35 +9,53 @@ export default fp((app: FastifyInstance) => {
   app.decorateRequest("user", null);
 
   // Mount all better-auth routes
-  app.all("/api/auth/*", async (request, reply) => {
-    const response = await auth.handler(
-      new Request(`${config.BETTER_AUTH_URL}${request.url}`, {
-        method: request.method,
-        headers: new Headers(request.headers as Record<string, string>),
-        body:
-          request.method !== "GET" && request.method !== "HEAD"
-            ? JSON.stringify(request.body)
-            : undefined,
-      }),
-    );
+  app.route({
+    method: ["GET", "POST"],
+    url: "/api/auth/*",
+    config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+    async handler(request, reply) {
+      try {
+        // Construct request URL
+        const url = new URL(request.url, `${request.protocol}://${request.headers.host}`);
 
-    // Forward status, headers, body back to Fastify
-    reply.status(response.status);
-    response.headers.forEach((value, key) => {
-      reply.header(key, value);
-    });
-    const body = await response.text();
-    return reply.send(body);
+        // Convert Fastify headers to standard Headers object
+        const headers = new Headers();
+        Object.entries(request.headers).forEach(([key, value]) => {
+          if (value) headers.append(key, value.toString());
+        });
+
+        // Create Fetch API-compatible request
+        const req = new Request(url.toString(), {
+          method: request.method,
+          headers,
+          ...(request.body ? { body: JSON.stringify(request.body) } : {}),
+        });
+
+        // Process authentication request
+        const response = await auth.handler(req);
+
+        // Forward response to client
+        reply.status(response.status);
+        response.headers.forEach((value, key) => void reply.header(key, value));
+        return reply.send(response.body ? await response.text() : null);
+      } catch (error) {
+        app.log.error({ err: error }, "Authentication error");
+        return reply.status(500).send({
+          success: false,
+          code: "AUTH_FAILURE",
+          message: "Internal authentication error",
+        });
+      }
+    },
   });
 
-  // Populate session on every request
   app.addHook("onRequest", async (request) => {
     try {
-      const session = await auth.api.getSession({
+      const result = await auth.api.getSession({
         headers: fromNodeHeaders(request.headers),
       });
-      request.session = session?.session ?? null;
-      request.user = session?.user ?? null;
+      request.session = result?.session ?? null;
+      request.user = result?.user ?? null;
     } catch {
       request.session = null;
       request.user = null;

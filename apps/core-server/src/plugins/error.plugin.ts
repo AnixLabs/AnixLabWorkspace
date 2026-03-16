@@ -48,7 +48,7 @@ export default fp((app: FastifyInstance) => {
     }
 
     // Mongoose duplicate key
-    if (error.code === "11000") {
+    if (error.code === "11000" || (typeof error.code === "number" && error.code === 11000)) {
       return reply.status(409).send({
         success: false,
         code: "DUPLICATE",

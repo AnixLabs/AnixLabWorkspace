@@ -36,7 +36,7 @@ async function bootstrap() {
   // Socket.IO
   const io = new SocketServer(app.server, {
     cors: {
-      origin: config.CLIENT_URLS,
+      origin: config.SOCKET_CLIENT_URLS,
       credentials: true,
     },
     connectionStateRecovery: {
