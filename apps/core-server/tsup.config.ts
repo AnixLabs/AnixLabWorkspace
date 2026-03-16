@@ -9,4 +9,5 @@ export default defineConfig({
   dts: false,
   minify: false,
   target: "node18",
+  external: ["mongoose", "zod", "better-auth", "mongodb", "nodemailer"],
 });
