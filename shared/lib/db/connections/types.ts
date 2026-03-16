@@ -7,8 +7,6 @@ interface CachedConnection {
 
 // Extend the NodeJS global object to include
 declare global {
-  // Avoid TS error on redeclaration in hot reload
-   
   var _imageUploadDb: CachedConnection | undefined;
   var _shortUrlDb: CachedConnection | undefined;
 }

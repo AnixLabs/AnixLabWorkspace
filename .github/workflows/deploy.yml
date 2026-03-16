@@ -1,0 +1,38 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e
+
+            # Add pnpm global binaries
+            export PATH="$HOME/.local/share/pnpm:$PATH"
+
+            # Navigate to project
+            cd ~/apps/AnixLabWorkspace
+
+            # Sync code
+            git fetch origin
+            git reset --hard origin/main
+
+            # Install & build
+            pnpm install --filter core-server... --frozen-lockfile
+            pnpm build --filter core-server
+
+            # PM2 start/reload
+            pm2 startOrReload ecosystem.config.cjs
+            pm2 save

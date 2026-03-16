@@ -1,4 +1,5 @@
-import SlideBarLayout from "@shared/components/navigation/SlideBarLayout";
+import type { MenuItem } from "@shared/components/navigation/slidebar/types";
+import SlideBarLayout from "@shared/components/navigation/slidebar/layout";
 import { RxImage } from "react-icons/rx";
 import { PiResize } from "react-icons/pi";
 import { PiCalculatorThin } from "react-icons/pi";
@@ -6,9 +7,8 @@ import { FcManager } from "react-icons/fc";
 import { IoQrCodeOutline } from "react-icons/io5";
 import { HiOutlineLink } from "react-icons/hi2";
 import { RiQuestionAnswerLine } from "react-icons/ri";
-import { Suspense } from "react";
 
-const menuItem = [
+const menuItem: MenuItem[] = [
   {
     label: "Url Shortener",
     icon: <HiOutlineLink />,
@@ -66,9 +66,5 @@ const menuItem = [
 ];
 
 export default function SlideBar() {
-  return (
-    <Suspense>
-      <SlideBarLayout menuItem={menuItem} />
-    </Suspense>
-  );
+  return <SlideBarLayout menuItem={menuItem} />;
 }

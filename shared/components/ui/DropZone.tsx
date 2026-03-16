@@ -23,8 +23,10 @@ interface DropZoneProps {
 // Custom file type with extra fields
 export type ExtendedFile = File & {
   url?: string;
-  uid?: string;
+  uid: string;
 };
+
+const defaultOnFilesChange = () => undefined;
 
 export default function DropZone({
   accept = {
@@ -34,7 +36,7 @@ export default function DropZone({
   multiple = false,
   maxItem = 5,
   maxSize = 10 * 1024 * 1024, // 10 MB
-  onFilesChange = () => undefined,
+  onFilesChange = defaultOnFilesChange,
   label = "Drag & drop some files here, or click to select files",
   disabled = false,
   className = "",
@@ -168,7 +170,7 @@ export default function DropZone({
     },
   });
 
-  const previews = files.map((file, i) => {
+  const previews = files.map((file) => {
     const isImage = file.type.startsWith("image/");
     // const isPdf = file.type === "application/pdf";
     const extMatch = /\.(\w+)$/.exec(file.name);
@@ -208,7 +210,7 @@ export default function DropZone({
 
     return (
       <div
-        key={i}
+        key={file.uid}
         className="flex flex-col items-center relative cursor-pointer"
         onClick={() => isImage && setPreviewFile(file)}
       >
@@ -216,12 +218,8 @@ export default function DropZone({
           className="absolute z-10 bg-red-400 text-white w-5 h-5 min-h-5 p-3 rounded-full -top-4 -right-2"
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
-            const fileToRemove = files[i];
-            if (!fileToRemove) return;
-            if (fileToRemove.url) {
-              URL.revokeObjectURL(fileToRemove.url);
-            }
-            setFiles((prev) => prev.filter((_, idx) => idx !== i));
+            if (file.url) URL.revokeObjectURL(file.url);
+            setFiles((prev) => prev.filter((f) => f.uid !== file.uid));
           }}
           disabled={disabled}
         >
