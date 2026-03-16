@@ -5,6 +5,7 @@ import {
   hasZodFastifySchemaValidationErrors,
   isResponseSerializationError,
 } from "fastify-type-provider-zod";
+import { config } from "../config";
 
 export default fp((app: FastifyInstance) => {
   app.setErrorHandler((error: FastifyError, request, reply) => {
@@ -60,7 +61,7 @@ export default fp((app: FastifyInstance) => {
     return reply.status(500).send({
       success: false,
       code: "INTERNAL_ERROR",
-      message: process.env.NODE_ENV === "production" ? "Something went wrong" : error.message,
+      message: config.NODE_ENV === "production" ? "Something went wrong" : error.message,
     });
   });
 
