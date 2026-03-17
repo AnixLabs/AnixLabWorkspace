@@ -1,58 +1,55 @@
+import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
 import { twoFactor, username, emailOTP, admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
-import { betterAuth } from "better-auth";
+import { z } from "zod";
+import { getMongoClient } from "@shared/lib/mongodb";
 import { sendNoReplyMail } from "@shared/lib/sendMail";
 
-const NODE_ENV = process.env.NODE_ENV;
-const NEXT_PUBLIC_AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_BASE_URL;
+const AuthEnvSchema = z.object({
+  AUTH_BASE_URL: z.url().optional(),
+  NEXT_PUBLIC_AUTH_BASE_URL: z.url().optional(),
 
-if (!NEXT_PUBLIC_AUTH_BASE_URL) {
-  throw new Error("Missing NEXT_PUBLIC_AUTH_BASE_URL env");
+  AUTH_GOOGLE_ID: z.string(),
+  AUTH_GOOGLE_SECRET: z.string(),
+
+  MONGODB_URI_AUTH: z.string(),
+
+  BASE_URL: z.url().optional(),
+  CLIENT_URLS: z
+    .string()
+    .transform((val) => val.split(",").map((u) => u.trim()))
+    .optional(),
+});
+
+const parsed = AuthEnvSchema.safeParse(process.env);
+
+if (!parsed.success) {
+  console.error("❌ Invalid environment variables:");
+  console.error(z.treeifyError(parsed.error));
+  process.exit(1);
 }
-const AUTH_GOOGLE_ID = process.env.AUTH_GOOGLE_ID;
 
-if (!AUTH_GOOGLE_ID) {
-  throw new Error("Missing AUTH_GOOGLE_ID env");
+const authEnv = parsed.data;
+
+const AUTH_BASE_URL = parsed.data.AUTH_BASE_URL ?? parsed.data.NEXT_PUBLIC_AUTH_BASE_URL;
+if (!AUTH_BASE_URL) {
+  throw new Error("Missing AUTH_BASE_URL or NEXT_PUBLIC_AUTH_BASE_URL env");
 }
-const AUTH_GOOGLE_SECRET = process.env.AUTH_GOOGLE_SECRET;
 
-if (!AUTH_GOOGLE_SECRET) {
-  throw new Error("Missing AUTH_GOOGLE_SECRET env");
+const trustedOrigins = authEnv.CLIENT_URLS ?? [AUTH_BASE_URL];
+if (authEnv.BASE_URL) trustedOrigins.push(authEnv.BASE_URL);
+if (trustedOrigins.length === 0) {
+  throw new Error("At least one CLIENT_URLS origin must be specified");
 }
 
 // MongoDB
-let mongoClient: MongoClient;
-
-const g = globalThis as typeof globalThis & { mongoClient?: MongoClient };
-
-function getMongoClient() {
-  if (!mongoClient) {
-    const uri = process.env.MONGODB_URI_AUTH;
-    if (!uri) throw new Error("MONGODB_URI_AUTH is not defined");
-
-    mongoClient = new MongoClient(uri);
-
-    if (NODE_ENV !== "production") {
-      g.mongoClient = mongoClient;
-    }
-  }
-
-  return mongoClient;
-}
-
-const db = getMongoClient().db("BetterAuth");
-
-const trustedOrigins =
-  process.env.ALLOW_AUTH_ORIGIN_DIVIDE_BY_COMMA?.split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean) ?? [];
+const db = getMongoClient(authEnv.MONGODB_URI_AUTH).db("BetterAuth");
 
 // Auth config
 export const auth = betterAuth({
-  appName: "Anix7",
-  baseURL: NEXT_PUBLIC_AUTH_BASE_URL,
+  appName: "AnixLab",
+  baseURL: AUTH_BASE_URL,
   trustedOrigins,
 
   database: mongodbAdapter(db),
@@ -68,30 +65,25 @@ export const auth = betterAuth({
 
   socialProviders: {
     google: {
-      clientId: AUTH_GOOGLE_ID,
-      clientSecret: AUTH_GOOGLE_SECRET,
+      clientId: authEnv.AUTH_GOOGLE_ID,
+      clientSecret: authEnv.AUTH_GOOGLE_SECRET,
     },
   },
 
-  advanced: {
-    ...(NODE_ENV === "production" && {
-      crossSubDomainCookies: {
-        enabled: true,
-        domain: "anix7.in",
-      },
-      useSecureCookies: true,
-    }),
+  // advanced: {
+  //   ...(authEnv.NODE_ENV === "production" && {
+  //     crossSubDomainCookies: {
+  //       enabled: true,
+  //       domain: "anix7.in",
+  //     },
+  //     useSecureCookies: true,
+  //   }),
 
-    cookiePrefix: "anix7-auth",
-  },
+  //   cookiePrefix: "anix7-auth",
+  // },
 
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
-      if (NODE_ENV === "development") {
-        console.info("Test Verification Email: ", url);
-        return;
-      }
-
       try {
         await sendNoReplyMail({
           sendTo: user.email,
@@ -129,17 +121,12 @@ export const auth = betterAuth({
         else if (type === "email-verification") subject = "Verify your email";
         else if (type === "forget-password") subject = "Reset your password";
 
-        if (NODE_ENV === "development") {
-          console.info(subject, ": ", otp);
-          return;
-        }
-
         try {
           await sendNoReplyMail({
             sendTo: email,
             subject,
             html,
-            fromName: "Anix7 Verification",
+            fromName: "AnixLab Verification",
           });
         } catch (error) {
           console.error("OTP email send failed", error);

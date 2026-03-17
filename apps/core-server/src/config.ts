@@ -5,29 +5,19 @@ const EnvSchema = z.object({
   // ====<[ Global ]>====
   // ===================
 
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  NODE_ENV: z.enum(["development", "production", "test"]),
 
   // Owner
   OWNER_EMAIL: z.email(),
 
   // Database
   MONGODB_URI_AUTH: z.url(),
-  MONGODB_URI_SHORTURLS: z.url(),
-  MONGODB_URI_IMAGEUPLOADS: z.url(),
 
   // Auth
   AUTH_GOOGLE_ID: z.string(),
   AUTH_GOOGLE_SECRET: z.string(),
   BETTER_AUTH_SECRET: z.string().min(32),
-  NEXT_PUBLIC_AUTH_BASE_URL: z.url(),
-  // comma-separated allowed auth origins, supports wildcard *
-  ALLOW_AUTH_ORIGIN_DIVIDE_BY_COMMA: z
-    .string()
-    .transform((val) => val.split(",").map((u) => u.trim())),
-
-  // Short URL
-  SHORT_URL: z.string(),
-  URL_SHORTENER_TOKEN: z.string(),
+  AUTH_BASE_URL: z.url(),
 
   // Zoho Mail
   EMAIL_HOST: z.string(),
@@ -45,11 +35,8 @@ const EnvSchema = z.object({
   // comma-separated allowed origins for HTTP
   CLIENT_URLS: z.string().transform((val) => val.split(",").map((u) => u.trim())),
 
-  // comma-separated allowed origins for Socket.IO (usually just the game client)
+  // comma-separated allowed origins for Socket.IO
   SOCKET_CLIENT_URLS: z.string().transform((val) => val.split(",").map((u) => u.trim())),
-
-  // should be <this server's url>/api/auth
-  BETTER_AUTH_URL: z.string().default("/api/auth"),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
