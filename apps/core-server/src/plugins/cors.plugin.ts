@@ -12,7 +12,7 @@ export default fp((app: FastifyInstance) => {
       }
 
       // Check if the origin is in the allowed list
-      if (origin && config.CLIENT_URLS.includes(origin)) {
+      if (config.CLIENT_URLS.includes(origin)) {
         return callback(null, true);
       }
 
