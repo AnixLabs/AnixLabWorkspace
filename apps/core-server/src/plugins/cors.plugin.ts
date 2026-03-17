@@ -6,10 +6,17 @@ import { config } from "../config";
 export default fp((app: FastifyInstance) => {
   app.register(cors, {
     origin: (origin, callback) => {
-      if (origin && config.CLIENT_URLS.includes(origin)) {
+      // Allow non-browser / server requests
+      if (!origin) {
         return callback(null, true);
       }
 
+      // Check if the origin is in the allowed list
+      if (config.CLIENT_URLS.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Log the blocked origin for debugging purposes
       app.log.warn(`❌ Blocked by CORS: ${origin}`);
       return callback(new Error("Not allowed by CORS"), false);
     },
