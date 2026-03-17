@@ -1,7 +1,5 @@
 import { createAuthClient } from "better-auth/react";
-import type { auth } from "./index.js";
 import {
-  inferAdditionalFields,
   twoFactorClient,
   usernameClient,
   emailOTPClient,
@@ -9,10 +7,15 @@ import {
   organizationClient,
 } from "better-auth/client/plugins";
 
+const AUTH_BASE_URL = process.env.AUTH_BASE_URL ?? process.env.NEXT_PUBLIC_AUTH_BASE_URL;
+
+if (!AUTH_BASE_URL) {
+  throw new Error("Missing AUTH_BASE_URL or NEXT_PUBLIC_AUTH_BASE_URL env");
+}
+
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_AUTH_BASE_URL,
+  baseURL: AUTH_BASE_URL,
   plugins: [
-    inferAdditionalFields<typeof auth>(),
     twoFactorClient(),
     usernameClient(),
     emailOTPClient(),

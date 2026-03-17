@@ -1,33 +1,24 @@
 // lib/mongodb.ts
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI;
+const NODE_ENV = process.env.NODE_ENV;
 
-if (!uri) {
-  throw new Error("❌ Add MONGODB_URI to your .env.local file.");
-}
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-// Extend NodeJS global type to avoid TS errors
+// Extend NodeJS global type to avoid TS errors in development
 declare global {
-   
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
+  var _mongoClient: MongoClient | undefined;
 }
 
-if (process.env.NODE_ENV === "development") {
-  // Use cached connection in dev mode (so hot reloads don't create new clients)
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri);
-    global._mongoClientPromise = client.connect();
+let mongoClient: MongoClient | undefined;
+
+export function getMongoClient(uri: string) {
+
+  // In development, reuse global instance to prevent multiple connections on HMR
+  if (NODE_ENV === "development") {
+    global._mongoClient ??= new MongoClient(uri);
+    return global._mongoClient;
   }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // Always create new client in production
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
-}
 
-export { client };
-export default clientPromise;
+  mongoClient ??= new MongoClient(uri);
+
+  return mongoClient;
+}

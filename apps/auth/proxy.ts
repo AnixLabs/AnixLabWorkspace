@@ -23,7 +23,7 @@ export function proxy(req: NextRequest) {
   const origin = req.headers.get("origin");
 
   const allowedDomains =
-    process.env.ALLOW_AUTH_ORIGIN_DIVIDE_BY_COMMA?.split(",")
+    process.env.AUTH_CLIENT_URLS?.split(",")
       .map((d) => d.trim())
       .filter(Boolean) ?? [];
 
