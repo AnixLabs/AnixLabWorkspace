@@ -18,7 +18,7 @@ async function encryptAndRedirect(data: {
 
   // console.log("Encrypted Token:", token);
 
-  // Redirect to tools.anix7.in
+  // Redirect to tools.anixlab.in
   redirect(`${process.env.WHERE_TO_REDIRECT_AFTER_PROCESSING}/${token}`);
 }
 
