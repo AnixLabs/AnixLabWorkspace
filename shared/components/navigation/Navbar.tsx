@@ -26,7 +26,7 @@ export interface NavBarType {
   moreIcon?: MoreIconType[];
 }
 
-export default function Navbar({ appName = "Anix7", appSubName = "", moreIcon = [] }: NavBarType) {
+export default function Navbar({ appName = "Anix Lab", appSubName = "", moreIcon = [] }: NavBarType) {
   return (
     <>
       <header className="w-full z-20 sticky top-0 shadow-xs border-b md:dark:border-b-gray-900/25">

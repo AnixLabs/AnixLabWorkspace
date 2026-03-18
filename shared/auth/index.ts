@@ -48,7 +48,7 @@ const db = getMongoClient(authEnv.MONGODB_URI_AUTH).db("BetterAuth");
 
 // Auth config
 export const auth = betterAuth({
-  appName: "AnixLab",
+  appName: "Anix Lab",
   baseURL: AUTH_BASE_URL,
   trustedOrigins,
 
@@ -74,7 +74,7 @@ export const auth = betterAuth({
   //   ...(authEnv.NODE_ENV === "production" && {
   //     crossSubDomainCookies: {
   //       enabled: true,
-  //       domain: "anix7.in",
+  //       domain: "anixlab.in",
   //     },
   //     useSecureCookies: true,
   //   }),
@@ -126,7 +126,7 @@ export const auth = betterAuth({
             sendTo: email,
             subject,
             html,
-            fromName: "AnixLab Verification",
+            fromName: "Anix Lab Verification",
           });
         } catch (error) {
           console.error("OTP email send failed", error);
