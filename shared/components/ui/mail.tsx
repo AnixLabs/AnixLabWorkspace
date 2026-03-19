@@ -288,7 +288,7 @@ export function verifyMail({
                                   >
                                     <div>
                                       You received this email to let you know
-                                      about important changes to your AnixLab Account and services.
+                                      about important changes to your Anix Lab Account and services.
                                       <br />
                                     </div>
                                     <p style="color: #777; font-size: 14px; text-align: center; margin-top: 20px;">

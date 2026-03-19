@@ -195,7 +195,7 @@ export default function Terms() {
       </h2>
 
       <p className="my-1 ml-1">
-        We reserve the right to suspend or terminate your access to Anix7 services at any time, for
+        We reserve the right to suspend or terminate your access to Anix Lab services at any time, for
         any reason, including violation of these Terms.
       </p>
 
@@ -231,7 +231,7 @@ export default function Terms() {
         us:
       </p>
       <p className="my-1 ml-1">
-        📧 <strong>Email</strong>: <a href="mailto:support@anix7.in">support@anix7.in</a>
+        📧 <strong>Email</strong>: <a href="mailto:support@anixlab.in">support@anixlab.in</a>
       </p>
 
       <p className="my-1 ml-1">
