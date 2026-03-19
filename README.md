@@ -144,15 +144,14 @@ pnpm dev
 ```bash
 pnpm --filter www-website dev
 pnpm --filter anipic dev
-pnpm --filter api dev
-pnpm --filter auth dev
+pnpm --filter core-server dev
 ```
 
 ### Run multiple apps
 
 ```bash
-pnpm dev --filter auth --filter tools --filter anipic
-pnpm dev --filter www-website --filter api
+pnpm dev --filter tools --filter anipic
+pnpm dev --filter www-website --filter core-server
 ```
 
 ### Build all
