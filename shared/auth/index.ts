@@ -1,10 +1,11 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { twoFactor, username, emailOTP, admin } from "better-auth/plugins";
+import { twoFactor, username, emailOTP, admin as adminPlugin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { z } from "zod";
 import { getMongoClient } from "@shared/lib/mongodb";
 import { sendNoReplyMail } from "@shared/lib/sendMail";
+import { ac, admin, moderator, owner, superadmin, user } from "./permissions";
 
 const AuthEnvSchema = z.object({
   AUTH_BASE_URL: z.url().optional(),
@@ -134,7 +135,7 @@ export const auth = betterAuth({
       },
     }),
 
-    admin(),
+    adminPlugin({ ac, roles: { user, owner, admin, moderator, superadmin } }),
 
     nextCookies(), // ⚠️ Must be last
   ],

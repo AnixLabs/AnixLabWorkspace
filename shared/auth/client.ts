@@ -6,6 +6,7 @@ import {
   adminClient,
   organizationClient,
 } from "better-auth/client/plugins";
+import { ac, admin, moderator, owner, superadmin, user } from "./permissions";
 
 const AUTH_BASE_URL = process.env.AUTH_BASE_URL ?? process.env.NEXT_PUBLIC_AUTH_BASE_URL;
 
@@ -19,7 +20,7 @@ export const authClient = createAuthClient({
     twoFactorClient(),
     usernameClient(),
     emailOTPClient(),
-    adminClient(),
+    adminClient({ ac, roles: { user, owner, admin, moderator, superadmin } }),
     organizationClient(),
   ],
 });

@@ -4,10 +4,17 @@ import { auth } from "@shared/auth";
 
 const PUBLIC_FILE = /\.(.*)$/;
 
+function hasRole(userRole: string | undefined | null, allowed: string[]) {
+  if (!userRole) return false;
+
+  const roles = userRole.split(",").map((r) => r.trim());
+  return roles.some((r) => allowed.includes(r));
+}
+
 export async function proxy(req: NextRequest) {
   const { nextUrl, method } = req;
 
-  // 1️⃣ Skip static files & internals
+  // Skip static files & internals
   if (
     PUBLIC_FILE.test(nextUrl.pathname) ||
     nextUrl.pathname.startsWith("/_next") ||
@@ -18,34 +25,30 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Fetch session
+  // Get session
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   const role = session?.user?.role;
-  const isAdmin = role === "admin" || role === "owner";
+
+  // Define allowed roles for admin panel
+  const isAdmin = hasRole(role, ["admin", "owner", "superadmin"]);
 
   const isApiRoute = nextUrl.pathname.startsWith("/api");
   const isPage = !isApiRoute;
 
   // Unauthorized logic
   if (!isAdmin) {
-    // API or non-GET page
+    // API or non-GET page → block
     if (isApiRoute || (isPage && method !== "GET")) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
-    // Normal page → rewrite
+    // Page request → redirect to unauthorized page
     if (nextUrl.pathname !== "/unauthorized") {
       const unauthorizedUrl = new URL("/unauthorized", nextUrl.origin);
-      unauthorizedUrl.searchParams.set(
-        "next",
-        nextUrl.pathname + nextUrl.search
-      );
+      unauthorizedUrl.searchParams.set("next", nextUrl.pathname + nextUrl.search);
 
       return NextResponse.rewrite(unauthorizedUrl);
     }
