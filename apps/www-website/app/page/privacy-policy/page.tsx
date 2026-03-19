@@ -194,16 +194,20 @@ export default function PrivacyPolicy() {
           <strong>Opt-Out:</strong> Opt-out of personalized ads by managing your cookie preferences.
         </li>
       </ul>
+
       <p className="my-1 ml-1">
         To exercise these rights, contact us at:{" "}
         <strong>
-          <a href="mailto:privacy@anix7.in">privacy@anix7.in</a>
+          <a href="mailto:privacy@anixlab.in">privacy@anixlab.in</a>
         </strong>
       </p>
+
       <Hr />
+
       <h2>
-        <strong>8. Children&#39;s Privacy</strong>
+        <strong>8. Children&apos;s Privacy</strong>
       </h2>
+
       <p className="my-1 ml-1">
         Anix7 is not intended for children under the age of 13. We do not knowingly collect personal
         data from children. If we learn we’ve collected data from a child under 13, we will delete
