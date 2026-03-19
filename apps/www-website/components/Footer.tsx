@@ -70,13 +70,14 @@ export default function Footer() {
             src="/assets/img/logo/anix7-logo-512.jpg"
             width={120}
             height={120}
-            alt="Anix7 Tools"
+            alt="Anix Lab Tools"
           />
           <div>
-            <h2>Anix7</h2>
+            <h2>Anix Lab</h2>
             <p>
-              Anix7 is your all-in-one hub for smart tools, anime updates, 4K wallpapers, mini games
-              and nature photography. Discover, create, and download with ease.
+              Anix Lab (formerly Anix7) is your all-in-one digital hub for smart tools, anime
+              updates, 4K wallpapers, mini games, and nature photography. Discover, create, and
+              download with ease — all in one place.
             </p>
           </div>
         </div>
@@ -110,7 +111,7 @@ export default function Footer() {
             <span>{new Date().getFullYear()}</span> &nbsp;&middot;&nbsp;&nbsp;
             <bdi>
               <Link href="/" className=" inline-flex items-center text-lg">
-                Anix7
+                Anix Lab
                 <svg viewBox="0 0 24 24" className="w-4 h-4 mx-1 fill-current">
                   <path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path>
                 </svg>

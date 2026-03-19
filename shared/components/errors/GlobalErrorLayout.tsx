@@ -21,7 +21,7 @@ export default function GlobalErrorLayout({ error }: { error: Error }) {
         <header className=" absolute top-0 w-full flex justify-between items-center p-3">
           <div className="flex items-center gap-2">
             <Image src="/favicon.ico" alt="favicon" width={50} height={50} className="w-9" />
-            <span className="text-xl font-bold">Anix7 - Tools</span>
+            <span className="text-xl font-bold">Anix Lab</span>
           </div>
           <span>
             Error Code:

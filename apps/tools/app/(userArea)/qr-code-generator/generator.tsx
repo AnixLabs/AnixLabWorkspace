@@ -171,7 +171,7 @@ export default function QRCodeGenerator() {
     })
       .then((dataUrl) => {
         const link = document.createElement("a");
-        link.download = `${content} - Generated QR Code - Anix7 Tools.png`;
+        link.download = `${content} - Generated QR Code - Anix Lab Tools.png`;
         link.href = dataUrl;
         link.click();
       })
@@ -198,7 +198,7 @@ export default function QRCodeGenerator() {
     }));
   };
 
-  let qrValue = "https://tools.anix7.in";
+  let qrValue = "https://tools.anixlab.in";
 
   switch (content) {
     case "URL":

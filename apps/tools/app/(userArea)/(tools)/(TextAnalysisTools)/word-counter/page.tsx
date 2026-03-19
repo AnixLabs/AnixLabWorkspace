@@ -6,9 +6,9 @@ import WordCounterClient from "./WordCounterClient";
 export const metadata = {
   title: "Free Word Counter - Track Word & Character Count Easily",
   description:
-    "Free Word Counter to count words and characters instantly. Track text length, extract keywords, set limits and optimize writing for SEO and social media.",
+    "Free Word Counter by Anix Lab (formerly Anix7) to count words and characters instantly. Track text length, extract keywords, set limits, and optimize writing for SEO and social media.",
   keywords: [
-    "Anix7 Tools",
+    "Anix Lab Tools",
     "Anix7 word counter",
     "word counter",
     "character counter",
@@ -39,13 +39,13 @@ export const metadata = {
 
   openGraph: {
     url: `/word-counter`,
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     images: [
       {
         url: `/assets/img/word-counter-og.jpeg`,
         width: 1200,
         height: 630,
-        alt: "Anix7 Tools Word Counter",
+        alt: "Anix Lab Tools Word Counter",
       },
     ],
     type: "website",

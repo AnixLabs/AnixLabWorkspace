@@ -7,21 +7,23 @@ import Section, { Card, CardSection } from "@shared/components/ui/Section";
 import { IfLoggedIn, IfLoggedOut } from "@shared/auth/LoggedInWrapper";
 
 export const metadata = {
-  title: "Simple, fast, and secure URL Shortener",
+  title: "Simple, Fast, and Secure URL Shortener",
   description:
-    "Easily shorten long URLs into concise, shareable links. Perfect for social media, emails, and more. Try Anix7 Tools' fast and secure URL shortener today!",
+    "Easily shorten long URLs into concise, shareable links with Anix Lab (formerly Anix7 Tools). Perfect for social media, emails, and more. Try our fast and secure URL shortener today!",
   keywords: [
+    "Anix Lab Tools",
     "Anix7 Tools",
     "Anix7 URL shortener",
+    "Anix Lab URL shortener",
     "URL shortener",
     "link shortener",
     "short link generator",
     "tiny URL",
     "best URL shortener",
     "custom URL shortener",
-    "Anix7 link shortener",
+    "Anix Lab link shortener",
     "best URL shortener tool",
-    "short URL generator Anix7",
+    "short URL generator Anix Lab",
     "custom short link generator",
     "create short URLs online",
     "shorten long links easily",
@@ -81,13 +83,13 @@ export const metadata = {
 
   openGraph: {
     url: `/url-shortener`,
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     images: [
       {
         url: `/assets/img/url-shortener-og.jpeg`,
         width: 1200,
         height: 630,
-        alt: "Anix7 Tools URL Shortener",
+        alt: "Anix Lab Tools URL Shortener",
       },
     ],
     type: "website",

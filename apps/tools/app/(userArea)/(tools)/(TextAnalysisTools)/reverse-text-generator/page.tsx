@@ -9,9 +9,9 @@ import { IfLoggedOut } from "@shared/auth/LoggedInWrapper";
 export const metadata = {
   title: "Reverse Text Generator - Flip, Mirror & Reverse Words Instantly",
   description:
-    "Free Reverse Text Generator to reverse letters, flip words, or mirror text instantly. Create upside-down, backward, or mirrored text for fun or creative designs.",
+    "Free Reverse Text Generator by Anix Lab (formerly Anix7) to reverse letters, flip words, or mirror text instantly. Create upside-down, backward, or mirrored text for fun or creative designs.",
   keywords: [
-    "Anix7 Tools",
+    "Anix Lab Tools",
     "Anix7 Reverse Text Generator",
     "Reverse text",
     "Flip text",
@@ -42,13 +42,13 @@ export const metadata = {
 
   openGraph: {
     url: `/reverse-text-generator`,
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     // images: [
     //   {
     //     url: `/assets/img/reverse-text-generator-og.jpeg`,
     //     width: 1200,
     //     height: 630,
-    //     alt: "Anix7 Tools Reverse Text Generator",
+    //     alt: "Anix Lab Tools Reverse Text Generator",
     //   },
     // ],
     type: "website",

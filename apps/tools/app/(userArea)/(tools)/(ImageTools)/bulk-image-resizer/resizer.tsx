@@ -171,7 +171,7 @@ export default function Resizer() {
     const blob = await zip.generateAsync({ type: "blob" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "Anix7_Tools_Resized_Images.zip";
+    a.download = "Anix_Lab_Tools_Resized_Images.zip";
     a.click();
     URL.revokeObjectURL(a.href);
     setBulkDownloadLoading(false);

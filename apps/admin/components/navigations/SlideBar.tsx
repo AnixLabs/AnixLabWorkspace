@@ -10,40 +10,40 @@ import { HiOutlineLink } from "react-icons/hi2";
 
 const menuItem: MenuItem[] = [
   {
-    label: "Anix7 Tools",
+    label: "Anix Lab Tools",
     icon: <IoSettingsOutline />,
     subMenu: [
       {
         label: "Tools Home",
         icon: <RiHomeHeartLine />,
-        url: "https://tools.anix7.in",
+        url: "https://tools.anixlab.in",
       },
       {
         label: "Url Shortener",
         icon: <HiOutlineLink />,
-        url: "https://tools.anix7.in/url-shortener",
+        url: "https://tools.anixlab.in/url-shortener",
       },
       {
         label: "QR Code Generator",
         icon: <IoQrCodeOutline />,
-        url: "https://tools.anix7.in/qr-code-generator",
+        url: "https://tools.anixlab.in/qr-code-generator",
       },
       {
         label: "Bulk Image Resizer",
         icon: <PiResize />,
-        url: "https://tools.anix7.in/bulk-image-resizer",
+        url: "https://tools.anixlab.in/bulk-image-resizer",
       },
       {
         label: "Image Upload Tools",
         icon: <RxImage />,
-        url: "https://tools.anix7.in/image-uploading",
+        url: "https://tools.anixlab.in/image-uploading",
       },
     ],
   },
   {
     label: "AniPic",
     icon: <RxImage />,
-    url: "https://anipic.anix7.in",
+    url: "https://anipic.anixlab.in",
     hr: true,
   },
   {

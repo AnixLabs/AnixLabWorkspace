@@ -1,17 +1,30 @@
 export const metadata = {
   title: "Contact Us",
   description:
-    "Need help, support, or have suggestions? Reach out to the Anix7 team via email or social media. We're here to assist you!",
+    "Need help, support, or have suggestions? Contact Anix Lab (formerly Anix7) via email for assistance, support, or collaboration inquiries.",
+  keywords: [
+    "Anix Lab contact",
+    "Anix Lab support",
+    "Anix Lab email",
+    "Anix Lab help",
+    "Anix Lab collaboration",
+    "Anix Lab (formerly Anix7)",
+  ],
   alternates: { canonical: "/page/contact-us" },
   addToSitemap: true,
 };
+
 export default function ContactUs() {
   return (
     <>
-      <h1>Contact Us</h1>
+      <h1>
+        <strong>Contact Anix Lab</strong>
+      </h1>
+
       <p className="my-1 ml-1">
-        If you have any questions, suggestions, or need support, feel free to get in touch with us.
-        We typically respond within 7 - 14 days.
+        Have questions, suggestions, or need assistance? The <strong>Anix Lab</strong> team
+        (formerly Anix7) is here to help. We aim to respond to all inquiries within{" "}
+        <strong>7–14 business days</strong>.
       </p>
 
       <hr className="my-4" />
@@ -19,43 +32,47 @@ export default function ContactUs() {
       <h3 className="mt-2 mb-1">📧 General Inquiries</h3>
       <p className="ml-1">
         <strong>Email:</strong>{" "}
-        <a rel="noopener" href="mailto:contact@anix7.in">
-          contact@anix7.in
+        <a rel="noopener" href="mailto:contact@anixlab.in">
+          contact@anixlab.in
         </a>
       </p>
 
       <h3 className="mt-4 mb-1">🛠️ Support</h3>
       <p className="ml-1">
-        For help with tools or account-related issues:
+        For assistance with tools, features, or account-related issues:
         <br />
         <strong>Email:</strong>{" "}
-        <a rel="noopener" href="mailto:support@anix7.in">
-          support@anix7.in
+        <a rel="noopener" href="mailto:support@anixlab.in">
+          support@anixlab.in
         </a>
       </p>
 
       <h3 className="mt-4 mb-1">🤝 Collaborations & Partnerships</h3>
       <p className="ml-1">
-        Interested in working with Anix7? Email us with your proposal at:{" "}
-        <a rel="noopener" href="mailto:contact@anix7.in">
-          contact@anix7.in
+        Interested in working with <strong>Anix Lab</strong>? Send your proposal to:
+        <br />
+        <a rel="noopener" href="mailto:contact@anixlab.in">
+          contact@anixlab.in
         </a>
       </p>
 
-      {/* <h3 className="mt-4 mb-1">🌐 Social Media</h3>
+      {/* Future Social Section */}
+      {/* 
+      <h3 className="mt-4 mb-1">🌐 Social Media</h3>
       <p className="ml-1">
-        Stay connected and follow us for updates:
+        Stay connected for updates and announcements:
         <br />
         <strong>Instagram:</strong>{" "}
-        <a href="https://instagram.com/anix7.in" target="_blank" rel="noopener">
-          @anix7.in
+        <a href="https://instagram.com/anixlab.in" target="_blank" rel="noopener">
+          @anixlab.in
         </a>
         <br />
         <strong>YouTube:</strong>{" "}
-        <a href="https://youtube.com/@anix7" target="_blank" rel="noopener">
-          @anix7
+        <a href="https://youtube.com/@anixlab.in" target="_blank" rel="noopener">
+          @anixlab.in
         </a>
-      </p> */}
+      </p> 
+      */}
     </>
   );
 }

@@ -9,7 +9,7 @@ function getHostname(origin: string): string | null {
 }
 
 function isDomainAllowed(hostname: string, allowed: string) {
-  // wildcard support (*.anix7.in)
+  // wildcard support (*.anixlab.in)
   if (allowed.startsWith("*.")) {
     const root = allowed.slice(2);
     return hostname === root || hostname.endsWith(`.${root}`);

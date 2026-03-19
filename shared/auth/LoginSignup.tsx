@@ -126,15 +126,15 @@ export function AgreeAndSubmitButton({
     <div className="flex gap-5 mt-5 justify-between items-center">
       <p className="text-xs text-gray-500 mt-2">
         By continuing, you agree to Our&apos;s{" "}
-        <Link href="https://www.anix7.in/page/terms" target="_blank">
+        <Link href="https://www.anixlab.in/page/terms" target="_blank">
           Terms of Use
         </Link>
         ,{" "}
-        <Link href="https://www.anix7.in/page/privacy-policy" target="_blank">
+        <Link href="https://www.anixlab.in/page/privacy-policy" target="_blank">
           Privacy Policy
         </Link>
         , and{" "}
-        <Link href="https://www.anix7.in/page/disclaimer" target="_blank">
+        <Link href="https://www.anixlab.in/page/disclaimer" target="_blank">
           Disclaimer
         </Link>
         .
