@@ -21,16 +21,17 @@ const baseUrl = process.env.BASE_URL!;
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "AniPic - AI Generated Images & Creative Visuals | Anix7",
-    template: "%s - Anipic",
+    default: "AniPic - AI Generated Images & Creative Visuals | Anix Lab",
+    template: "%s - AniPic",
   },
   description:
-    "Discover high-quality AI-generated images and wallpapers on AniPic by Anix7. Explore anime, art, fantasy, portraits, and creative visuals — free to download.",
+    "Discover high-quality AI-generated images and wallpapers on AniPic by Anix Lab (formerly Anix7). Explore anime, art, fantasy, portraits, and creative visuals — free to download.",
   keywords: [
-    "Anipic",
-    "AniPic - Anix7",
-    "anix7.in",
-    "AniPic by Anix7",
+    "AniPic",
+    "AniPic - Anix Lab",
+    "anixlab.in",
+    "AniPic by Anix Lab",
+    "AniPic formerly Anix7",
     "AI generated images",
     "AI image platform",
     "AI art gallery",
@@ -60,12 +61,12 @@ export const metadata: Metadata = {
     "anime",
   ],
   authors: {
-    name: "Anix7",
-    url: "https://anix7.in",
+    name: "Anix Lab",
+    url: "https://anixlab.in",
   },
   openGraph: {
     url: "/",
-    siteName: "AniPic - Anix7",
+    siteName: "AniPic - Anix Lab",
     images: [
       {
         url: "/assets/img/logo/logo-512.jpg",
@@ -98,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <div className="absolute w-48 h-56 bg-neutral-500/5 dark:bg-black/15 -z-10 top-0 right-0 rounded-bl-full" />
 
-          <Navbar appName="AniPic" appSubName="Anix7" />
+          <Navbar appName="AniPic" appSubName="Anix Lab" />
           <div className="flex">
             <SlideBar />
             <div className="grow pt-5 md:pt-7 relative transition-all duration-300 md:w-[calc(100%-224px)] border-l border-white/30">

@@ -4,18 +4,18 @@ import type { MenuItem } from "@shared/components/navigation/slidebar/types";
 
 const menuItem: MenuItem[] = [
   // {
-  //   label: "Anix7 Tools",
+  //   label: "Anix Lab Tools",
   //   icon: <IoSettingsOutline />,
   //   subMenu: [
   //     {
   //       label: "Tools Home",
   //       icon: <RiHomeHeartLine />,
-  //       url: "https://tools.anix7.in",
+  //       url: "https://tools.anixlab.in",
   //     },
   //     {
   //       label: "Bulk Image Resizer",
   //       icon: <PiResize />,
-  //       url: "https://tools.anix7.in/bulk-image-resizer",
+  //       url: "https://tools.anixlab.in/bulk-image-resizer",
   //     },
   //   ],
   // },
