@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
           url: "/assets/img/logo/anix7-logo-512.jpg",
           width: 512,
           height: 512,
-          alt: "AniPics by Anix7",
+          alt: "AniPics by Anix Lab",
         },
       ],
     },

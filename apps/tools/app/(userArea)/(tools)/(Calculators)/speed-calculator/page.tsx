@@ -13,8 +13,9 @@ const pairs = units.flatMap((u1) =>
 export const metadata = {
   title: "Speed Calculator - Convert Between mph, km/h, m/s, Mach, Knots and More",
   description:
-    "Free online Speed Calculator tool to convert between multiple speed units like mph, km/h, m/s, Mach, knots, ft/s, and even the speed of light. Fast, accurate, and easy to use.",
+    "Free online Speed Calculator by Anix Lab (formerly Anix7) to convert between multiple speed units like mph, km/h, m/s, Mach, knots, ft/s, and even the speed of light. Fast, accurate, and easy to use.",
   keywords: [
+    "Anix Lab Tools",
     "Anix7 Tools",
     "Speed calculator",
     "Speed converter",
@@ -26,13 +27,13 @@ export const metadata = {
   ],
   openGraph: {
     url: `/speed-calculator`,
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     // images: [
     //   {
     //     url: `/assets/img/speed-calculator-og.jpeg`,
     //     width: 1200,
     //     height: 630,
-    //     alt: "Anix7 Tools Speed Calculator",
+    //     alt: "Anix Lab Tools Speed Calculator",
     //   },
     // ],
     type: "website",

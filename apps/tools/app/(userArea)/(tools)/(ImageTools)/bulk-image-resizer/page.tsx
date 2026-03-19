@@ -4,20 +4,20 @@ import Resizer, { LaunchResizer } from "./resizer";
 export const metadata = {
   title: "Image Resizer | Bulk Image Resizer | Resize Multiple Images Online",
   description:
-    "Free online image resizer by Anix7 Tools — resize PNG, JPG, WebP, and more formats in bulk, quickly and securely.",
+    "Free online image resizer by Anix Lab (formerly Anix7) — resize PNG, JPG, WebP, and more formats in bulk, quickly and securely.",
   keywords: [
     "Bulk Image Resizer",
     "Resize Images Online",
     "Batch Image Resizer",
-    "Anix7 Tools Image Resizer",
+    "Anix Lab Tools Image Resizer",
     "Resize multiple images",
     "Resize images in bulk",
     "Free image resizer",
     "Online image resizer",
     "Resize photos",
     "Bulk photo resizer",
-    "Anix7 Tools",
-    "Image Resizer by Anix7 Tools",
+    "Anix Lab Tools",
+    "Image Resizer by Anix Lab Tools",
     "Resize JPG PNG SVG WebP images",
     "Image resizing without losing quality",
     "Resize images for free",
@@ -59,37 +59,34 @@ export const metadata = {
 
   openGraph: {
     url: "/bulk-image-resizer",
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     images: [
       {
         url: `/assets/img/image-resizer-og.jpeg`,
         width: 1200,
         height: 630,
-        alt: "Anix7 Tools Bulk Image Resizer",
+        alt: "Anix Lab Tools Bulk Image Resizer",
       },
     ],
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/bulk-image-resizer" },addToSitemap: true 
+  alternates: { canonical: "/bulk-image-resizer" },
+  addToSitemap: true,
 };
-
 
 export default function BulkImageResizer() {
   return (
     <>
       <Resizer />
-      <section className="prose lg:prose-lg max-w-4xl mx-auto py-10 px-4">
-        <h1 className="text-3xl font-bold text-center">
-          Anix7 Tools - Bulk Image Resizer
-        </h1>
+      <section className="max-w-4xl mx-auto py-10 px-4">
+        <h1 className="text-3xl font-bold text-center">Anix Lab Tools - Bulk Image Resizer</h1>
 
         <p className="mt-4">
-          Welcome to the <strong>Anix7 Tools Bulk Image Resizer</strong> — your
-          all-in-one solution for resizing multiple images quickly and
-          efficiently. Whether you&apos;re a designer, photographer, or content
-          creator, this tool is designed to simplify your workflow while
-          maintaining top image quality.
+          Welcome to the <strong>Anix Lab Tools Bulk Image Resizer</strong> — your all-in-one
+          solution for resizing multiple images quickly and efficiently. Whether you&apos;re a
+          designer, photographer, or content creator, this tool is designed to simplify your
+          workflow while maintaining top image quality.
         </p>
 
         {/* Image Placeholder */}
@@ -104,18 +101,16 @@ export default function BulkImageResizer() {
         <h2>How to Resize Images in Bulk</h2>
         <ul className="list-disc ml-6">
           <li>
-            <strong>Upload Multiple Images:</strong> Drag and drop your images
-            or select them manually. You can upload PNG, JPEG, SVG, WEBP, and
-            more.
+            <strong>Upload Multiple Images:</strong> Drag and drop your images or select them
+            manually. You can upload PNG, JPEG, SVG, WEBP, and more.
           </li>
           <li>
-            <strong>Specify Dimensions:</strong> Set the desired width or
-            height. The tool intelligently maintains aspect ratio for quality
-            retention.
+            <strong>Specify Dimensions:</strong> Set the desired width or height. The tool
+            intelligently maintains aspect ratio for quality retention.
           </li>
           <li>
-            <strong>Download with Ease:</strong> Get your resized images
-            individually or all at once in a ZIP file.
+            <strong>Download with Ease:</strong> Get your resized images individually or all at once
+            in a ZIP file.
           </li>
           {/* <li>
           <strong>Rename Files:</strong> Optionally rename your images before
@@ -132,28 +127,27 @@ export default function BulkImageResizer() {
           className="drop-shadow-2xl mt-6 mx-auto w-2/3 max-w-sm"
         />
 
-        <h2>Why Use Anix7&apos;s Bulk Image Resizer?</h2>
+        <h2>Why Use Anix Lab&apos;s Bulk Image Resizer?</h2>
         <ul className="list-disc ml-6">
           <li>
-            <strong>Privacy-First:</strong> All resizing happens in your
-            browser. Your images never leave your device, ensuring complete
-            privacy.
+            <strong>Privacy-First:</strong> All resizing happens in your browser. Your images never
+            leave your device, ensuring complete privacy.
           </li>
           <li>
-            <strong>High Compatibility:</strong> Supports a wide range of
-            formats including PNG, JPEG, SVG, HEIC, WEBP, and more.
+            <strong>High Compatibility:</strong> Supports a wide range of formats including PNG,
+            JPEG, SVG, HEIC, WEBP, and more.
           </li>
           <li>
-            <strong>Efficient Processing:</strong> Resize dozens of images in
-            seconds — no more waiting.
+            <strong>Efficient Processing:</strong> Resize dozens of images in seconds — no more
+            waiting.
           </li>
           <li>
-            <strong>Preserved Quality:</strong> Even after resizing, your images
-            maintain sharpness and clarity.
+            <strong>Preserved Quality:</strong> Even after resizing, your images maintain sharpness
+            and clarity.
           </li>
           <li>
-            <strong>Simple & Intuitive:</strong> A clean interface makes the
-            tool easy to use for everyone — no technical skills required.
+            <strong>Simple & Intuitive:</strong> A clean interface makes the tool easy to use for
+            everyone — no technical skills required.
           </li>
         </ul>
 
@@ -162,23 +156,22 @@ export default function BulkImageResizer() {
           width={200}
           height={200}
           src="/assets/img/upload-step.png"
-          alt="User interface of Anix7 image resizer"
+          alt="User interface of Anix Lab image resizer"
           className="drop-shadow-2xl mt-6 mx-auto w-2/3 max-w-sm"
         />
 
         <h2 className="mt-8">Perfect for Every Use Case</h2>
         <p>
-          Whether you&apos;re preparing product images for an online store,
-          optimizing photos for web publishing, or creating social media
-          content, Anix7&apos;s Bulk Image Resizer gets the job done quickly and
-          reliably.
+          Whether you&apos;re preparing product images for an online store, optimizing photos for
+          web publishing, or creating social media content, Anix Lab&apos;s Bulk Image Resizer gets
+          the job done quickly and reliably.
         </p>
 
         <h2 className="mt-8">Start Resizing Now</h2>
         <p>
           Stop wasting time resizing images one by one. Try the{" "}
-          <strong>Anix7 Tools Bulk Image Resizer</strong> and experience faster,
-          smarter image processing — right from your browser.
+          <strong>Anix Lab Tools Bulk Image Resizer</strong> and experience faster, smarter image
+          processing — right from your browser.
         </p>
 
         <LaunchResizer />

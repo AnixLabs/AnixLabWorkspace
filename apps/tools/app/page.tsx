@@ -15,12 +15,12 @@ export default function Home() {
     <>
       <section className="relative p-5 text-center mb-4 md:mb-8">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4">
-          Welcome to Anix7 Tools
+          Welcome to Anix Lab - Tools
         </h1>
         <p className="sm:text-md md:text-lg lg:text-xl mb-6 text-center">
           Simplify your digital workflow with a powerful collection of online tools — from URL
           shorteners and QR code generators to image resizing, uploading, and more. Everything you
-          need, all in one place.
+          need, all in one place with <strong>Anix Lab - Tools</strong> (formerly Anix7).
         </p>
 
         <IfLoggedOut>
@@ -72,17 +72,17 @@ export default function Home() {
             {
               title: "Step 1: Choose a Tool",
               description:
-                "Select from our tools to shorten URLs, upload images, generate custom QR codes or any other tools.",
+                "Select from our tools to shorten URLs, upload images, generate custom QR codes, or explore other utilities.",
             },
             {
               title: "Step 2: Customize",
               description:
-                "Easily customize your links, images, QR codes or what you choose with various options and settings.",
+                "Easily customize your links, images, or QR codes with a variety of options and settings.",
             },
             {
               title: "Step 3: Share & Access",
               description:
-                "Share your content instantly with shareable links, and access your uploads anytime from anywhere.",
+                "Share your content instantly with generated links and access your uploads anytime, anywhere.",
             },
           ].map(({ title, description }, index) => (
             <Card key={index} title={title} description={description} />
@@ -94,7 +94,7 @@ export default function Home() {
         <div className="flex justify-center gap-16">
           <div className="bg-white shadow p-8 rounded-lg max-w-xs text-center">
             <p className="text-lg italic mb-4">
-              "Anix7 Tools is a lifesaver! I can quickly shorten URLs and generate QR codes without
+              "Anix Lab Tools (formerly Anix7) is a lifesaver! I can quickly shorten URLs and generate QR codes without
               any hassle."
             </p>
             <h4 className="text-xl font-semibold">John Doe</h4>
@@ -117,7 +117,7 @@ export default function Home() {
             Ready to get started?
           </h2>
           <p className="text-lg mb-6">
-            Sign up today and unlock the full potential of Anix7 Tools!
+            Sign up today and unlock the full potential of Anix Lab - Tools!
           </p>
 
           <Button className="rounded-full py-3 px-[10%]" htmlFor="loginSignupCheckId">
@@ -125,6 +125,7 @@ export default function Home() {
           </Button>
         </WorkBox>
       </IfLoggedOut>
+
       <IfLoggedIn>
         <MobileMenu />
       </IfLoggedIn>

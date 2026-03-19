@@ -3,17 +3,18 @@ import Link from "next/link";
 export const metadata = {
   title: "Frequently Asked Questions (FAQs)",
   description:
-    "Get quick answers to the most common questions about Anix7 Tools. Learn more about features, support, usage policies, and user tools.",
+    "Get quick answers to the most common questions about Anix Lab (formerly Anix7 Tools). Learn more about features, support, usage policies, and tools.",
   keywords: [
+    "Anix Lab Tools FAQ",
     "Anix7 Tools FAQ",
-    "Anix7 Tools questions",
+    "Anix Lab questions",
     "Help center",
-    "Anix7 Tools support",
+    "Anix Lab support",
     "Common issues",
-    "Tools Tools usage",
+    "Tools usage",
     "User guide",
     "Account support",
-    "Anix7 Tools help",
+    "Anix Lab help",
     "Frequently asked questions",
   ],
   alternates: { canonical: "/page/faqs" },
@@ -22,6 +23,7 @@ export const metadata = {
 
 export default function Faqs() {
   const baseUrl = new URL(process.env.BASE_URL!).hostname;
+  const contactEmail = process.env.CONTACT_EMAIL ?? "contact@anixlab.in";
   return (
     <>
       <h1>Frequently Asked Questions (FAQs)</h1>
@@ -29,8 +31,8 @@ export default function Faqs() {
         Welcome to the FAQ page for {baseUrl}! Below are answers to some common questions about our
         services. If you have any additional questions, feel free to contact us at{" "}
         <strong>
-          <a rel="noopener" href="mailto:contact@anix7.in">
-            contact@anix7.in
+          <a rel="noopener" href={`mailto:${contactEmail}`}>
+            {contactEmail}
           </a>
         </strong>
         .
@@ -139,7 +141,7 @@ export default function Faqs() {
       <p className="my-1 ml-1">
         We do not store any unnecessary user data. All processing is done in the browser whenever
         possible. See our{" "}
-        <Link href="https://www.anix7.in/page/privacy-policy">Privacy Policy</Link> for details.
+        <Link href="https://www.anixlab.in/page/privacy-policy">Privacy Policy</Link> for details.
       </p>
 
       <h3>
@@ -165,7 +167,7 @@ export default function Faqs() {
       </p>
 
       <h3>
-        17. <strong>What is the Anix7 Pro plan?</strong>
+        17. <strong>What is the Anix Lab Pro plan?</strong>
       </h3>
       <p className="my-1 ml-1">
         The Pro plan unlocks premium features like ad-free experience, larger uploads, faster
@@ -185,8 +187,8 @@ export default function Faqs() {
       <p className="my-1 ml-1">
         Absolutely! We love user feedback. Email us at{" "}
         <strong>
-          <a rel="noopener" href="mailto:contact@anix7.in">
-            contact@anix7.in
+          <a rel="noopener" href={`mailto:${contactEmail}`}>
+            {contactEmail}
           </a>
         </strong>{" "}
         with your ideas.
@@ -198,8 +200,8 @@ export default function Faqs() {
       <p className="my-1 ml-1">
         If you notice any bugs, errors, or broken links, please let us know at{" "}
         <strong>
-          <a rel="noopener" href="mailto:contact@anix7.in">
-            contact@anix7.in
+          <a rel="noopener" href={`mailto:${contactEmail}`}>
+            {contactEmail}
           </a>
         </strong>
         .

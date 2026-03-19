@@ -1,167 +1,237 @@
-# Anix7 Monorepo
+# Anix Lab Workspace
 
-This is the official monorepo for **Anix7**, powered by [Turborepo](https://turbo.build/repo) and [PNPM Workspaces](https://pnpm.io). It contains all applications and shared packages for the Anix7 ecosystem — including web apps, API servers, and shared libraries.
+<p align="center">
+  <b>🚀 Anix Lab (formerly Anix7) — Unified Monorepo Architecture</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Monorepo-Turborepo-blue?style=flat-square" />
+  <img src="https://img.shields.io/badge/Package%20Manager-PNPM-orange?style=flat-square" />
+  <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square" />
+  <img src="https://img.shields.io/badge/API-Fastify%20%7C%20Socket.IO-green?style=flat-square" />
+  <img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-red?style=flat-square" />
+</p>
 
 ---
 
-## All Projects
+## 📦 Overview
 
-- [Anipic](./apps/anipic) - Next.js 15 App Router
-- [www-website](./apps/www-website) - Next.js 15 App Router
-- [tools](./apps/tools) - Next.js 15 App Router
-- [i-used-for-short-url](./apps/i-used-for-short-url) - Next.js 15 App Router
-- [api](./apps/api) - Fastify or Express API server
-- [auth](./apps/auth) - Next.js 15 App Router For Auth Support in Middleware
-- [shared](./shared) - Shared libraries, components, and configurations  
-  - [config](./shared/config) - Shared configuration (e.g., Tailwind, ESLint)
-  - [lib](./shared/lib) - Shared libraries
-    - [models](./shared/lib/models) - Shared Mongoose models (with multi-DB connection support)
-    - [auth](./shared/lib/auth) - Shared Auth.js configuration
-    - [db](./shared/lib/db) - Shared database utilities (e.g., MongoDB connection)
-  - [styles](./shared/styles) - Shared styles (e.g., base.css, Tailwind CSS)
-  - [utils](./shared/utils) - Reusable utility functions (e.g., copy to clipboard, helpers)
-  
+This is the official monorepo for **Anix Lab (formerly Anix7)**, powered by **Turborepo** and **PNPM Workspaces**.
 
+It serves as the centralized codebase for the entire Anix Lab ecosystem — including:
+
+- 🌐 Web applications
+- 🔐 Authentication services
+- ⚡ API servers
+- 📚 Shared libraries & configurations
+
+---
+
+## 🧩 Projects
+
+### 🚀 Applications (Apps)
+
+- **Admin Dashboard** → `apps/admin`
+- **Anipic (Image Platform)** → `apps/anipic`
+- **Main Website** → `apps/www-website`
+- **Tools Platform** → `apps/tools`
+- **Short URL Redirect Service** → `apps/i-used-for-short-url`
+- **Core Backend Server (API + Socket.IO)** → `apps/core-server`
+
+---
+
+### 📦 Shared Packages
+
+- **Auth Module** → `shared/auth`
+  Shared authentication UI components, logic, and client utilities
+
+- **UI Components** → `shared/components`
+  Reusable React components (UI, navigation, loaders, error handling, etc.)
+
+- **Configuration** → `shared/config`
+  Centralized configs for:
+  - ESLint (Flat Config)
+  - TypeScript
+  - Next.js
+  - PostCSS
+
+- **Core Libraries** → `shared/lib`
+  - Database layer (MongoDB + multi-connection support)
+  - Mongoose models (ImageUpload, ShortUrl, etc.)
+  - Email utilities (Nodemailer)
+  - Zod validation & helpers
+
+- **Head & SEO Utilities** → `shared/head`
+  Metadata, analytics, and theme-related utilities
+
+- **Providers** → `shared/providers`
+  Global React providers (e.g., Toast System, context wrappers)
+
+- **Styles** → `shared/styles`
+  Global styles, themes, and utility CSS
+
+- **Utilities** → `shared/utils`
+  General-purpose helper functions (clipboard, client info, classNames, etc.)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-.
+AnixLabWorkspace/
 ├── apps/
-│   ├── anipic/               # Next.js 15 App Router
-│   ├── www-website/          # Next.js 15 App Router
-│   ├── tools/                # Next.js 15 App Router
-│   ├── i-used-for-short-url/ # Next.js 15 App Router
-│   ├── api/                  # Fastify or Express API server
-│   └── auth/                 # Next.js 15 App Router For Auth Support in Middlewere
+│   ├── admin/                # Admin dashboard (Next.js)
+│   ├── anipic/               # Image platform (Next.js)
+│   ├── core-server/          # Backend server (Fastify + Socket.IO)
+│   ├── i-used-for-short-url/ # Public short URL redirect service
+│   ├── tools/                # Tools platform (calculators, utilities, etc.)
+│   └── www-website/          # Main website (landing + pages)
 │
-├── shared/
-│   ├── components/  # Shared React components
-│   ├── config/      # Shared configuration (e.g., Tailwind, ESLint)
-│   ├── lib/         # Shared libraries
-│   │   ├── models/  # Shared Mongoose models (with multi-DB connection support)
-│   │   ├── auth/    # Shared Auth.js configuration
-│   │   └── db/      # Shared database utilities (e.g., MongoDB connection)
-│   ├── styles/      # Shared styles (e.g., base.css, Tailwind CSS)
-│   └── utils/       # Reusable utility functions (e.g., copy to clipboard, helpers)
+├── shared/                   # Shared packages across apps
+│   ├── auth/                 # Shared auth UI & logic
+│   ├── components/           # Reusable UI components
+│   ├── config/               # ESLint, TS, Next, PostCSS configs
+│   ├── head/                 # SEO, analytics, meta handlers
+│   ├── lib/                  # Core libraries
+│   │   ├── db/               # Multi-DB connections + models
+│   │   ├── mail/             # Email utilities
+│   │   └── utils/            # Core helpers
+│   ├── providers/            # React providers (Toast, etc.)
+│   ├── styles/               # Global styles
+│   └── utils/                # General utilities
 │
-│
-├── .env*              # Environment files for local development
-├── package.json       # Monorepo root config (with workspaces)
-├── turbo.json         # Turborepo build pipeline config
-└── pnpm-workspace.yaml # PNPM workspaces config
+├── .github/workflows/        # CI/CD pipelines
+├── ecosystem.config.cjs      # PM2 ecosystem config
+├── turbo.json                # Turborepo pipeline config
+├── pnpm-workspace.yaml       # Workspace definition
+├── package.json              # Root config
+└── tsconfig.json             # Root TypeScript config
 ```
 
 ---
 
 ## ⚙️ Tech Stack
 
-- [Next.js 15 (App Router)](https://nextjs.org/)
-- [Auth.js](https://nextjs.org/)
-- [MongoDB with Mongoose](https://mongoosejs.com/)
-- [Fastify](https://fastify.io/) (or [Express.js](https://expressjs.com/))
-- [PNPM Workspaces](https://pnpm.io/workspaces)
-- [Turborepo](https://turbo.build/repo)
-- [Tailwind CSS v4](https://tailwindcss.com/) (for UI)
-- [ESLint Flat Config](https://eslint.org/docs/latest/use/configure/flat-config/) (shared)
-- [PostCSS](https://postcss.org/) (for CSS processing)
+- **Next.js 16 (App Router)**
+- **BetterAuth**
+- **MongoDB + Mongoose**
+- **Fastify**
+- **Socket.IO**
+- **Turborepo**
+- **PNPM Workspaces**
+- **Tailwind CSS v4**
+- **ESLint (Flat Config)**
+- **PostCSS**
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Install dependencies
+### Install dependencies
 
 ```bash
 pnpm install
 ```
 
-### 2. Run development servers
+### Run all apps (dev mode)
 
 ```bash
 pnpm dev
 ```
 
-Or run a specific app:
+### Run specific apps
 
 ```bash
-pnpm --filter web dev # Web app (Next.js 15)
-pnpm --filter anipic dev # Anipic app (Next.js 15)
-pnpm --filter api dev # API server (Fastify or Express)
-pnpm --filter auth dev # Auth app (Next.js 15)
+pnpm --filter www-website dev
+pnpm --filter anipic dev
+pnpm --filter api dev
+pnpm --filter auth dev
 ```
 
-Or multiple apps at once:
+### Run multiple apps
 
 ```bash
 pnpm dev --filter auth --filter tools --filter anipic
 pnpm dev --filter www-website --filter api
 ```
 
-### 3. Build all apps & packages
+### Build all
 
 ```bash
 pnpm build
 ```
 
-### 4. Run lint checks
+### Lint
 
 ```bash
 pnpm lint
+```
+
+### Type Check
+
+```bash
+pnpm typecheck
+```
+
+### Lint + Type Check
+
+```bash
+pnpm check
 ```
 
 ---
 
 ## 🌐 Environment Setup
 
-Each app can have its own `.env` file:
+Each application can maintain its own environment configuration:
 
 ```
 apps/www-website/.env.local
-apps/api/.env
+apps/core-server/.env
 ```
-
-Shared environment variables (if any) can be placed in the root `.env` file.
 
 ---
 
 ## 🎯 Why Monorepo?
 
-✔️ Unified development experience across multiple apps  
-✔️ Share **Mongoose models**, **NextAuth config**, **utils**, and **types**  
-✔️ Turborepo caching for faster CI/CD builds  
-✔️ Centralized ESLint, Tailwind, PostCSS, Prettier configs  
-✔️ Easier refactoring, scaling, and maintenance across the whole **Anix7 ecosystem**
+- ✅ Unified development workflow
+- ✅ Shared **models, auth, utilities, and configs**
+- ✅ Faster builds with **Turborepo caching**
+- ✅ Centralized tooling (ESLint, Tailwind, PostCSS)
+- ✅ Scalable and maintainable architecture
+- ✅ Seamless cross-project integration within **Anix Lab ecosystem**
 
 ---
 
-## 🏗️ Build Tools & Features
+## 🏗️ Features
 
-- **Turborepo Tasks** — caching, build optimization
-- **Shared Tailwind CSS** config in `shared/config/`
-- **Multi-MongoDB connection** via shared DB utils
-- **Reusable Auth.js config**
-- **Reusable Mongoose models** (multi-DB support)
+- ⚡ Turborepo task pipeline & caching
+- 🎨 Shared Tailwind configuration
+- 🔗 Multi-database MongoDB support
+- 🔐 Centralized BetterAuth setup
+- 📦 Reusable Mongoose models
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.
+Licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.
 
-> For educational and personal use only.
-> **Commercial or production use is strictly prohibited without explicit permission.**
+> ⚠️ This project is intended for **educational and personal use only**.
+> Commercial or production usage requires explicit permission.
 
-See [LICENSE](./LICENSE) for full details.
+See [`LICENSE`](./LICENSE) for full details.
 
 ---
 
 ## 🤝 Contribution
 
-PRs, suggestions, and improvements are welcome — for educational or learning purposes only.
+Contributions, suggestions, and improvements are welcome.
 
 ---
 
-© 2025 [CodesWithSubham](https://github.com/CodesWithSubham) — All rights reserved.
+## 👨‍💻 Author
+
+© 2026 [**CodesWithSubham**](https://github.com/CodesWithSubham) — All rights reserved.
+
+---

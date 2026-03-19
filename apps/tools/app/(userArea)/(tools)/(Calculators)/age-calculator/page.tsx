@@ -7,13 +7,15 @@ import { Button } from "@shared/components/ui/Button";
 import { IfLoggedOut } from "@shared/auth/LoggedInWrapper";
 
 export const metadata = {
-  title: "Age Calculator - Calculate Age in Years, Months and Days",
+  title: "Age Calculator - Calculate Exact Age in Years, Months & Days",
   description:
-    "Free Age Calculator to find your exact age in years, months and days. Compare two ages, calculate differences, and check days left until your birthday.",
+    "Free Age Calculator by Anix Lab (formerly Anix7). Find your exact age in years, months, and days. Compare ages, calculate differences, and track upcoming birthdays instantly.",
+
   keywords: [
-    "Anix7 Tools",
+    "Anix Lab Tools",
+    "Anix Lab age calculator",
     "Anix7 age calculator",
-    "Age calculator",
+    "age calculator",
     "calculate age online",
     "exact age calculator",
     "date of birth calculator",
@@ -57,18 +59,20 @@ export const metadata = {
 
   openGraph: {
     url: `/age-calculator`,
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     images: [
       {
         url: `/assets/img/age-calculator-og.jpeg`,
         width: 1200,
         height: 630,
-        alt: "Anix7 Tools Age Calculator",
+        alt: "Anix Lab Age Calculator Tool",
       },
     ],
     type: "website",
   },
+
   twitter: { card: "summary_large_image" },
+
   alternates: { canonical: "/age-calculator" },
   addToSitemap: true,
 };

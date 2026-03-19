@@ -1,5 +1,5 @@
 {
-  "name": "anix7-workspace",
+  "name": "anixlab-workspace",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",

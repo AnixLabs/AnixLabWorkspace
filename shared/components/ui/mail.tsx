@@ -72,7 +72,7 @@ export function verifyMail({
                                     "
                                           align="left"
                                         >
-                                          Tools - Anix7
+                                          Anix Lab
                                           <br />
                                         </td>
                                         <td
@@ -215,7 +215,7 @@ export function verifyMail({
                                       If this wasn’t you, someone may have mistyped their email address. Keep this code to yourself, and no other action is needed at this moment.
                                     </p>
                                     <p>
-                                      The Anix7 - Tools team
+                                      The Anix Lab team
                                       <br />
                                     </p>
                                     <p>
@@ -288,8 +288,7 @@ export function verifyMail({
                                   >
                                     <div>
                                       You received this email to let you know
-                                      about important changes to your Tools -
-                                      Anix7 Account and services.
+                                      about important changes to your Anix Lab Account and services.
                                       <br />
                                     </div>
                                     <p style="color: #777; font-size: 14px; text-align: center; margin-top: 20px;">
@@ -297,7 +296,7 @@ export function verifyMail({
                                         href="${baseUrl}"
                                         style="color: #007bff; text-decoration: none;"
                                       >
-                                        © Anix7 Tools
+                                        © Anix Lab ${new Date().getFullYear()}
                                       </a> &nbsp;|&nbsp;
                                       
                                       <a

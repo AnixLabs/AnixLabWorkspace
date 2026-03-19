@@ -4,10 +4,10 @@ import Link from "next/link";
 export const metadata = {
   title: "Privacy Policy",
   description:
-    "Learn how Anix7 collects, uses, stores, and protects your data. Your privacy is important to us.",
+    "Learn how Anix Lab (formerly Anix7) collects, uses, stores, and protects your data. Your privacy is important to us.",
   keywords: [
-    "Anix7 privacy policy",
-    "data protection",
+    "Anix Lab privacy policy",
+    "Anix Lab data protection",
     "user information",
     "data usage",
     "cookie policy",
@@ -15,7 +15,7 @@ export const metadata = {
     "privacy practices",
     "data security",
     "personal information",
-    "GDPR compliance",
+    "Anix Lab (formerly Anix7)",
   ],
   alternates: { canonical: "/page/privacy-policy" },
   addToSitemap: true,
@@ -27,154 +27,157 @@ export default function PrivacyPolicy() {
       <h1>
         <strong>Privacy Policy</strong>
       </h1>
+
       <p className="my-1 ml-1">
         <strong>Effective Date:</strong> 06 July 2025
       </p>
+
       <p className="my-1 ml-1">
-        At <strong>Anix7</strong> (accessible via <Link href="/">www.anix7.in</Link> and all
-        associated subdomains), your privacy is a top priority. This Privacy Policy outlines how we
-        collect, use, and protect your personal information when you use any of our services.
+        At <strong>Anix Lab</strong> (formerly Anix7), accessible via{" "}
+        <Link href="/">www.anixlab.in</Link> and its associated subdomains, your privacy is a top
+        priority. This Privacy Policy explains how we collect, use, and safeguard your information
+        when you use our services.
       </p>
+
       <p className="my-1 ml-1">
-        By accessing or using Anix7 or any of its associated platforms (including but not limited to{" "}
-        <strong>Anix7 Tools</strong>, <strong>Anix7 Games</strong>,{" "}
-        {/* <strong>Anix7 AI</strong>,{" "} */}
-        <strong>Anix7 Photos</strong>, <strong>AniPic</strong>, <strong>Anix7 Anime</strong>, and{" "}
-        <strong>Anix7 App Market</strong>), you agree to this Privacy Policy.
+        By accessing or using Anix Lab platforms (including but not limited to{" "}
+        <strong>Anix Lab Tools</strong>, <strong>Anix Play</strong> and <strong>AniPic</strong>,
+        {/* <strong>Anix Lab Anime</strong>, and <strong>Anix Lab App Market</strong>), */}
+        you agree to the terms outlined in this Privacy Policy.
       </p>
+
       <Hr />
+
       <h2>
         <strong>1. Information We Collect</strong>
       </h2>
-      <p className="my-1 ml-1">
-        We may collect the following types of information when you interact with our platforms:
-      </p>
+
+      <p className="my-1 ml-1">We may collect the following types of information:</p>
+
       <h3>
-        a. <strong>Personal Information</strong> <em>(only when voluntarily submitted)</em>:
+        a. <strong>Personal Information</strong> <em>(voluntarily provided)</em>
       </h3>
       <ul className="list-disc ml-5 pl-5 space-y-2">
-        <li>Name, email, or contact info (e.g., via support forms, feedback).</li>
-        <li>Payment-related details if you purchase a subscription or premium feature.</li>
+        <li>Name, email address, or contact details (e.g., support or feedback).</li>
+        <li>Payment-related information for subscriptions or premium features.</li>
       </ul>
+
       <h3>
-        b. <strong>Non-Personal Information</strong> <em>(automatically collected)</em>:
+        b. <strong>Non-Personal Information</strong> <em>(automatically collected)</em>
       </h3>
       <ul className="list-disc ml-5 pl-5 space-y-2">
-        <li>Browser type, device type, OS version.</li>
+        <li>Browser type, device type, and operating system.</li>
         <li>IP address and approximate location.</li>
-        <li>Pages visited, time spent, and interaction data (for analytics).</li>
+        <li>Usage data such as pages visited and interaction patterns.</li>
       </ul>
+
       <h3>
-        c. <strong>Uploaded Files &amp; Content</strong>:
+        c. <strong>Uploaded Content</strong>
       </h3>
       <ul className="list-disc ml-5 pl-5 space-y-2">
         <li>
-          Images, URLs, QR data, and other content processed by our tools remain in your browser
-          unless explicitly uploaded to our server (e.g., for temporary download links).
+          Files such as images, URLs, or QR data are processed locally in your browser unless
+          explicitly uploaded for features like sharing or downloads.
         </li>
       </ul>
+
       <h3>
-        d. <strong>Cookies &amp; Tracking Technologies</strong>:
+        d. <strong>Cookies &amp; Tracking Technologies</strong>
       </h3>
       <ul className="list-disc ml-5 pl-5 space-y-2">
-        <li>To remember user preferences, improve performance, and measure usage patterns.</li>
+        <li>Used to improve performance and remember user preferences.</li>
         <li>
-          We may use cookies for analytics (Google Analytics, for example), but we{" "}
-          <strong>do not use cookies to sell or trade data</strong>.
+          May include analytics tools (e.g., Google Analytics). We do{" "}
+          <strong>not sell or trade user data</strong>.
         </li>
       </ul>
+
       <Hr />
+
       <h2>
         <strong>2. How We Use Your Information</strong>
       </h2>
-      <p className="my-1 ml-1">We use your data for the following purposes:</p>
+
       <ul className="list-disc ml-5 pl-5 space-y-2">
-        <li>To operate and improve our tools and services.</li>
-        <li>To personalize your user experience.</li>
-        <li>To analyze website traffic and optimize performance.</li>
-        <li>To respond to user support requests or feedback.</li>
-        <li>To display personalized ads on the free version of the site.</li>
-        <li>To process payments and manage subscriptions (only applicable for Pro features).</li>
-        <li>To prevent abuse, fraud, or misuse of our services.</li>
+        <li>To operate and improve services</li>
+        <li>To personalize user experience</li>
+        <li>To analyze usage and performance</li>
+        <li>To respond to support requests</li>
+        <li>To display ads on free services</li>
+        <li>To process payments and subscriptions</li>
+        <li>To prevent fraud and misuse</li>
       </ul>
+
       <Hr />
+
       <h2>
-        <strong>3. Google Login Integration</strong>
+        <strong>3. Google Login</strong>
       </h2>
-      <p className=" my-1 ml-1">When you use the login feature via Google, we:</p>
-      <ul className="list-disc ml-5 pl-5 space-y-2">
-        <li>
-          Request to access name, email address and profile picture for the purpose of
-          authentication.
-        </li>
-        <li>Allow you to revoke access at any time through your Google account settings.</li>
-      </ul>
-      <p className=" my-1 ml-1">
-        We comply with Google’s API Services User Data Policy and ensure that your data is handled
-        securely.
+
+      <p className="my-1 ml-1">
+        When signing in with Google, we may access basic profile details such as name, email, and
+        profile image for authentication purposes. You can revoke access anytime via your Google
+        account settings.
       </p>
+
       <Hr />
+
       <h2>
-        <strong>4. Cookies and Tracking Technologies</strong>
+        <strong>4. Cookies</strong>
       </h2>
-      <p className=" my-1 ml-1">
-        We use cookies and similar technologies to enhance your experience and analyze website
-        traffic. These include:
-      </p>
+
       <ul className="list-disc ml-5 pl-5 space-y-2">
         <li>
-          <strong>Essential Cookies:</strong> Required for the proper functioning of the website.
+          <strong>Essential Cookies:</strong> Required for functionality
         </li>
         <li>
-          <strong>Analytics Cookies:</strong> Help us understand how users interact with our site.
+          <strong>Analytics Cookies:</strong> For usage insights
         </li>
         <li>
-          <strong>Advertising Cookies:</strong> Used to display personalized ads on the free version
-          of the site.
+          <strong>Advertising Cookies:</strong> For relevant ads
         </li>
       </ul>
-      <p className=" my-1 ml-1">
-        You can manage your cookie preferences through your browser settings.
-      </p>
+
+      <p className="my-1 ml-1">You can control cookies through your browser settings.</p>
+
       <Hr />
+
       <h2>
         <strong>5. Data Retention</strong>
       </h2>
+
       <ul className="list-disc ml-5 pl-5 space-y-2">
         <li>
-          Files processed in-browser are never stored on our servers, except when required for
-          specific download or sharing functions. However, images uploaded using the Image Upload
-          feature are stored on our servers and may be publicly accessible. Users retain control and
-          can delete their uploaded images at any time.
+          Most tool data is processed locally and not stored unless required for specific features.
         </li>
         <li>
-          Contact or support-related data may be retained as long as needed for support or legal
-          compliance.
+          Uploaded content (e.g., images) may be stored and publicly accessible until deleted by the
+          user.
         </li>
+        <li>Support-related data is retained as necessary.</li>
       </ul>
+
       <Hr />
+
       <h2>
-        <strong>6. Sharing Your Information</strong>
+        <strong>6. Data Sharing</strong>
       </h2>
+
       <p className="my-1 ml-1">
-        We <strong>do not sell, rent, or trade</strong> your personal data.
+        We <strong>do not sell or rent</strong> your data.
       </p>
-      <p className="my-1 ml-1">We may share data with:</p>
+
       <ul className="list-disc ml-5 pl-5 space-y-2">
-        <li>
-          <strong>Service providers</strong> (e.g., payment gateways, analytics platforms) under
-          strict confidentiality agreements.
-        </li>
-        <li>
-          <strong>Legal authorities</strong> if required to comply with law or protect our
-          users/platform.
-        </li>
+        <li>Trusted service providers (payments, analytics)</li>
+        <li>Legal authorities if required by law</li>
       </ul>
+
       <Hr />
+
       <h2>
         <strong>7. Your Rights</strong>
       </h2>
-      <p className=" my-1 ml-1">You have the following rights regarding your personal data:</p>
+
       <ul className="list-disc ml-5 pl-5 space-y-2">
         <li>
           <strong>Access:</strong> Request a copy of the personal data we hold about you.
@@ -194,59 +197,69 @@ export default function PrivacyPolicy() {
           <strong>Opt-Out:</strong> Opt-out of personalized ads by managing your cookie preferences.
         </li>
       </ul>
+
       <p className="my-1 ml-1">
         To exercise these rights, contact us at:{" "}
         <strong>
-          <a href="mailto:privacy@anix7.in">privacy@anix7.in</a>
+          <a href="mailto:privacy@anixlab.in">privacy@anixlab.in</a>
         </strong>
       </p>
+
       <Hr />
+
       <h2>
-        <strong>8. Children&#39;s Privacy</strong>
+        <strong>8. Children&apos;s Privacy</strong>
       </h2>
+
       <p className="my-1 ml-1">
-        Anix7 is not intended for children under the age of 13. We do not knowingly collect personal
-        data from children. If we learn we’ve collected data from a child under 13, we will delete
-        it promptly.
+        Our services are not intended for children under 13. We do not knowingly collect their data.
       </p>
+
       <Hr />
+
       <h2>
         <strong>9. Third-Party Services</strong>
       </h2>
+
       <p className="my-1 ml-1">
-        We may link or integrate with third-party tools and platforms (e.g., Telegram bots, Imgur,
-        Google APIs). These services operate independently and are governed by their own privacy
-        policies. We recommend reviewing them before use.
+        Third-party tools (e.g., Google APIs, Telegram) operate under their own privacy policies.
       </p>
+
       <Hr />
+
       <h2>
-        <strong>10. Security Measures</strong>
+        <strong>10. Security</strong>
       </h2>
+
       <p className="my-1 ml-1">
-        We use modern security standards and best practices to protect your data. However, no online
-        service is 100% secure, and we cannot guarantee absolute protection against all threats.
+        We implement industry-standard security practices, but no system is 100% secure.
       </p>
+
       <Hr />
+
       <h2>
-        <strong>11. Changes to This Policy</strong>
+        <strong>11. Updates to This Policy</strong>
       </h2>
+
       <p className="my-1 ml-1">
-        We may update this Privacy Policy from time to time. The most recent version will always be
-        available on this page with the updated effective date. Continued use of Anix7 after changes
-        indicates your acceptance of the updated policy.
+        This policy may be updated periodically. Continued use of Anix Lab implies acceptance of the
+        latest version.
       </p>
+
       <Hr />
+
       <h2>
-        <strong>12. Contact Us</strong>
+        <strong>12. Contact</strong>
       </h2>
+
       <p className="my-1 ml-1">
         For questions, concerns, or privacy-related requests, please contact:
       </p>
       <p className="my-1 ml-1">
-        📧 <strong>Email:</strong> <a href="mailto:privacy@anix7.in">privacy@anix7.in</a>
+        📧 <strong>Email:</strong> <a href="mailto:privacy@anixlab.in">privacy@anixlab.in</a>
       </p>
       <p className="my-1 ml-1">
-        🌐 <strong>Website:</strong> <Link href="/">www.anix7.in</Link>
+        🌐 <strong>Website:</strong> <Link href="/">www.anixlab.in</Link>
       </p>
     </>
   );

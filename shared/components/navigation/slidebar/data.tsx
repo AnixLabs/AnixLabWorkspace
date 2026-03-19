@@ -9,23 +9,23 @@ export const commonMenu: MenuItem[] = [
   {
     label: "About Us",
     icon: <RiGroupLine />,
-    url: "https://www.anix7.in/page/about-us",
+    url: "https://www.anixlab.in/page/about-us",
   },
   {
     label: "Contact Us",
     icon: <MdAlternateEmail />,
-    url: "https://www.anix7.in/page/contact-us",
+    url: "https://www.anixlab.in/page/contact-us",
     hr: true,
   },
   {
     label: "Disclaimer",
     icon: <TiWarningOutline />,
-    url: "https://www.anix7.in/page/disclaimer",
+    url: "https://www.anixlab.in/page/disclaimer",
   },
   {
     label: "Terms of Use",
     icon: <MdOutlineSecurity />,
-    url: "https://www.anix7.in/page/terms",
+    url: "https://www.anixlab.in/page/terms",
     hr: true,
   },
   {
@@ -38,6 +38,6 @@ export const commonMenu: MenuItem[] = [
 
 export const commonQuickURLs: QuickURL[] = [
   { url: "/sitemap.xml", label: "Sitemap" },
-  { url: "https://www.anix7.in/page/dmca", label: "DMCA" },
-  { url: "https://www.anix7.in/page/privacy-policy", label: "Privacy Policy" },
+  { url: "https://www.anixlab.in/page/dmca", label: "DMCA" },
+  { url: "https://www.anixlab.in/page/privacy-policy", label: "Privacy Policy" },
 ];

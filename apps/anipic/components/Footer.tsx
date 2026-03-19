@@ -12,7 +12,7 @@ const importantLinks = [
     links: [
       {
         name: "About Us",
-        url: "https://www.anix7.in/page/about-us",
+        url: "https://www.anixlab.in/page/about-us",
       },
       // {
       //   name: "Careers",
@@ -20,7 +20,7 @@ const importantLinks = [
       // },
       {
         name: "Contact Us",
-        url: "https://www.anix7.in/page/contact-us",
+        url: "https://www.anixlab.in/page/contact-us",
       },
     ],
   },
@@ -29,11 +29,11 @@ const importantLinks = [
     links: [
       {
         name: "Privacy Policy",
-        url: "https://www.anix7.in/page/privacy-policy",
+        url: "https://www.anixlab.in/page/privacy-policy",
       },
       {
         name: "Terms of Use",
-        url: "https://www.anix7.in/page/terms",
+        url: "https://www.anixlab.in/page/terms",
       },
       // {
       //   name: "Cookie Policy",
@@ -50,11 +50,11 @@ const importantLinks = [
       // },
       {
         name: "FAQs",
-        url: "https://www.anix7.in/page/faqs",
+        url: "https://www.anixlab.in/page/faqs",
       },
       {
         name: "Help Center",
-        url: "https://www.anix7.in/page/contact-us",
+        url: "https://www.anixlab.in/page/contact-us",
       },
     ],
   },
@@ -72,17 +72,19 @@ export default function Footer() {
             src="/assets/img/logo/logo-512.png"
             width={120}
             height={120}
-            alt="AniPic - Anix7"
+            alt="AniPic - Anix Lab"
           />
           <div>
-            <h2>AniPic - Anix7</h2>
+            <h2>AniPic - Anix Lab</h2>
             <p>
-              AniPic by Anix7 is a modern platform for discovering high-quality AI-generated images,
-              art, and creative visuals.
+              <strong>AniPic</strong> by Anix Lab (formerly Anix7) is a modern platform for
+              discovering high-quality AI-generated images, artwork, and creative visuals.
             </p>
           </div>
         </div>
+
         <Hr />
+
         {/* Footer Section - Important Links */}
         {!!importantLinks.length && (
           <>
@@ -105,6 +107,7 @@ export default function Footer() {
             <Hr />
           </>
         )}
+
         {/* Credit */}
         <div className="inline-flex items-center">
           <span>
@@ -115,7 +118,7 @@ export default function Footer() {
             &nbsp;&middot;&nbsp;&nbsp;
             <bdi>
               <Link href="/" className=" inline-flex items-center text-lg">
-                Anix7
+                Anix Lab
                 <svg viewBox="0 0 24 24" className="w-4 h-4 mx-1 fill-current">
                   <path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path>
                 </svg>
