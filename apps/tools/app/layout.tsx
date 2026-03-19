@@ -23,16 +23,14 @@ const baseUrl = process.env.BASE_URL!;
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
-  // alternates: {
-  //   canonical: "",
-  // },
   title: {
-    default: "Anix7 Tools - Free Online Tools for Everyday Tasks",
-    template: "%s - Anix7 Tools",
+    default: "Anix Lab Tools - Free Online Tools for Everyday Tasks",
+    template: "%s - Anix Lab Tools",
   },
   description:
-    "Anix7 Tools is your go-to hub for free online utilities. URL Shortener, QR Code Generator, Image Resizing or Uploading, and many more — all in one place.",
+    "Anix Lab Tools (formerly Anix7 Tools) is your go-to hub for free online utilities. URL Shortener, QR Code Generator, Image Resizing or Uploading, and many more — all in one place.",
   keywords: [
+    "Anix Lab Tools",
     "Anix7 Tools",
     "online tools",
     "free tools",
@@ -56,13 +54,13 @@ export const metadata = {
   ],
   openGraph: {
     url: "/",
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     images: [
       {
         url: `/assets/img/logo.png`,
         width: 1200,
         height: 630,
-        alt: "Anix7 Tools Logo",
+        alt: "Anix Lab Tools Logo",
       },
     ],
     type: "website",
@@ -76,7 +74,7 @@ export const metadata = {
     follow: true,
   },
   other: {
-    publisher: "Anix7",
+    publisher: "Anix Lab",
   },
 };
 
@@ -92,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="absolute w-48 h-56 bg-neutral-500/5 dark:bg-black/15 -z-10 top-0 right-0 rounded-bl-full" />
           <Suspense>
             <Navbar
-              appName="Anix7"
+              appName="Anix Lab"
               appSubName="Tools"
               moreIcon={[
                 {

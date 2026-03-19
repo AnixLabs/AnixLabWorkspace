@@ -5,40 +5,41 @@ import { IoColorPaletteOutline } from "react-icons/io5";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Fully customized QR Code Generator with colors, shapes, and logos",
+  title: "Fully Customized QR Code Generator with Colors, Shapes, and Logos",
   description:
-    "QR Code Generator by Anix7 Tools, where you can generate fully customized QR Codes with colors, shapes, and logos.",
+    "QR Code Generator by Anix Lab (formerly Anix7 Tools), where you can generate fully customized QR Codes with colors, shapes, and logos.",
   keywords: [
     "QR",
     "QR Code",
     "QR Code Generator",
-    "QR Code Generator by Anix7 Tools",
+    "QR Code Generator by Anix Lab Tools",
     "Anix7 QR Code Generator",
-    "Anix7 Tools QR Code Generator",
-    "Anix7 Tools",
-    "Anix7 Tools QR code generator",
-    "QR code generator Anix7 Tools",
+    "Anix Lab QR Code Generator",
+    "Anix Lab Tools QR Code Generator",
+    "Anix Lab Tools",
+    "Anix Lab Tools QR code generator",
+    "QR code generator Anix Lab Tools",
     "QR code generator with colors",
     "QR code generator with shapes",
     "QR code generator with logos",
     "custom QR code generator",
-    "create QR codes online Anix7",
+    "create QR codes online Anix Lab",
     "generate QR codes with logos",
     "QR code design tool",
     "personalized QR codes",
     "QR code generator for websites",
     "dynamic QR code generator",
-    "QR code creation tool Anix7",
+    "QR code creation tool Anix Lab",
     "QR code with custom design",
-    "QR code with logo Anix7 Tools",
-    "Anix7 customized QR code generator",
+    "QR code with logo Anix Lab Tools",
+    "Anix Lab customized QR code generator",
     "QR code for business cards",
     "generate static QR codes",
-    "QR code creator Anix7",
-    "Anix7 QR code tool",
+    "QR code creator Anix Lab",
+    "Anix Lab QR code tool",
     "QR code generator with custom colors",
     "create QR code for links",
-    "QR code for marketing Anix7",
+    "QR code for marketing Anix Lab",
     "QR code generator for events",
     "generate QR code for URL",
     "QR code generator with custom features",
@@ -98,13 +99,13 @@ export const metadata: Metadata = {
 
   openGraph: {
     url: "/qr-code-generator",
-    siteName: "Anix7 Tools",
+    siteName: "Anix Lab Tools",
     images: [
       {
         url: `/assets/img/qr-code-generator-og.jpeg`,
         width: 1200,
         height: 630,
-        alt: "Anix7 Tools QR Code Generator",
+        alt: "Anix Lab Tools QR Code Generator",
       },
     ],
     type: "website",
@@ -178,14 +179,14 @@ export default function QrCode() {
       </div>
       <section className="my-16 px-4 text-center">
         <h2 className="text-2xl font-bold mb-4">
-          Benefits from <span className="text-theme-450">QR by Anix7 Tools</span>
+          Benefits from <span className="text-theme-450">QR by Anix Lab Tools</span>
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto">
-          {/* With QR by Anix7 Tools, you can track how many people scan your QR
-          Codes — along with the time, location, and more. No coding skills
-          needed to build beautiful, fully customized landing pages. */}
-          With QR Code Generator by Anix7 Tools, you can generate fully customized QR Codes with
-          colors, shapes, and logos.
+          {/* With QR by Anix Lab Tools, you can track how many people scan your QR
+  Codes — along with the time, location, and more. No coding skills
+  needed to build beautiful, fully customized landing pages. */}
+          With QR Code Generator by Anix Lab (formerly Anix7 Tools), you can generate fully
+          customized QR Codes with colors, shapes, and logos.
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -278,7 +279,7 @@ export default function QrCode() {
         <h2 className="text-2xl font-bold text-center mb-6">How to Use</h2>
         <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10">
           Creating QR Codes with{" "}
-          <span className="text-theme-450 font-medium">QR by Anix7 Tools</span> is simple and
+          <span className="text-theme-450 font-medium">QR by Anix Lab Tools</span> is simple and
           efficient. Just follow these steps:
         </p>
 
@@ -443,13 +444,13 @@ export default function QrCode() {
       <section className="py-16 px-4 max-w-5xl mx-auto text-center">
         <Image
           src="/assets/img/logo.png" // Replace with your actual logo path
-          alt="QR by Anix7 Tools"
-          title="QR by Anix7 Tools"
+          alt="QR by Anix Lab Tools"
+          title="QR by Anix Lab Tools"
           className="w-40 h-40 mx-auto mb-4"
           width={160}
           height={160}
         />
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4">QR by Anix7 Tools</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4">QR by Anix Lab Tools</h2>
         <p className="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto">
           Generate fully customized QR Codes with colors, shapes, and logos
           {/* — and keep track of how many people scan your QR Codes, from where, and on what date */}
