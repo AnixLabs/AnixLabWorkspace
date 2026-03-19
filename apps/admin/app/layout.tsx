@@ -28,7 +28,7 @@ export const metadata = {
     "media management system",
     "Anix Lab (formerly Anix7)",
   ],
-  author: "Anix Lab",
+  authors: [{ name: "Anix Lab" }],
   openGraph: {
     url: "/",
     siteName: "Anix Lab AdminOS",
