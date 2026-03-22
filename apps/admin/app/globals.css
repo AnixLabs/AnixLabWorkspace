@@ -3,10 +3,38 @@
 @source "../../../shared/**/*{.js,.jsx,.tsx}";
 
 @import "../../../shared/styles/utilities.css";
-@import "../../../shared/styles/theme.css";
 
-@custom-variant dark (&:is(.dark *));
+@theme inline {
+  /* LIGHT SIDE */
+  --color-theme-50: color-mix(in oklch, var(--themeC) 4%, white);
+  --color-theme-100: color-mix(in oklch, var(--themeC) 10%, white);
+  --color-theme-150: color-mix(in oklch, var(--themeC) 18%, white);
+  --color-theme-200: color-mix(in oklch, var(--themeC) 27%, white);
+  --color-theme-250: color-mix(in oklch, var(--themeC) 37%, white);
+  --color-theme-300: color-mix(in oklch, var(--themeC) 48%, white);
+  --color-theme-350: color-mix(in oklch, var(--themeC) 59%, white);
+  --color-theme-400: color-mix(in oklch, var(--themeC) 72%, white);
+  --color-theme-450: color-mix(in oklch, var(--themeC) 86%, white);
+
+  /* BASE */
+  --color-theme-500: var(--themeC);
+
+  /* DARK SIDE */
+  --color-theme-550: color-mix(in oklch, var(--themeC) 90%, black);
+  --color-theme-600: color-mix(in oklch, var(--themeC) 80%, black);
+  --color-theme-650: color-mix(in oklch, var(--themeC) 70%, black);
+  --color-theme-700: color-mix(in oklch, var(--themeC) 60%, black);
+  --color-theme-750: color-mix(in oklch, var(--themeC) 50%, black);
+  --color-theme-800: color-mix(in oklch, var(--themeC) 42%, black);
+  --color-theme-850: color-mix(in oklch, var(--themeC) 33%, black);
+  --color-theme-900: color-mix(in oklch, var(--themeC) 25%, black);
+  --color-theme-950: color-mix(in oklch, var(--themeC) 15%, black);
+}
 
 @layer base {
   @import "../../../shared/styles/base.css";
+
+  :root {
+    --themeC: lab(33.38% 65.88 -67.28);
+  }
 }
