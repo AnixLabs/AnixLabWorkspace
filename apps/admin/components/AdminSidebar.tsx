@@ -130,19 +130,19 @@ export function AdminSidebar() {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-45 bg-black/60 backdrop-blur-sm"
+          className="md:hidden fixed inset-0 z-45 bg-black/60 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       <div
-        className={`max-lg:fixed top-0 left-0 z-55 h-screen lg:-ml-2 transition-transform duration-300 ease-in-out ${
-          isOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-70"
+        className={`max-md:fixed top-0 left-0 z-55 h-screen md:-ml-2 transition-transform duration-300 ease-in-out ${
+          isOpen ? "max-md:translate-x-0" : "max-md:-translate-x-70"
         }`}
       >
         <SidebarContent pathname={pathname} closeSidebar={() => setIsOpen(false)} />
         <button
-          className="lg:hidden fixed top-2 -right-12 z-60 w-9 h-9 bg-[#0a0a0f] border border-theme-500/30 rounded-lg flex items-center justify-center text-theme-400 shadow-lg cursor-pointer transition-colors hover:border-theme-400/60"
+          className="md:hidden fixed top-2 -right-12 z-60 w-9 h-9 bg-[#0a0a0f] border border-theme-500/30 rounded-lg flex items-center justify-center text-theme-400 shadow-lg cursor-pointer transition-colors hover:border-theme-400/60"
           onClick={() => setIsOpen((v) => !v)}
           aria-label="Toggle sidebar"
         >
