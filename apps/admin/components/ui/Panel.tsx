@@ -9,7 +9,7 @@ export function Panel({ children, className, ...props }: PanelProps) {
   return (
     <div
       className={cn(
-        "backdrop-blur-sm border border-indigo-500/12 rounded-2xl overflow-hidden",
+        "p-6 backdrop-blur-xs border-2 border-theme-500/20 rounded-2xl overflow-hidden",
         className,
       )}
       {...props}
@@ -20,27 +20,21 @@ export function Panel({ children, className, ...props }: PanelProps) {
 }
 
 interface PanelHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  title: string;
   right?: React.ReactNode;
 }
 
-export function PanelHeader({
-  title,
-  right,
-  className,
-  ...props
-}: Omit<PanelHeaderProps, "children">) {
+export function PanelHeader({ children, right, className, ...props }: PanelHeaderProps) {
   return (
     <div
       className={cn(
-        "px-5 py-4 border-b border-indigo-500/10 flex items-center justify-between",
+        "mb-6 -mt-4 pb-2 border-b-2 border-theme-500/20 flex items-center justify-between",
         className,
       )}
       {...props}
     >
-      <span className="text-[11px] font-bold text-white/80 uppercase tracking-[0.06em] font-['JetBrains_Mono',monospace]">
-        {title}
-      </span>
+      <h2 className="font-bold text-white/80 uppercase tracking-[0.06em] font-['JetBrains_Mono',monospace]">
+        {children}
+      </h2>
       {right}
     </div>
   );
