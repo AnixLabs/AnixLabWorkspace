@@ -8,7 +8,7 @@ export default async function DashboardHeading() {
   const now = new Date();
 
   return (
-    <div className="px-6 py-8">
+    <div className="text-center">
       <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest">
         {now.toLocaleDateString("en-US", {
           weekday: "long",

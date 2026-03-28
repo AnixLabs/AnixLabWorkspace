@@ -7,15 +7,15 @@ interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Panel({ children, className, ...props }: PanelProps) {
   return (
-    <div
+    <section
       className={cn(
-        "p-6 backdrop-blur-xs border-2 border-theme-500/20 rounded-2xl overflow-hidden",
+        "my-6 p-6 backdrop-blur-xs border-2 border-theme-500/20 rounded-2xl overflow-hidden",
         className,
       )}
       {...props}
     >
       {children}
-    </div>
+    </section>
   );
 }
 

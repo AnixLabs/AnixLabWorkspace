@@ -16,7 +16,7 @@ export default function AdminAccessLayout({ children }: { children: React.ReactN
         </div>
 
         {/* Content */}
-        <div className="p-3 w-full overflow-x-hidden">{children}</div>
+        <div className="p-5 w-full md:w-[92%] overflow-x-hidden">{children}</div>
       </div>
     </div>
   );
