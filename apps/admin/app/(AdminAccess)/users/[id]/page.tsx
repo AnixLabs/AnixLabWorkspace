@@ -63,7 +63,7 @@ export default async function UserDetailPage({ params }: PageProps) {
   const canBan = !isSelf && (isSuperadmin || viewerOutranksTarget);
   const canChangeRole = !isSelf && (isSuperadmin || viewerOutranksTarget);
   const canDelete = !isSelf && (isSuperadmin || viewerOutranksTarget);
-  const canRevokeAll = !isSelf;
+  const canRevokeAll = !isSelf && (isSuperadmin || viewerOutranksTarget);
   // const canSetPassword = true; // non-destructive; always allowed
 
   const banLockReason = isSelf
