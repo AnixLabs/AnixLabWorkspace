@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@shared/auth";
 
 // routes that never require auth
-const PUBLIC_PATHS = new Set(["/", "/favicon.ico", "/robots.txt"]);
+const PUBLIC_PATHS = new Set(["/", "/api/health","/favicon.ico", "/robots.txt"]);
 
 function isPublicPath(pathname: string): boolean {
   if (PUBLIC_PATHS.has(pathname)) return true;
