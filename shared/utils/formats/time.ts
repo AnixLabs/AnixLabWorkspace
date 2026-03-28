@@ -73,35 +73,23 @@ export function formatDate(date: Date | number | string): string {
   }).format(d);
 }
 
-export function formatTimeAgo(date: Date | number | string): string {
+export function formatTimeAgo(
+  date: Date | number | string,
+  maxParts: 1 | 2 | 3 | 4 | 5 | 6 = 3,
+): string {
   if (!date) return "-";
 
   const now = Date.now();
-  const past = new Date(date).getTime();
+  const time = new Date(date).getTime();
 
-  if (isNaN(past)) return "-";
+  if (isNaN(time)) return "-";
 
-  const diff = Math.floor((now - past) / 1000);
+  const diffSec = Math.floor((now - time) / 1000);
+  const isFuture = diffSec < 0;
 
-  if (diff < 60) return `${diff}s ago`;
+  const duration = formatDuration(Math.abs(diffSec), maxParts);
 
-  const mins = Math.floor(diff / 60);
-  if (mins < 60) return `${mins}m ago`;
-
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-
-  const days = Math.floor(hrs / 24);
-  if (days < 7) return `${days}d ago`;
-
-  const weeks = Math.floor(days / 7);
-  if (weeks < 4) return `${weeks}w ago`;
-
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo ago`;
-
-  const years = Math.floor(days / 365);
-  return `${years}y ago`;
+  return isFuture ? `in ${duration}` : `${duration} ago`;
 }
 
 export function formatClock(seconds: number): string {
