@@ -1,5 +1,5 @@
 import { auth } from "@shared/auth";
-import { headers } from "next/headers";
+import { headers as nextHeaders } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import {
   banUser,
@@ -15,66 +15,82 @@ import Image from "next/image";
 import { Panel, PanelHeader } from "@/components/ui/Panel";
 import { Button } from "@shared/components/ui/Button";
 import { Input, Select } from "@shared/components/ui/Input";
+import type { Role } from "@shared/auth/types";
+import { Pill } from "@/components/ui/Pill";
+import { getRoleWeight } from "@shared/auth/utils";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-type Role = "user" | "admin" | "superadmin";
-
-function getRoleWeight(role?: string | null): number {
-  if (role === "superadmin") return 2;
-  if (role === "admin") return 1;
-  return 0;
-}
-
 export default async function UserDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const h = await headers();
+  const headers = await nextHeaders();
 
   const [user, sessions, currentSession] = await Promise.all([
-    auth.api.getUser({ query: { id }, headers: h }),
-    auth.api.listUserSessions({ body: { userId: id }, headers: h }),
-    auth.api.getSession({ headers: h }),
+    auth.api.getUser({ query: { id }, headers }),
+    auth.api.listUserSessions({ body: { userId: id }, headers }),
+    auth.api.getSession({ headers }),
   ]);
 
-  // Must be logged in
-  if (!currentSession?.user) redirect("/login");
+  if (!currentSession?.user) redirect("/");
 
   const viewer = currentSession.user;
-  const viewerRole = (viewer.role ?? "user") as Role;
-  const viewerWeight = getRoleWeight(viewerRole);
+  const isSelf = viewer.id === id;
+  const isSuperadmin = viewer.role === "superadmin";
 
-  // Only admins and superadmins can access this page
-  if (viewerWeight < 1) redirect("/");
+  // Gate page access
+  const canAccessPage = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { user: ["list"] } },
+  });
+  if (!canAccessPage?.success) redirect("/");
 
   if (!user) notFound();
 
-  const isSelf = viewer.id === id;
-  const targetRole = (user.role ?? "user") as Role;
+  const targetRole = user.role ?? "user";
+  const viewerWeight = getRoleWeight(viewer.role);
   const targetWeight = getRoleWeight(targetRole);
 
-  // Superadmin = full root access over everyone.
-  // Admin = full access over users (weight 0) only; cannot act on peers or above.
-  // Self-targeting is blocked for all sensitive ops regardless of role.
-  const isSuperadmin = viewerRole === "superadmin";
-  const viewerOutranksTarget = viewerWeight > targetWeight;
+  // Superadmin outranks everyone; everyone else must strictly outrank the target
+  const outranksTarget = isSuperadmin || viewerWeight > targetWeight;
 
-  const canBan = !isSelf && (isSuperadmin || viewerOutranksTarget);
-  const canChangeRole = !isSelf && (isSuperadmin || viewerOutranksTarget);
-  const canDelete = !isSelf && (isSuperadmin || viewerOutranksTarget);
-  const canRevokeAll = !isSelf && (isSuperadmin || viewerOutranksTarget);
-  // const canSetPassword = true; // non-destructive; always allowed
+  // Resolve all permissions in parallel
+  const [permBan, permRole, permDelete, permSessions, permPassword] = await Promise.all([
+    auth.api.userHasPermission({ body: { userId: viewer.id, permissions: { user: ["ban"] } } }),
+    auth.api.userHasPermission({
+      body: { userId: viewer.id, permissions: { user: ["set-role"] } },
+    }),
+    auth.api.userHasPermission({ body: { userId: viewer.id, permissions: { user: ["delete"] } } }),
+    auth.api.userHasPermission({
+      body: { userId: viewer.id, permissions: { session: ["revoke"] } },
+    }),
+    auth.api.userHasPermission({
+      body: { userId: viewer.id, permissions: { user: ["set-password"] } },
+    }),
+  ]);
 
-  const banLockReason = isSelf
-    ? "You cannot ban your own account."
-    : `You cannot ban a ${targetRole}.`;
-  const roleLockReason = isSelf
-    ? "You cannot change your own role."
-    : `You cannot change the role of a ${targetRole}.`;
-  const deleteLockReason = isSelf
-    ? "You cannot delete your own account."
-    : `You cannot delete a ${targetRole}.`;
+  const canBan = !isSelf && outranksTarget && !!permBan?.success;
+  const canChangeRole = !isSelf && outranksTarget && !!permRole?.success;
+  const canDelete = !isSelf && outranksTarget && !!permDelete?.success;
+  const canRevokeAll = !isSelf && outranksTarget && !!permSessions?.success;
+  const canSetPassword = (isSelf || outranksTarget) && !!permPassword?.success;
+
+  // Produce a specific lock reason for the UI
+  function getLockReason(action: string): string {
+    if (isSelf) return `You cannot ${action} your own account.`;
+    if (!outranksTarget) return `You cannot ${action} a ${targetRole} — equal or higher role.`;
+    return `You don't have permission to ${action} this user.`;
+  }
+
+  // For the role selector: only show roles strictly below the viewer's weight (superadmin sees all)
+  const assignableRoles: { label: string; value: string }[] = (
+    [
+      { label: "User", value: "user" },
+      { label: "Moderator", value: "moderator" },
+      { label: "Admin", value: "admin" },
+      { label: "Superadmin", value: "superadmin" },
+    ] as { label: string; value: Role }[]
+  ).filter(({ value }) => (isSuperadmin ? true : getRoleWeight(value) < viewerWeight));
 
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-6">
@@ -90,35 +106,33 @@ export default async function UserDetailPage({ params }: PageProps) {
             <Image
               src={user.image}
               alt={user.name}
-              className="w-16 h-16 rounded-full object-cover"
+              className="shrink-0 w-16 h-16 rounded-full object-cover"
               width={64}
               height={64}
               unoptimized
             />
           ) : (
-            <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center text-xl font-bold">
+            <div className="shrink-0 w-16 h-16 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center text-xl font-bold">
               {user.name?.[0]?.toUpperCase() ?? "?"}
             </div>
           )}
           <div>
-            <h1 className="text-xl font-bold">{user.name}</h1>
-            <p className="text-sm text-gray-500">{user.email}</p>
+            <h1 className="text-xl font-bold break-all">{user.name}</h1>
+            <p className="text-sm text-gray-500 break-all">{user.email}</p>
             <div className="flex gap-1.5 mt-1 flex-wrap">
-              {isSelf && (
-                <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
-                  You
-                </span>
-              )}
-              {targetRole === "superadmin" && (
-                <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
-                  Superadmin
-                </span>
-              )}
-              {targetRole === "admin" && (
-                <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full">
-                  Admin
-                </span>
-              )}
+              {/* Self */}
+              {isSelf && <Pill status="default">You</Pill>}
+
+              {/* Role */}
+              <Pill status={user.role === "user" ? "default" : "warning"}>
+                {user.role ?? "user"}
+              </Pill>
+
+              {/* Verified */}
+              {user.emailVerified && <Pill status="success">Verified</Pill>}
+
+              {/* Ban Status */}
+              {user.banned && <Pill status="error">Banned</Pill>}
             </div>
           </div>
         </div>
@@ -138,10 +152,10 @@ export default async function UserDetailPage({ params }: PageProps) {
       </Panel>
 
       {/* Ban / Unban */}
-      {canBan ? (
-        <Panel className="mt-6">
-          <PanelHeader>Ban Management</PanelHeader>
-          {user.banned ? (
+      <Panel className="mt-6">
+        <PanelHeader>Ban Management</PanelHeader>
+        {canBan ? (
+          user.banned ? (
             <form
               action={async () => {
                 "use server";
@@ -161,7 +175,11 @@ export default async function UserDetailPage({ params }: PageProps) {
                 await banUser(id, typeof reason === "string" ? reason : undefined, expiresIn);
               }}
             >
-              <Input name="reason" placeholder="Reason (optional)" />
+              <Input
+                name="reason"
+                placeholder="Reason (optional)"
+                defaultValue={user.banReason ?? "Violation of terms of service"}
+              />
               <Select
                 name="days"
                 options={[
@@ -174,62 +192,50 @@ export default async function UserDetailPage({ params }: PageProps) {
               />
               <Button className="bg-rose-600 hover:shadow-rose-900">🚫 Ban User</Button>
             </form>
-          )}
-        </Panel>
-      ) : (
-        <LockedSection title="Ban Management" reason={banLockReason} />
-      )}
+          )
+        ) : (
+          <LockedSection reason={getLockReason("ban")} />
+        )}
+      </Panel>
 
       {/* Role */}
-      {canChangeRole ? (
-        <Panel>
-          <PanelHeader>Role</PanelHeader>
+      <Panel>
+        <PanelHeader>Role</PanelHeader>
+        {canChangeRole ? (
           <form
             action={async (fd: FormData) => {
               "use server";
-              const role = fd.get("role");
-              if (
-                typeof role === "string" &&
-                (role === "user" || role === "admin" || role === "superadmin")
-              ) {
-                await setRole(id, role as Role);
-              }
+              const role = fd.get("role") as Role | null;
+              if (role) await setRole(id, role);
             }}
             className="flex gap-2 items-center"
           >
-            <Select
-              name="role"
-              defaultValue={user.role ?? "user"}
-              options={[
-                { label: "User", value: "user" },
-                { label: "Admin", value: "admin" },
-                // Superadmin option is conditionally rendered below
-                ...(viewerRole === "superadmin"
-                  ? [{ label: "Superadmin", value: "superadmin" }]
-                  : []),
-              ]}
-            />
+            <Select name="role" defaultValue={user.role ?? "user"} options={assignableRoles} />
             <Button>Update Role</Button>
           </form>
-        </Panel>
-      ) : (
-        <LockedSection title="Role" reason={roleLockReason} />
-      )}
+        ) : (
+          <LockedSection reason={getLockReason("change the role of")} />
+        )}
+      </Panel>
 
       {/* Password */}
       <Panel>
         <PanelHeader>Set Password</PanelHeader>
-        <form
-          action={async (fd: FormData) => {
-            "use server";
-            const password = fd.get("password");
-            if (typeof password === "string" && password) await setPassword(id, password);
-          }}
-          className="flex gap-2 items-center"
-        >
-          <Input name="password" type="password" placeholder="New password" required />
-          <Button>Set Password</Button>
-        </form>
+        {canSetPassword ? (
+          <form
+            action={async (fd: FormData) => {
+              "use server";
+              const password = fd.get("password");
+              if (typeof password === "string" && password) await setPassword(id, password);
+            }}
+            className="flex gap-2 items-center"
+          >
+            <Input name="password" type="password" placeholder="New password" required />
+            <Button>Set Password</Button>
+          </form>
+        ) : (
+          <LockedSection reason="You don't have permission to set passwords." />
+        )}
       </Panel>
 
       {/* Sessions */}
@@ -247,9 +253,15 @@ export default async function UserDetailPage({ params }: PageProps) {
             </Button>
           </form>
         ) : (
-          <p className="text-xs text-gray-400 mb-4 italic">
-            You cannot revoke all sessions on your own account.
-          </p>
+          <LockedSection
+            reason={
+              isSelf
+                ? "You cannot revoke all sessions on your own account."
+                : !outranksTarget
+                  ? `You cannot revoke sessions of a ${targetRole} — equal or higher role.`
+                  : "You don't have permission to revoke sessions."
+            }
+          />
         )}
 
         <div className="space-y-2 mt-6">
@@ -269,7 +281,7 @@ export default async function UserDetailPage({ params }: PageProps) {
                   </div>
                   {isCurrentSession ? (
                     <span className="text-xs text-gray-400 italic">current</span>
-                  ) : (
+                  ) : canRevokeAll ? (
                     <form
                       action={async () => {
                         "use server";
@@ -278,6 +290,8 @@ export default async function UserDetailPage({ params }: PageProps) {
                     >
                       <button className="text-xs text-red-500 hover:underline">Revoke</button>
                     </form>
+                  ) : (
+                    <span className="text-xs text-gray-400 italic">locked</span>
                   )}
                 </div>
               );
@@ -289,9 +303,9 @@ export default async function UserDetailPage({ params }: PageProps) {
       </Panel>
 
       {/* Danger Zone */}
-      {canDelete ? (
-        <Panel>
-          <PanelHeader>Danger Zone</PanelHeader>
+      <Panel>
+        <PanelHeader>Danger Zone</PanelHeader>
+        {canDelete ? (
           <form
             action={async () => {
               "use server";
@@ -299,35 +313,27 @@ export default async function UserDetailPage({ params }: PageProps) {
               redirect("/users");
             }}
           >
-            <Button className="bg-rose-600 hover:shadow-rose-900 ">
+            <Button className="bg-rose-600 hover:shadow-rose-900">
               🗑️ Delete User Permanently
             </Button>
           </form>
-        </Panel>
-      ) : (
-        <LockedSection title="Danger Zone" reason={deleteLockReason} />
-      )}
+        ) : (
+          <LockedSection reason={getLockReason("delete")} />
+        )}
+      </Panel>
     </div>
   );
 }
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between border-b pb-1">
+    <div className="flex justify-between gap-2 border-b pb-1">
       <span className="text-gray-500">{label}</span>
-      <span className="font-medium">{value}</span>
+      <span className="font-medium break-all">{value}</span>
     </div>
   );
 }
 
-function LockedSection({ title, reason }: { title: string; reason: string }) {
-  return (
-    <div className="border rounded-xl p-6 bg-gray-50 dark:bg-neutral-800 shadow-sm space-y-2 opacity-60">
-      <h2 className="font-semibold text-lg text-gray-400">{title}</h2>
-      <p className="text-xs text-gray-400 flex items-center gap-1.5">
-        <span>🔒</span>
-        <span>{reason}</span>
-      </p>
-    </div>
-  );
+function LockedSection({ reason }: { reason: string }) {
+  return <p className="text-xs text-gray-400 italic">🔒 {reason}</p>;
 }

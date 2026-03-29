@@ -1,75 +1,67 @@
 import { auth } from "@shared/auth";
 import { headers } from "next/headers";
-import Image from "next/image";
-import Link from "next/link";
+import { redirect } from "next/navigation";
+import { UsersClient } from "./UsersClient";
+import { z } from "zod";
 
-export default async function UsersPage() {
-  const data = await auth.api.listUsers({
-    query: { limit: 100, sortBy: "createdAt", sortDirection: "desc" },
-    headers: await headers(),
+const SearchParamsSchema = z.object({
+  q: z.string().optional().default(""),
+  page: z.string().optional().default("1").transform(Number),
+  limit: z.enum(["20", "50", "100"]).optional().default("20").transform(Number),
+});
+
+export default async function UsersPage({ searchParams }: { searchParams: unknown }) {
+  const h = await headers();
+
+  const session = await auth.api.getSession({ headers: h });
+  if (!session?.user) redirect("/");
+
+  const permitted = await auth.api.userHasPermission({
+    body: { userId: session.user.id, permissions: { user: ["list"] } },
   });
 
-  const users = data?.users ?? [];
+  if (!permitted?.success) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3 text-center">
+        <span className="text-5xl">🔒</span>
+        <h1 className="text-xl font-semibold">Access Denied</h1>
+        <p className="text-sm text-gray-500">
+          You don&apos;t have permission to view the user list.
+        </p>
+      </div>
+    );
+  }
+
+  const parsed = SearchParamsSchema.safeParse(await searchParams);
+
+  if (!parsed.success) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3 text-center">
+        <span className="text-5xl">⚠️</span>
+        <h1 className="text-xl font-semibold">Invalid Parameters</h1>
+        <p className="text-sm text-gray-500">
+          {parsed.error.issues.map((i) => i.message).join(", ")}
+        </p>
+        <p className="text-sm text-gray-500">{parsed.error.issues.map((i) => i.path).join(", ")}</p>
+      </div>
+    );
+  }
+
+  const { q, page, limit } = parsed.data;
+  const offset = (page - 1) * limit;
+
+  const data = await auth.api.listUsers({
+    query: {
+      limit,
+      offset,
+      sortBy: "createdAt",
+      sortDirection: "desc",
+      ...(q ? { searchValue: q, searchField: "email", searchOperator: "contains" } : {}),
+    },
+    headers: h,
+  });
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Users</h1>
-          <p className="text-sm text-gray-500">{data?.total ?? 0} total</p>
-        </div>
-        <Link
-          href="/users/create"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600"
-        >
-          + Create User
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {users.map((user) => (
-          <Link key={user.id} href={`/users/${user.id}`}>
-            <div className="border rounded-xl p-4 hover:shadow-md transition cursor-pointer bg-white dark:bg-neutral-900">
-              <div className="flex items-center gap-3 mb-2">
-                {user.image ? (
-                  <Image
-                    src={user.image}
-                    alt={user.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                    width={40}
-                    height={40}
-                    unoptimized
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center text-sm font-bold">
-                    {user.name?.[0]?.toUpperCase() ?? "?"}
-                  </div>
-                )}
-                <div>
-                  <p className="font-semibold text-sm">{user.name}</p>
-                  <p className="text-xs text-gray-500">{user.role ?? "user"}</p>
-                </div>
-              </div>
-              <p className="text-xs text-gray-400 truncate">{user.email}</p>
-              <p className="text-xs text-gray-300 mt-1">
-                {new Date(user.createdAt).toLocaleDateString()}
-              </p>
-              <div className="flex gap-1 mt-2 flex-wrap">
-                {user.banned && (
-                  <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-                    banned
-                  </span>
-                )}
-                {user.emailVerified && (
-                  <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">
-                    verified
-                  </span>
-                )}
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
+    <UsersClient initialUsers={data.users} total={data.total} page={page} limit={limit} q={q} />
   );
 }

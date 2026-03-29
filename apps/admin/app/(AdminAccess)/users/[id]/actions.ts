@@ -3,140 +3,154 @@
 import { auth } from "@shared/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import type { Role } from "@shared/auth/types";
+import { getRoleWeight } from "@shared/auth/utils";
 
-type Role = "user" | "admin" | "superadmin";
-
-const h = async () => await headers();
-
-function getRoleWeight(role?: string | null): number {
-  if (role === "superadmin") return 2;
-  if (role === "admin") return 1;
-  return 0;
-}
-
-/** Assert the caller is logged in and has at least admin role. Returns the viewer. */
-async function requireAdmin() {
-  const session = await auth.api.getSession({ headers: await h() });
+async function requireSession() {
+  const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) throw new Error("Unauthorized: not logged in.");
-  if (getRoleWeight(session.user.role) < 1) throw new Error("Forbidden: admin role required.");
-  return session.user;
+  return session;
 }
 
-/** Fetch target user, throwing 404 if missing. */
 async function requireTargetUser(userId: string) {
-  const target = await auth.api.getUser({ query: { id: userId }, headers: await h() });
+  const target = await auth.api.getUser({ query: { id: userId }, headers: await headers() });
   if (!target) throw new Error("Not found: user does not exist.");
   return target;
 }
 
-/**
- * Assert the viewer can act on the target.
- * Rules:
- *  - Cannot act on self (for sensitive ops).
- *  - Superadmin can act on everyone.
- *  - Admin can only act on users with lower role weight (i.e. plain "user").
- */
-function assertCanAct(
-  viewerRole: string | null | undefined,
-  targetRole: string | null | undefined,
-  viewerId: string,
-  targetId: string,
-  action: string,
-) {
-  if (viewerId === targetId) throw new Error(`Forbidden: cannot ${action} your own account.`);
-
-  const vw = getRoleWeight(viewerRole);
-  const tw = getRoleWeight(targetRole);
-  const isSuperadmin = viewerRole === "superadmin";
-
-  if (!isSuperadmin && vw <= tw)
-    throw new Error(`Forbidden: cannot ${action} a ${targetRole ?? "user"} — insufficient role.`);
+/** Superadmin can act on anyone. Everyone else can only act on strictly lower roles. */
+function assertOutranks(viewerRole: string | null | undefined, targetRole?: string | null) {
+  if (viewerRole === "superadmin") return; // superadmin bypasses all
+  if (getRoleWeight(viewerRole) <= getRoleWeight(targetRole))
+    throw new Error(`Forbidden: cannot act on a ${targetRole ?? "user"} of equal or higher role.`);
 }
 
-// ─── Ban / Unban ──────────────────────────────────────────────────────────────
-
+// Ban / Unban
 export async function banUser(userId: string, reason?: string, expiresIn?: number) {
-  const viewer = await requireAdmin();
+  const { user: viewer } = await requireSession();
+  if (viewer.id === userId) throw new Error("Forbidden: cannot ban your own account.");
+
   const target = await requireTargetUser(userId);
-  assertCanAct(viewer.role, target.role, viewer.id, userId, "ban");
+  assertOutranks(viewer.role, target.role);
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { user: ["ban"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to ban users.");
 
   await auth.api.banUser({
     body: { userId, banReason: reason, banExpiresIn: expiresIn },
-    headers: await h(),
+    headers: await headers(),
   });
   revalidatePath(`/users/${userId}`);
 }
 
 export async function unbanUser(userId: string) {
-  const viewer = await requireAdmin();
-  const target = await requireTargetUser(userId);
-  assertCanAct(viewer.role, target.role, viewer.id, userId, "unban");
+  const { user: viewer } = await requireSession();
+  if (viewer.id === userId) throw new Error("Forbidden: cannot unban your own account.");
 
-  await auth.api.unbanUser({ body: { userId }, headers: await h() });
+  const target = await requireTargetUser(userId);
+  assertOutranks(viewer.role, target.role);
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { user: ["ban"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to unban users.");
+
+  await auth.api.unbanUser({ body: { userId }, headers: await headers() });
   revalidatePath(`/users/${userId}`);
 }
 
-// ─── Role ─────────────────────────────────────────────────────────────────────
-
+// Role
 export async function setRole(userId: string, role: Role) {
-  const viewer = await requireAdmin();
+  const { user: viewer } = await requireSession();
+  if (viewer.id === userId) throw new Error("Forbidden: cannot change your own role.");
+
   const target = await requireTargetUser(userId);
-  assertCanAct(viewer.role, target.role, viewer.id, userId, "change the role of");
+  assertOutranks(viewer.role, target.role);
 
-  // Only superadmins can grant the superadmin role
-  if (role === "superadmin" && viewer.role !== "superadmin")
-    throw new Error("Forbidden: only a superadmin can grant the superadmin role.");
+  // Also cannot assign a role equal to or above their own (except superadmin)
+  if (viewer.role !== "superadmin" && getRoleWeight(role) >= getRoleWeight(viewer.role))
+    throw new Error(`Forbidden: cannot assign the ${role} role — it meets or exceeds your own.`);
 
-  await auth.api.setRole({ body: { userId, role }, headers: await h() });
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { user: ["set-role"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to change roles.");
+
+  await auth.api.setRole({ body: { userId, role }, headers: await headers() });
   revalidatePath(`/users/${userId}`);
 }
 
-// ─── Sessions ─────────────────────────────────────────────────────────────────
-
+// Sessions
 export async function revokeAllSessions(userId: string) {
-  const viewer = await requireAdmin();
+  const { user: viewer } = await requireSession();
   if (viewer.id === userId)
     throw new Error("Forbidden: cannot revoke all sessions on your own account.");
 
-  // Any admin/superadmin can revoke sessions of any other user (including peers)
-  await auth.api.revokeUserSessions({ body: { userId }, headers: await h() });
+  const target = await requireTargetUser(userId);
+  assertOutranks(viewer.role, target.role);
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { session: ["revoke"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to revoke sessions.");
+
+  await auth.api.revokeUserSessions({ body: { userId }, headers: await headers() });
   revalidatePath(`/users/${userId}`);
 }
 
 export async function revokeSession(sessionToken: string, userId: string) {
-  await requireAdmin();
+  const { session: currentSession, user: viewer } = await requireSession();
 
-  const currentSession = await auth.api.getSession({ headers: await h() });
-  if (sessionToken === currentSession?.session?.token)
+  const target = await requireTargetUser(userId);
+  assertOutranks(viewer.role, target.role);
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { session: ["revoke"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to revoke sessions.");
+
+  if (sessionToken === currentSession.token)
     throw new Error("Forbidden: cannot revoke your own current session.");
 
-  await auth.api.revokeUserSession({ body: { sessionToken }, headers: await h() });
+  await auth.api.revokeUserSession({ body: { sessionToken }, headers: await headers() });
   revalidatePath(`/users/${userId}`);
 }
 
-// ─── Delete ───────────────────────────────────────────────────────────────────
-
+// Delete User
 export async function removeUser(userId: string) {
-  const viewer = await requireAdmin();
-  const target = await requireTargetUser(userId);
-  assertCanAct(viewer.role, target.role, viewer.id, userId, "delete");
+  const { user: viewer } = await requireSession();
+  if (viewer.id === userId) throw new Error("Forbidden: cannot delete your own account.");
 
-  await auth.api.removeUser({ body: { userId }, headers: await h() });
+  const target = await requireTargetUser(userId);
+  assertOutranks(viewer.role, target.role);
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { user: ["delete"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to delete users.");
+
+  await auth.api.removeUser({ body: { userId }, headers: await headers() });
   revalidatePath("/users");
 }
 
-// ─── Password ─────────────────────────────────────────────────────────────────
-
+// Password
 export async function setPassword(userId: string, password: string) {
-  await requireAdmin();
-  await requireTargetUser(userId);
-  // Password reset is intentionally unrestricted — any admin can reset any user's
-  // password (including their own or another admin's). It's non-destructive and
-  // needed for account recovery flows.
+  const { user: viewer } = await requireSession();
+
+  const target = await requireTargetUser(userId);
+  // Allow setting your own password, otherwise must outrank
+  if (viewer.id !== userId) assertOutranks(viewer.role, target.role);
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: viewer.id, permissions: { user: ["set-password"] } },
+  });
+  if (!success) throw new Error("Forbidden: you lack permission to set passwords.");
 
   await auth.api.setUserPassword({
     body: { userId, newPassword: password },
-    headers: await h(),
+    headers: await headers(),
   });
   revalidatePath(`/users/${userId}`);
 }
