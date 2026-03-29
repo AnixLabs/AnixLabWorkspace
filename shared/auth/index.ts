@@ -5,7 +5,7 @@ import { nextCookies } from "better-auth/next-js";
 import { z } from "zod";
 import { getMongoClient } from "@shared/lib/mongodb";
 import { sendNoReplyMail } from "@shared/lib/sendMail";
-import { ac, admin, moderator, owner, superadmin, user } from "./permissions";
+import { ac, roles } from "./permissions";
 
 const AuthEnvSchema = z.object({
   AUTH_BASE_URL: z.url().optional(),
@@ -135,11 +135,9 @@ export const auth = betterAuth({
       },
     }),
 
-    adminPlugin({ ac, roles: { user, owner, admin, moderator, superadmin } }),
+    adminPlugin({ ac, roles }),
 
     nextCookies(), // ⚠️ Must be last
   ],
 });
 
-// Inferred types from better-auth
-export type AuthServerSession = typeof auth.$Infer.Session;

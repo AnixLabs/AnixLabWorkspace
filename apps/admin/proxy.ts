@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@shared/auth";
 
 // routes that never require auth
-const PUBLIC_PATHS = new Set(["/", "/api/health","/favicon.ico", "/robots.txt"]);
+const PUBLIC_PATHS = new Set(["/", "/api/health", "/favicon.ico", "/robots.txt"]);
 
 function isPublicPath(pathname: string): boolean {
   if (PUBLIC_PATHS.has(pathname)) return true;
@@ -33,7 +33,7 @@ export default async function proxy(req: NextRequest) {
   const { success: hasAccess } = await auth.api.userHasPermission({
     body: {
       userId: session.user.id,
-      permissions: { user: ["list"] },
+      permissions: { dashboard: ["view"] },
     },
   });
 

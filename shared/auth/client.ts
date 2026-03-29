@@ -6,7 +6,7 @@ import {
   adminClient,
   organizationClient,
 } from "better-auth/client/plugins";
-import { ac, admin, moderator, owner, superadmin, user } from "./permissions";
+import { ac, roles } from "./permissions";
 
 const AUTH_BASE_URL = process.env.AUTH_BASE_URL ?? process.env.NEXT_PUBLIC_AUTH_BASE_URL;
 
@@ -20,11 +20,10 @@ export const authClient = createAuthClient({
     twoFactorClient(),
     usernameClient(),
     emailOTPClient(),
-    adminClient({ ac, roles: { user, owner, admin, moderator, superadmin } }),
+    adminClient({ ac, roles }),
     organizationClient(),
   ],
 });
 
 export const { useSession, signIn, signOut, signUp } = authClient;
 
-export type AuthClientSession = typeof authClient.$Infer.Session;

@@ -15,7 +15,7 @@ export async function updateCacheTagAction(_: { error?: string } | null, formDat
     const { success: hasAccess } = await auth.api.userHasPermission({
       body: {
         userId: session.user.id,
-        permissions: { user: ["list"] },
+        permissions: { dashboard: ["refetch"] },
       },
     });
 

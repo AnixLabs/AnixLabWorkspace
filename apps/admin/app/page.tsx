@@ -1,4 +1,4 @@
-import { auth, type AuthServerSession } from "@shared/auth";
+import { auth } from "@shared/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Image from "next/image";
@@ -6,6 +6,7 @@ import LogInForm from "@shared/auth/LogInForm";
 import { Panel } from "@/components/ui/Panel";
 import { Logo } from "@/components/logo";
 import SocialLogin from "@shared/auth/SocialLogin";
+import type { AuthSessionServer } from "@shared/auth/types";
 
 export default async function LandingPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -15,7 +16,7 @@ export default async function LandingPage() {
     const { success } = await auth.api.userHasPermission({
       body: {
         userId: session.user.id,
-        permissions: { user: ["list"] },
+        permissions: { dashboard: ["view"] },
       },
     });
 
@@ -65,7 +66,7 @@ function SignInView() {
 }
 
 // No-access view
-function NoAccessView({ user }: { user: AuthServerSession["user"] }) {
+function NoAccessView({ user }: { user: AuthSessionServer["user"] }) {
   const initial = user.name?.[0]?.toUpperCase() ?? "?";
 
   return (
