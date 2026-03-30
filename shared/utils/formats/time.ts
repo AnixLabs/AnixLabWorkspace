@@ -33,7 +33,7 @@ export function formatDuration(seconds: number, maxParts: 1 | 2 | 3 | 4 | 5 | 6 
 }
 
 export function formatTime(date: Date | number | string): string {
-  if (!date) return "-";
+  if (date == null) return "-";
 
   const d = new Date(date);
   if (isNaN(d.getTime())) return "-";
@@ -46,7 +46,7 @@ export function formatTime(date: Date | number | string): string {
 }
 
 export function formatDateTime(date: Date | number | string): string {
-  if (!date) return "-";
+  if (date == null) return "-";
 
   const d = new Date(date);
   if (isNaN(d.getTime())) return "-";
@@ -61,7 +61,7 @@ export function formatDateTime(date: Date | number | string): string {
 }
 
 export function formatDate(date: Date | number | string): string {
-  if (!date) return "-";
+  if (date == null) return "-";
 
   const d = new Date(date);
   if (isNaN(d.getTime())) return "-";
@@ -77,7 +77,7 @@ export function formatTimeAgo(
   date: Date | number | string,
   maxParts: 1 | 2 | 3 | 4 | 5 | 6 = 3,
 ): string {
-  if (!date) return "-";
+  if (date == null) return "-";
 
   const now = Date.now();
   const time = new Date(date).getTime();
@@ -94,6 +94,7 @@ export function formatTimeAgo(
 
 export function formatClock(seconds: number): string {
   if (seconds == null) return "-";
+  if (Number.isNaN(seconds)) return "-";
   if (!Number.isFinite(seconds)) return "∞";
 
   const abs = Math.floor(Math.abs(seconds));
