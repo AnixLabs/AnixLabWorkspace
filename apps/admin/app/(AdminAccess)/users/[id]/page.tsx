@@ -93,7 +93,7 @@ export default async function UserDetailPage({ params }: PageProps) {
   ).filter(({ value }) => (isSuperadmin ? true : getRoleWeight(value) < viewerWeight));
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Back */}
       <Link href="/users" className="text-sm text-blue-500 hover:underline">
         ← Back to Users

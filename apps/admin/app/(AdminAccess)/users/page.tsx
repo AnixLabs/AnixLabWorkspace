@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const SearchParamsSchema = z.object({
   q: z.string().optional().default(""),
-  page: z.string().optional().default("1").transform(Number),
+  page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.enum(["20", "50", "100"]).optional().default("20").transform(Number),
 });
 
