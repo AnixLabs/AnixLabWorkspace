@@ -31,7 +31,7 @@ const APP_CONFIGS: AppConfig[] = [
   {
     name: "Core Server",
     url: process.env.APP_API_URL ?? "https://api.anixlab.in",
-    healthEndpoint: "/v1/health",
+    healthEndpoint: "/api/v1/health",
   },
   {
     name: "AniPic",
