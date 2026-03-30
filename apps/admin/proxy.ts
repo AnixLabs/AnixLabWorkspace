@@ -1,54 +1,57 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { auth } from "@shared/auth";
 
-const PUBLIC_FILE = /\.(.*)$/;
+// routes that never require auth
+const PUBLIC_PATHS = new Set(["/", "/api/health", "/favicon.ico", "/robots.txt"]);
 
-export async function proxy(req: NextRequest) {
+function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PATHS.has(pathname)) return true;
+  if (pathname.startsWith("/sitemap")) return true;
+  if (pathname.startsWith("/_next")) return true;
+  return false;
+}
+
+export default async function proxy(req: NextRequest) {
   const { nextUrl, method } = req;
 
-  // 1️⃣ Skip static files & internals
-  if (
-    PUBLIC_FILE.test(nextUrl.pathname) ||
-    nextUrl.pathname.startsWith("/_next") ||
-    nextUrl.pathname === "/favicon.ico" ||
-    nextUrl.pathname === "/robots.txt" ||
-    nextUrl.pathname.startsWith("/sitemap")
-  ) {
-    return NextResponse.next();
+  if (isPublicPath(nextUrl.pathname)) return NextResponse.next();
+
+  const session = await auth.api.getSession({ headers: req.headers });
+
+  if (!session?.user) {
+    if (nextUrl.pathname.startsWith("/api")) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    // redirect to / with ?next= so they land back after auth
+    const signIn = new URL("/", nextUrl.origin);
+    signIn.searchParams.set("next", nextUrl.pathname + nextUrl.search);
+    return NextResponse.redirect(signIn);
   }
 
-  // Fetch session
-  const session = await auth.api.getSession({
-    headers: await headers(),
+  // Permission check
+  const { success: hasAccess } = await auth.api.userHasPermission({
+    body: {
+      userId: session.user.id,
+      permissions: { dashboard: ["view"] },
+    },
   });
 
-  const role = session?.user?.role;
-  const isAdmin = role === "admin" || role === "owner";
-
-  const isApiRoute = nextUrl.pathname.startsWith("/api");
-  const isPage = !isApiRoute;
-
-  // Unauthorized logic
-  if (!isAdmin) {
-    // API or non-GET page
-    if (isApiRoute || (isPage && method !== "GET")) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
+  if (!hasAccess) {
+    // API routes → 403 JSON
+    if (nextUrl.pathname.startsWith("/api")) {
+      return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
     }
 
-    // Normal page → rewrite
-    if (nextUrl.pathname !== "/unauthorized") {
-      const unauthorizedUrl = new URL("/unauthorized", nextUrl.origin);
-      unauthorizedUrl.searchParams.set(
-        "next",
-        nextUrl.pathname + nextUrl.search
-      );
-
-      return NextResponse.rewrite(unauthorizedUrl);
+    // Non-GET page mutations (form posts, etc.) → 403 JSON
+    if (method !== "GET") {
+      return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
     }
+
+    const url = nextUrl.clone();
+    url.pathname = "/";
+    url.searchParams.set("next", nextUrl.pathname + nextUrl.search);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
@@ -56,6 +59,7 @@ export async function proxy(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|svg|webp|ico|css|js|txt|woff2?)|api/auth).*)",
+    // Skip all static assets — only run on real routes
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap\\.xml|.*\\.(?:png|jpe?g|svg|webp|ico|css|js|txt|woff2?)).*)",
   ],
 };

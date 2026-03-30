@@ -10,9 +10,9 @@ import { twMerge } from "tailwind-merge";
 import { IoColorPaletteOutline, IoSettingsOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { useSession } from "@shared/auth/client";
-import type { SessionUser } from "@shared/auth/types";
+import type { AuthSessionClient } from "@shared/auth/types";
 
-function ProfilePopups({ user }: { user: SessionUser }) {
+function ProfilePopups({ user }: { user: AuthSessionClient["user"] }) {
   const [profilePop, setProfilePop] = useState(false);
   const [themePop, setThemePop] = useState(false);
 

@@ -1,12 +1,11 @@
 import type { Socket } from "socket.io";
 import { auth } from "@shared/auth";
 import { fromNodeHeaders } from "better-auth/node";
-
-type BetterAuthSession = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>;
+import type { AuthSessionServer } from "@shared/auth/types";
 
 interface SocketData {
   userId: string;
-  user: BetterAuthSession["user"];
+  user: AuthSessionServer["user"];
 }
 
 export async function socketAuthMiddleware(

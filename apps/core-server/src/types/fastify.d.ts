@@ -1,8 +1,8 @@
-import type { AuthServerSession } from "@shared/auth";
+import type { AuthSessionServer } from "@shared/auth/types";
 
 declare module "fastify" {
   interface FastifyRequest {
-    session: AuthServerSession["session"] | null;
-    user: AuthServerSession["user"] | null;
+    session: AuthSessionServer["session"] | null;
+    user: AuthSessionServer["user"] | null;
   }
 }

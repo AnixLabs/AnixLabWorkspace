@@ -1,11 +1,6 @@
 import "./globals.css";
-import Navbar from "@shared/components/navigation/Navbar";
-import NoScriptWarning from "@shared/components/errors/NoScriptWarning";
-import ScrollToTopButton from "@shared/components/ScrollToTopButton";
-import Wave from "@shared/components/Wave";
-import SlideBar from "@/components/navigations/SlideBar";
 import Providers from "@shared/providers";
-import DefaultHead from "@shared/head";
+import { BgGlow, BgGridPattern } from "@/components/bg";
 
 const baseUrl = process.env.BASE_URL!;
 
@@ -56,28 +51,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <DefaultHead />
-      </head>
-      <body>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className="font-['Syne',sans-serif] text-white bg-linear-to-b from-[#030005] to-[#000006] relative min-h-screen">
         <Providers>
-          <div className="absolute w-48 h-56 bg-neutral-500/5 dark:bg-black/15 -z-10 top-0 right-0 rounded-bl-full" />
-
-          <Navbar appName="AdminOS" appSubName="Anix Lab" />
-          <div className="flex">
-            <SlideBar />
-            <div className="grow pt-5 md:pt-7 relative transition-all duration-300 md:w-[calc(100%-224px)] border-l border-white/30">
-              <div className="px-5 md:px-6 mx-auto max-w-(--breakpoint-xl)">
-                <main>
-                  <NoScriptWarning />
-                  {children}
-                </main>
-                <ScrollToTopButton />
-              </div>
-            </div>
-            <Wave />
-          </div>
+          <BgGridPattern />
+          <BgGlow />
+          <main>{children}</main>
         </Providers>
       </body>
     </html>

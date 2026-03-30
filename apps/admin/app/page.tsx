@@ -1,114 +1,138 @@
 import { auth } from "@shared/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
+import LogInForm from "@shared/auth/LogInForm";
+import { Panel } from "@/components/ui/Panel";
+import { Logo } from "@/components/logo";
+import SocialLogin from "@shared/auth/SocialLogin";
+import type { AuthSessionServer } from "@shared/auth/types";
 
-export default async function HomePage() {
-  const h = await headers();
+export default async function LandingPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
 
-  const [allUsers, adminUsers, bannedUsers, currentSession] = await Promise.all([
-    auth.api.listUsers({ query: { limit: 1 }, headers: h }),
-    auth.api.listUsers({ query: { limit: 1, filterField: "role", filterOperator: "eq", filterValue: "admin" }, headers: h }),
-    auth.api.listUsers({ query: { limit: 1, filterField: "banned", filterOperator: "eq", filterValue: "true" }, headers: h }),
-    auth.api.getSession({ headers: h }),
-  ]);
+  // Signed in
+  if (session?.user) {
+    const { success } = await auth.api.userHasPermission({
+      body: {
+        userId: session.user.id,
+        permissions: { dashboard: ["view"] },
+      },
+    });
 
-  const recentUsers = await auth.api.listUsers({
-    query: { limit: 5, sortBy: "createdAt", sortDirection: "desc" },
-    headers: h,
-  });
+    if (success) redirect("/dashboard");
 
-  const stats = [
-    { label: "Total Users", value: allUsers?.total ?? 0, icon: "👥", href: "/users" },
-    { label: "Admins", value: adminUsers?.total ?? 0, icon: "🛡️", href: "/users" },
-    { label: "Banned", value: bannedUsers?.total ?? 0, icon: "🚫", href: "/users" },
-  ];
+    // Signed in but no access
+    return <NoAccessView user={session.user} />;
+  }
 
+  // Not signed in
+  return <SignInView />;
+}
+
+// Sign-in view
+function SignInView() {
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Logged in as <span className="font-medium">{currentSession?.user?.name}</span>{" "}
-          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-            {currentSession?.user?.role ?? "admin"}
-          </span>
+    <div className="flex flex-col min-h-screen items-center justify-center px-4">
+      <Logo className="w-full fixed top-0" />
+      <div className="relative z-10 w-full max-w-md">
+        {/* Heading */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white tracking-tight leading-tight">
+            Welcome back
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1.5">Sign in to access the admin panel</p>
+        </div>
+
+        <Panel className="p-6">
+          <LogInForm />
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-white/12" />
+            <span className="text-[11px] text-zinc-500 uppercase tracking-widest">or</span>
+            <div className="flex-1 h-px bg-white/12" />
+          </div>
+
+          <SocialLogin />
+        </Panel>
+
+        <p className="text-center text-xs text-zinc-700 mt-6">
+          Restricted access · Admin personnel only
         </p>
       </div>
+    </div>
+  );
+}
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {stats.map((stat) => (
-          <Link key={stat.label} href={stat.href}>
-            <div className="border rounded-xl p-5 bg-white dark:bg-neutral-900 hover:shadow-md transition">
-              <div className="text-3xl mb-2">{stat.icon}</div>
-              <p className="text-2xl font-bold">{stat.value}</p>
-              <p className="text-sm text-gray-500">{stat.label}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
+// No-access view
+function NoAccessView({ user }: { user: AuthSessionServer["user"] }) {
+  const initial = user.name?.[0]?.toUpperCase() ?? "?";
 
-      {/* Recent Users */}
-      <div className="border rounded-xl p-6 bg-white dark:bg-neutral-900 shadow-sm">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="font-semibold text-lg">Recent Users</h2>
-          <Link href="/users" className="text-sm text-blue-500 hover:underline">
-            View all →
-          </Link>
-        </div>
-        <div className="space-y-3">
-          {recentUsers?.users.map((user) => (
-            <Link key={user.id} href={`/users/${user.id}`}>
-              <div className="flex items-center justify-between py-2 border-b last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded px-2 transition">
-                <div className="flex items-center gap-3">
-                  {user.image ? (
-                    // 
-                    <Image src={user.image} alt={user.name} className="w-8 h-8 rounded-full object-cover" width={40} height={40} unoptimized />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center text-xs font-bold">
-                      {user.name?.[0]?.toUpperCase() ?? "?"}
-                    </div>
-                  )}
-                  <div>
-                    <p className="text-sm font-medium">{user.name}</p>
-                    <p className="text-xs text-gray-400">{user.email}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs bg-gray-100 dark:bg-neutral-700 px-2 py-0.5 rounded-full">
-                    {user.role ?? "user"}
-                  </span>
-                  {user.banned && (
-                    <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-                      banned
-                    </span>
-                  )}
-                  <span className="text-xs text-gray-400">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
+  return (
+    <div className="flex flex-col min-h-screen items-center justify-center px-4">
+      <Logo className="w-full fixed top-0" />
+      <div className="relative z-10 w-full max-w-md">
+        <Panel className="p-6">
+          {/* User identity */}
+          <div className="flex items-center gap-3 mb-6 pb-5 border-b border-white/6">
+            {user.image ? (
+              <Image
+                src={user.image}
+                alt={user.name}
+                width={40}
+                height={40}
+                className="rounded-full ring-1 ring-white/10"
+                unoptimized
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500/20 to-violet-500/20 ring-1 ring-white/10 flex items-center justify-center text-sm font-bold text-indigo-400">
+                {initial}
               </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Quick Links */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {[
-          { label: "All Users", href: "/users", icon: "👥" },
-          { label: "Create User", href: "/users/create", icon: "➕" },
-          { label: "Sign Out", href: "/signout", icon: "🚪" },
-        ].map((link) => (
-          <Link key={link.label} href={link.href}>
-            <div className="border rounded-xl p-4 bg-white dark:bg-neutral-900 hover:shadow-md transition text-center">
-              <div className="text-2xl mb-1">{link.icon}</div>
-              <p className="text-sm font-medium">{link.label}</p>
+            )}
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-zinc-100 truncate">{user.name}</p>
+              <p className="text-xs text-zinc-500 truncate">{user.email}</p>
             </div>
-          </Link>
-        ))}
+            <span className="ml-auto shrink-0 text-[11px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-500 ring-1 ring-white/6">
+              {user.role ?? "user"}
+            </span>
+          </div>
+
+          {/* Access denied */}
+          <div className="flex flex-col items-center text-center gap-3 py-2">
+            <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl">
+              🔒
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-zinc-100 mb-1">Access Restricted</p>
+              <p className="text-xs text-zinc-500 leading-relaxed">
+                Your account doesn&apos;t have permission to access the admin panel. Contact a
+                superadmin to request access.
+              </p>
+            </div>
+          </div>
+        </Panel>
+
+        {/* Sign out */}
+        {
+          <form
+            action={async () => {
+              "use server";
+              await auth.api.signOut({
+                headers: await headers(),
+              });
+            }}
+            className="w-full mt-4"
+          >
+            <button
+              type="submit"
+              className="flex items-center justify-center w-full py-2.5 rounded-xl border border-white/6 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all text-xs text-zinc-500 hover:text-zinc-300 cursor-pointer "
+            >
+              Sign out
+            </button>
+          </form>
+        }
       </div>
     </div>
   );
