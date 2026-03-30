@@ -1,7 +1,7 @@
 export function formatCompactNumber(value: number, decimals: 1 | 2 | 3 | 4 = 2): string {
   if (value == null) return "-";
-  if (!Number.isFinite(value)) return value > 0 ? "∞" : "-∞";
   if (Number.isNaN(value)) return "-";
+  if (!Number.isFinite(value)) return value > 0 ? "∞" : "-∞";
 
   const abs = Math.abs(value);
 
