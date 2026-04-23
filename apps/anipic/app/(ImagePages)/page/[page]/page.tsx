@@ -7,7 +7,9 @@ import { notFound } from "next/navigation";
 import { buildSeoTitle } from "@/utils/seo/buildSeoUsingTags";
 import { Button } from "@shared/components/ui/Button";
 
-interface Params { params: Promise<{ page: string }> }
+interface Params {
+  params: Promise<{ page: string }>;
+}
 
 /* --------------------------- Static Params --------------------------- */
 export async function generateStaticParams() {
@@ -31,20 +33,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: `/page/${pageNum}`,
-      images: [
-        {
-          url: "/assets/img/logo/anix7-logo-512.jpg",
-          width: 512,
-          height: 512,
-          alt: "AniPics by Anix Lab",
-        },
-      ],
-    },
-    twitter: { card: "summary_large_image" },
     alternates: { canonical: `/page/${pageNum}` },
   };
 }
