@@ -56,7 +56,7 @@ export function verifyMail({
                                       <tr>
                                         <td align="left" width="37">
                                           <img
-                                            src="${baseUrl}/assets/img/logo.png"
+                                            src="${baseUrl}/assets/logo.svg"
                                             style="width: 35px; height: 35px"
                                             height="35"
                                             width="35"
