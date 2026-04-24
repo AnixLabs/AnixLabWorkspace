@@ -67,7 +67,7 @@ export default function Footer() {
           <div className="text-gray-500 dark:text-gray-200">Made with ❤️ by</div>
           <Image
             className="w-1/3 max-w-60 aspect-square mt-2 mb-1 mx-auto rounded-2xl"
-            src="/assets/img/logo/anix7-logo-512.jpg"
+            src="/assets/logo.svg"
             width={120}
             height={120}
             alt="Anix Lab Tools"
@@ -75,9 +75,9 @@ export default function Footer() {
           <div>
             <h2>Anix Lab</h2>
             <p>
-              Anix Lab (formerly Anix7) is your all-in-one digital hub for smart tools, anime
-              updates, 4K wallpapers, mini games, and nature photography. Discover, create, and
-              download with ease — all in one place.
+              Anix Lab (formerly Anix7) is your all-in-one digital hub for smart tools, 4K
+              wallpapers, mini games, and many more. Discover, create and download with ease — all
+              in one place.
             </p>
           </div>
         </div>

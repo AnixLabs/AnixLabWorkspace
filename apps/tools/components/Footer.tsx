@@ -69,7 +69,7 @@ export default function Footer() {
           <div className="text-gray-500 dark:text-gray-200">Made with ❤️ by</div>
           <Image
             className="w-1/3 max-w-60 aspect-square mt-2 mb-1 mx-auto"
-            src="/assets/img/logo.png"
+            src="/assets/logo.svg"
             width={120}
             height={120}
             alt="Anix Lab Tools"

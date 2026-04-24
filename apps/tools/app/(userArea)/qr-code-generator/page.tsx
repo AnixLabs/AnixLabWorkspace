@@ -443,7 +443,7 @@ export default function QrCode() {
       </section>
       <section className="py-16 px-4 max-w-5xl mx-auto text-center">
         <Image
-          src="/assets/img/logo.png" // Replace with your actual logo path
+          src="/assets/logo.png" // Replace with your actual logo path
           alt="QR by Anix Lab Tools"
           title="QR by Anix Lab Tools"
           className="w-40 h-40 mx-auto mb-4"

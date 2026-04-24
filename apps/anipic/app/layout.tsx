@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s - AniPic",
   },
   description:
-    "Discover high-quality AI-generated images and wallpapers on AniPic by Anix Lab (formerly Anix7). Explore anime, art, fantasy, portraits, and creative visuals — free to download.",
+    "Discover high-quality AI-generated images and wallpapers on AniPic by Anix Lab (formerly Anix7). Explore anime, art, fantasy, portraits and creative visuals — free to download.",
   keywords: [
     "AniPic",
     "AniPic - Anix Lab",
@@ -60,29 +60,36 @@ export const metadata: Metadata = {
     "anime enthusiast hub",
     "anime",
   ],
+
   authors: {
     name: "Anix Lab",
     url: "https://anixlab.in",
   },
+
   openGraph: {
     url: "/",
     siteName: "AniPic - Anix Lab",
     images: [
       {
-        url: "/assets/img/logo/logo-512.jpg",
-        // width: 1200,
-        // height: 630,
-        width: 512,
-        height: 512,
-        alt: "AniPic Logo",
+        url: `/assets/og-image.jpeg`,
+        width: 1200,
+        height: 630,
+        alt: "AniPic - AI Generated Images & Creative Visuals | Anix Lab",
       },
     ],
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
-    images: ["/assets/img/logo/logo-512.png"],
   },
+
+  appleWebApp: {
+    title: "Anix Lab",
+    capable: true,
+    statusBarStyle: "default",
+  },
+
   robots: {
     index: true,
     follow: true,

@@ -2,6 +2,7 @@
 import { CardButton } from "@shared/components/ui/Button";
 import { Paragraph } from "@shared/components/ui/Paragraph";
 import Section, { CardSection } from "@shared/components/ui/Section";
+import { getURLPreview } from "@shared/utils/getURLPreview";
 
 export const metadata = {
   title: "Anix Lab - Explore Tools, Anime, Games, and More",
@@ -11,16 +12,16 @@ export const metadata = {
   addToSitemap: true,
 };
 
-export default function Home() {
-  const Drops = [
-    {
-      title: "Anix Lab Tools",
-      description:
-        "A powerful collection of online utilities including URL shortener, image tools, QR code generator, and more — designed to simplify your everyday digital tasks.",
-      image: "/assets/img/tools.png",
-      url: "https://tools.anixlab.in",
-    },
-  ];
+export default async function Home() {
+  const urls = ["https://tools.anixlab.in", "https://anipic.anixlab.in"];
+
+  let drops: Awaited<ReturnType<typeof getURLPreview>>[] = [];
+
+  try {
+    drops = await Promise.all(urls.map(getURLPreview));
+  } catch (error) {
+    console.error("Error fetching URL previews:", error);
+  }
 
   return (
     <>
@@ -38,23 +39,25 @@ export default function Home() {
         enjoy — because at Anix Lab, there&apos;s always something new waiting for you.
       </Paragraph>
 
-      <Section title="Explore & Create with Anix Lab">
-        <CardSection className="md:grid-cols-2">
-          {Drops.map(({ url, image, title, description }, index) => (
-            <CardButton
-              key={index}
-              className="snap-start flex-col [&>div]:text-center!"
-              href={url}
-              title={title}
-              description={description}
-              image={image}
-              imageClassName="w-full max-w-96 aspect-auto"
-              imageWidth={380}
-              imageHeight={380}
-            />
-          ))}
-        </CardSection>
-      </Section>
+      {drops.length > 0 && (
+        <Section title="Explore & Create with Anix Lab">
+          <CardSection className="md:grid-cols-2">
+            {drops.map(({ data }, index) => (
+              <CardButton
+                key={index}
+                className="snap-start flex-col [&>div]:text-center!"
+                href={data.url}
+                title={data.title ?? "Untitled"}
+                description={data.description ?? "No description available"}
+                image={data.image?.url ?? data.logo?.url ?? "/assets/logo.png"}
+                imageClassName="w-full max-w-96 aspect-1200/630"
+                imageWidth={1200}
+                imageHeight={630}
+              />
+            ))}
+          </CardSection>
+        </Section>
+      )}
     </>
   );
 }

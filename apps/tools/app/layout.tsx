@@ -12,6 +12,7 @@ import DefaultHead from "@shared/head";
 import Providers from "@shared/providers";
 import ToolSearch from "@/components/tools/toolsSearch";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
 // Load Inter
 const inter = Inter({
@@ -21,14 +22,14 @@ const inter = Inter({
 
 const baseUrl = process.env.BASE_URL!;
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: "Anix Lab Tools - Free Online Tools for Everyday Tasks",
     template: "%s - Anix Lab Tools",
   },
   description:
-    "Anix Lab Tools (formerly Anix7 Tools) is your go-to hub for free online utilities. URL Shortener, QR Code Generator, Image Resizing or Uploading, and many more — all in one place.",
+    "Anix Lab Tools (formerly Anix7 Tools) is your go-to hub for free online utilities. URL Shortener, QR Code Generator, Image Resizing or Uploading and many more — all in one place.",
   keywords: [
     "Anix Lab Tools",
     "Anix7 Tools",
@@ -46,29 +47,36 @@ export const metadata = {
     "generate QR codes",
     "convert links to QR",
   ],
-  authors: [
-    {
-      name: "CodesWithSubham",
-      url: "https://github.com/CodesWithSubham",
-    },
-  ],
+
+  authors: {
+    name: "Anix Lab",
+    url: "https://anixlab.in",
+  },
+
   openGraph: {
     url: "/",
     siteName: "Anix Lab Tools",
     images: [
       {
-        url: `/assets/img/logo.png`,
+        url: `/assets/og-image.jpeg`,
         width: 1200,
         height: 630,
-        alt: "Anix Lab Tools Logo",
+        alt: "Anix Lab Tools - Free Online Tools for Everyday Tasks",
       },
     ],
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
-    images: [`/assets/img/logo.png`],
   },
+
+  appleWebApp: {
+    title: "Anix Lab",
+    capable: true,
+    statusBarStyle: "default",
+  },
+
   robots: {
     index: true,
     follow: true,

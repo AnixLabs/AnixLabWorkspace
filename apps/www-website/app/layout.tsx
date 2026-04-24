@@ -8,6 +8,7 @@ import Wave from "@shared/components/Wave";
 import SlideBar from "@/components/navigation/SlideBar";
 import Providers from "@shared/providers";
 import DefaultHead from "@shared/head";
+import type { Metadata } from "next";
 
 // Load Inter
 const inter = Inter({
@@ -16,16 +17,16 @@ const inter = Inter({
 });
 const baseUrl = process.env.BASE_URL!;
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
 
   title: {
-    default: "Anix Lab - Explore Tools, Anime, Games, and Stunning Visuals",
+    default: "Anix Lab - Explore Tools, Games, Images and Stunning Visuals",
     template: "%s - Anix Lab",
   },
 
   description:
-    "Anix Lab (formerly Anix7) is your all-in-one digital hub for smart tools, 4K wallpapers, mini games, and nature photography. Discover, create, and download with ease.",
+    "Anix Lab (formerly Anix7) is your all-in-one digital hub for smart tools, 4K wallpapers, mini games and many more. Discover, create and download with ease.",
 
   keywords: [
     "Anix Lab",
@@ -35,6 +36,9 @@ export const metadata = {
     "free tools website",
     "online utilities",
     "4K wallpapers",
+    "stunning visuals",
+    "ai-generated images",
+    "profile picture",
     "mini games",
     "digital hub",
   ],
@@ -48,10 +52,10 @@ export const metadata = {
     siteName: "Anix Lab",
     images: [
       {
-        url: `/assets/img/logo/anix7-logo-512.jpg`,
-        width: 512,
-        height: 512,
-        alt: "Anix Lab Logo",
+        url: `/assets/og-image.jpeg`,
+        width: 1200,
+        height: 630,
+        alt: "Anix Lab - Explore Tools, Games, and Stunning Visuals",
       },
     ],
     type: "website",
@@ -59,7 +63,12 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
-    images: ["/assets/img/logo/anix7-logo-512.jpg"],
+  },
+
+  appleWebApp: {
+    title: "Anix Lab",
+    capable: true,
+    statusBarStyle: "default",
   },
 
   robots: {
