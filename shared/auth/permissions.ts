@@ -4,6 +4,7 @@ import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 const statement = {
   ...defaultStatements,
   dashboard: ["view", "refetch"],
+  anipic: ["upload", "list", "delete", "get", "update"],
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -15,6 +16,7 @@ const user = ac.newRole({
 const moderator = ac.newRole({
   user: ["ban"],
   dashboard: ["view"],
+  anipic: ["list", "get"],
 });
 
 const admin = ac.newRole({
@@ -31,11 +33,13 @@ const admin = ac.newRole({
     "update",
   ],
   dashboard: ["view", "refetch"],
+  anipic: ["upload", "list", "delete", "get", "update"],
 });
 
 const superadmin = ac.newRole({
   ...adminAc.statements,
   dashboard: ["view", "refetch"],
+  anipic: ["upload", "list", "delete", "get", "update"],
 });
 
 export const roles = {
