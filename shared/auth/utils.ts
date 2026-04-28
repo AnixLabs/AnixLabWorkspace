@@ -30,3 +30,8 @@ export function getRoleWeight(role?: string | null): number {
 
   return Math.max(...roles.map((r) => roleWeights[r]));
 }
+
+/** Returns true if viewerRole has a higher role than targetRole. */
+export function hasHigherRole(viewerRole?: string | null, targetRole?: Role | null): boolean {
+  return getRoleWeight(viewerRole) > getRoleWeight(targetRole);
+}

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useSession } from "@shared/auth/client";
+import { hasHigherRole } from "@shared/auth/utils";
 
 interface UploadedImage {
   alias: string;
@@ -206,7 +207,7 @@ export default function MyImages() {
                 <div className="flex justify-center py-2">
                   <div className="pl-2">Ads: </div>
                   <div className="flex w-full justify-around items-center px-1">
-                    {(session?.user?.role === "admin" || session?.user?.role === "owner"
+                    {(hasHigherRole(session?.user?.role, "moderator")
                       ? ["None", "Low", "Mid", "High"]
                       : ["Off", "On"]
                     ).map((label, value) => (
@@ -214,7 +215,9 @@ export default function MyImages() {
                         key={`${image.alias}-${value}`}
                         disabled={adsLoading || image.adsLabel === value}
                         className="cursor-pointer flex items-center gap-2"
-                        onClick={() => void modifyAds(image.alias, value as UploadedImage["adsLabel"])}
+                        onClick={() =>
+                          void modifyAds(image.alias, value as UploadedImage["adsLabel"])
+                        }
                       >
                         <span
                           className={`w-4 h-4 rounded-full mr-1.5 border-[3.5px] border-theme-150 outline outline-theme-450 ${

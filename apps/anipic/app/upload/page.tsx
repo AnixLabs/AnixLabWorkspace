@@ -6,6 +6,7 @@ import { Button } from "@shared/components/ui/Button";
 import { cn } from "@shared/utils/cn";
 import { useSession } from "@shared/auth/client";
 import { Input } from "@shared/components/ui/Input";
+import { hasHigherRole } from "@shared/auth/utils";
 
 export default function UploadPage() {
   const [state, action, isPending] = useActionState(uploadImageAction, {
@@ -51,7 +52,6 @@ export default function UploadPage() {
           url,
           width: image.width,
           height: image.height,
-          // type: image.
         },
       }));
 
@@ -65,7 +65,7 @@ export default function UploadPage() {
   };
 
   const { data: session, isPending: status } = useSession();
-  const allowed = session?.user?.role === "admin" || session?.user?.role === "owner";
+  const allowed = hasHigherRole(session?.user?.role, "user");
 
   if (status) {
     return <p className="text-center mt-10">Loading...</p>;

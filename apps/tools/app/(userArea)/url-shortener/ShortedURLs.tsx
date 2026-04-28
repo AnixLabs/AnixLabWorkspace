@@ -12,6 +12,7 @@ import type { Urls } from "./types";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useSession } from "@shared/auth/client";
+import { hasHigherRole } from "@shared/auth/utils";
 
 interface GetByUserResponse {
   success: boolean;
@@ -259,7 +260,7 @@ export default function ShortedURLs({
                   {/* Ads */}
                   <td className="p-2 border border-black">
                     <div className="flex flex-col justify-around items-start gap-0.5 disabled:*:opacity-70 min-h-24">
-                      {(session?.user?.role === "admin" || session?.user?.role === "owner"
+                      {(hasHigherRole(session?.user?.role, "moderator")
                         ? ["None", "Low", "Mid", "High"]
                         : ["Off", "On"]
                       ).map((label, i) => (

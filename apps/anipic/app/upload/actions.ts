@@ -39,28 +39,34 @@ export async function uploadImageAction(
   _prevState: UploadImageState,
   formData: FormData,
 ): Promise<UploadImageState> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user || !(session.user.role === "admin" || session.user.role === "owner")) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  /* -------- Convert FormData → Object -------- */
-  const raw = Object.fromEntries(formData.entries());
-
-  const parsed = uploadImageSchema.safeParse(raw);
-  if (!parsed.success) {
-    return {
-      success: false,
-      error: parsed.error.issues[0]?.message ?? "Validation error",
-    };
-  }
-
-  const { originalUrl, displayUrl, thumbnailUrl, width, height, tags } = parsed.data;
-
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    const { success: hasPermission } = await auth.api.userHasPermission({
+      body: {
+        userId: session?.user?.id,
+        permissions: { anipic: ["upload"] },
+      },
+    });
+    if (!session?.user || !hasPermission) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    /* -------- Convert FormData → Object -------- */
+    const raw = Object.fromEntries(formData.entries());
+
+    const parsed = uploadImageSchema.safeParse(raw);
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message ?? "Validation error",
+      };
+    }
+
+    const { originalUrl, displayUrl, thumbnailUrl, width, height, tags } = parsed.data;
+
     const AniPic = await getAniPicModel();
 
     /* -------- Generate serial number -------- */
@@ -79,8 +85,8 @@ export async function uploadImageAction(
 
       tags,
 
-      uploadedBy: session.user.id, // ✅ correct
-      approved: session.user.role === "admin" || session.user.role === "owner",
+      uploadedBy: session.user.id,
+      approved: hasPermission,
 
       downloads: 0,
       views: 0,
