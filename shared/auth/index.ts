@@ -71,17 +71,17 @@ export const auth = betterAuth({
     },
   },
 
-  // advanced: {
-  //   ...(authEnv.NODE_ENV === "production" && {
-  //     crossSubDomainCookies: {
-  //       enabled: true,
-  //       domain: "anixlab.in",
-  //     },
-  //     useSecureCookies: true,
-  //   }),
+  advanced: {
+    ...(process.env.NODE_ENV === "production" && {
+      crossSubDomainCookies: {
+        enabled: true,
+        domain: "anixlab.in",
+      },
+      useSecureCookies: true,
+    }),
 
-  //   cookiePrefix: "anix7-auth",
-  // },
+    cookiePrefix: "anix-lab-auth",
+  },
 
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
