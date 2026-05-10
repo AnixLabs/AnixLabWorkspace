@@ -6,8 +6,6 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { updateTag } from "next/cache";
 
-/* ---------------- ZOD SCHEMA ---------------- */
-
 const uploadImageSchema = z.object({
   originalUrl: z.url(),
   displayUrl: z.url(),
@@ -33,8 +31,6 @@ export type UploadImageState =
   | { success: false; error: string }
   | { success: true; message: string };
 
-/* ---------------- SERVER ACTION ---------------- */
-
 export async function uploadImageAction(
   _prevState: UploadImageState,
   formData: FormData,
@@ -54,7 +50,6 @@ export async function uploadImageAction(
       return { success: false, error: "Unauthorized" };
     }
 
-    /* -------- Convert FormData → Object -------- */
     const raw = Object.fromEntries(formData.entries());
 
     const parsed = uploadImageSchema.safeParse(raw);
@@ -69,13 +64,7 @@ export async function uploadImageAction(
 
     const AniPic = await getAniPicModel();
 
-    /* -------- Generate serial number -------- */
-    const last = await AniPic.findOne().sort({ sno: -1 }).lean();
-    const sno = last ? last.sno + 1 : 1;
-
     await AniPic.create({
-      sno,
-
       originalUrl,
       displayUrl,
       thumbnailUrl,

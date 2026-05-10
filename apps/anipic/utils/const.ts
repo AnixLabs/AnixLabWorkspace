@@ -1,1 +1,0 @@
-export const IMAGE_LIMIT_PER_PAGE = 10;
