@@ -1,9 +1,11 @@
 import "server-only";
-import { Schema, type Model, type Connection } from "mongoose";
+
+import { Schema, type Model, type Connection, type Types } from "mongoose";
+
 import connectToAniPicDb from "../connections/aniPicDb";
 
 export interface AniPic {
-  sno: number;
+  _id: Types.ObjectId;
 
   originalUrl: string;
   displayUrl: string;
@@ -31,32 +33,35 @@ export interface AniPic {
 
 const aniPicSchema = new Schema<AniPic>(
   {
-    sno: { type: Number, required: true, unique: true, index: true },
     originalUrl: { type: String, required: true, unique: true },
     displayUrl: { type: String, required: true },
     thumbnailUrl: { type: String, required: true },
 
-    uploadedBy: { type: String, required: true, ref: "User", index: true },
-    approved: { type: Boolean, default: false, index: true },
+    uploadedBy: { type: String, required: true, ref: "User" },
+    approved: { type: Boolean, default: false },
 
-    tags: { type: [String], default: [], index: true },
+    tags: { type: [String], default: [] },
 
-    width: Number,
-    height: Number,
+    width: { type: Number, required: true },
+    height: { type: Number, required: true },
 
     downloads: { type: Number, default: 0 },
     views: { type: Number, default: 0 },
     likes: { type: Number, default: 0 },
 
-    isDeleted: { type: Boolean, default: false, index: true },
-    dmcaFlag: { type: Boolean, default: false, index: true },
+    isDeleted: { type: Boolean, default: false },
+    dmcaFlag: { type: Boolean, default: false },
     dmcaReason: { type: String },
   },
   { timestamps: true },
 );
 
-// Index for sorting and searching efficiently
-aniPicSchema.index({ createdAt: -1 });
+// Cursor + filter indexes
+aniPicSchema.index({ approved: 1, isDeleted: 1, dmcaFlag: 1, _id: -1 });
+aniPicSchema.index({ approved: 1, isDeleted: 1, dmcaFlag: 1, likes: -1, _id: -1 });
+aniPicSchema.index({ approved: 1, isDeleted: 1, dmcaFlag: 1, views: -1, _id: -1 });
+aniPicSchema.index({ approved: 1, isDeleted: 1, dmcaFlag: 1, downloads: -1, _id: -1 });
+aniPicSchema.index({ tags: 1, approved: 1, isDeleted: 1, dmcaFlag: 1, _id: -1 });
 
 let cachedModel: Model<AniPic> | null = null;
 

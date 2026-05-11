@@ -1,0 +1,10 @@
+@keyframes shimmer {
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+/* shimmer animation class */
+.skeletonShimmer {
+  animation: shimmer 1.6s infinite;
+}

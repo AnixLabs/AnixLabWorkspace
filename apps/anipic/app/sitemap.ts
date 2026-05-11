@@ -1,39 +1,40 @@
-import getAniPicModel from "@/lib/db/models/AniPic";
-import { IMAGE_LIMIT_PER_PAGE } from "@/utils/const";
 import type { MetadataRoute } from "next";
-import { cacheLife, cacheTag } from "next/cache";
+import { getGallerySitemapUrls, getAllTagsSitemapUrls } from "@/features/images/generateCursors";
+import { cacheLife } from "next/cache";
 
-const baseUrl = process.env.BASE_URL ?? "https://anipic.anixlab.in";
+const BASE_URL = process.env.BASE_URL ?? "https://anipic.anixlab.in";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";
-  cacheLife("max");
-  cacheTag("anipicImagePages");
+  cacheLife("days");
 
-  const AniPic = await getAniPicModel();
+  const now = new Date();
 
-  // Count total approved images
-  const total = await AniPic.countDocuments({ approved: true });
-  const totalPages = Math.ceil(total / IMAGE_LIMIT_PER_PAGE);
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/`, lastModified: now, changeFrequency: "daily", priority: 1.0 },
+    { url: `${BASE_URL}/gallery`, lastModified: now, changeFrequency: "hourly", priority: 0.9 },
+  ];
 
-  const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
+  const [galleryCursorUrls, tagUrls] = await Promise.all([
+    getGallerySitemapUrls(),
+    getAllTagsSitemapUrls(),
+  ]);
 
-  // Generate individual pagination page URLs
-  const imagePages = Array.from({ length: totalPages - 1 }, (_, i) => ({
-    url: `${normalizedBaseUrl}/page/${i + 1}`,
-    lastModified: new Date(),
+  const galleryCursorPages: MetadataRoute.Sitemap = galleryCursorUrls.slice(1).map((path) => ({
+    url: `${BASE_URL}${path}`,
+    lastModified: now,
     changeFrequency: "daily" as const,
-    priority: 0.8,
+    priority: 0.7,
   }));
 
-  // Include homepage at the top
-  return [
-    {
-      url: normalizedBaseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
-    ...imagePages,
-  ];
+  const tagPages: MetadataRoute.Sitemap = tagUrls.map((path) => ({
+    url: `${BASE_URL}${path}`,
+    lastModified: now,
+    changeFrequency: "daily" as const,
+    priority: path.split("/").length === 3 ? 0.8 : 0.6,
+    //  /tag/foo      → 3 segments → first page (0.8)
+    //  /tag/foo/xyz  → 4 segments → cursor page (0.6)
+  }));
+
+  return [...staticPages, ...galleryCursorPages, ...tagPages];
 }
