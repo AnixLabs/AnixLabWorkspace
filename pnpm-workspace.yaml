@@ -1,10 +1,7 @@
 packages:
   - apps/*
   - shared
-
-onlyBuiltDependencies:
-  - '@prisma/engines'
-  - esbuild
-  - prisma
-  - sharp
-  - unrs-resolver
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
