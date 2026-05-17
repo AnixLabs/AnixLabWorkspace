@@ -1,6 +1,6 @@
 // /components/LoginSignup.js
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Button } from "../components/ui/Button";
@@ -30,11 +30,7 @@ export default function LoginSignup() {
   const [isLoginTab, setIsLoginTab] = useState(true);
 
   const searchParams = useSearchParams();
-  const [defaultOpen, setDefaultOpen] = useState(false);
-
-  useEffect(() => {
-    setDefaultOpen(searchParams.has("openLogin"));
-  }, [searchParams]);
+  const defaultOpen = searchParams.has("openLogin");
 
   if (session) return null;
 

@@ -1,7 +1,7 @@
 "use client";
 
 import DropZone from "@shared/components/ui/DropZone";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, startTransition } from "react";
 import JSZip from "jszip";
 import { Checkbox, Input, SliderWithTooltip } from "@shared/components/ui/Input";
 import { Button } from "@shared/components/ui/Button";
@@ -72,8 +72,10 @@ export default function Resizer() {
   }, [images]);
 
   useEffect(() => {
-    setWidthInput(widthType === "pixels" ? maxWidth : 100);
-    setHeightInput(widthType === "pixels" ? maxHeight : 100);
+    startTransition(() => {
+      setWidthInput(widthType === "pixels" ? maxWidth : 100);
+      setHeightInput(widthType === "pixels" ? maxHeight : 100);
+    });
   }, [maxWidth, maxHeight, widthType]);
 
   const handleResize = () => {

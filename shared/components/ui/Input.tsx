@@ -1,7 +1,7 @@
 "use client";
 
 import copyToClipboard from "../../utils/CopyToClipboard";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, startTransition, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const debounceTime = 200; // ms
@@ -161,7 +161,7 @@ export function ColorWithInput({
 
   // Sync when external value changes
   useEffect(() => {
-    setLocalColor(value);
+    startTransition(() => setLocalColor(value));
   }, [value]);
 
   // Debounced onChange

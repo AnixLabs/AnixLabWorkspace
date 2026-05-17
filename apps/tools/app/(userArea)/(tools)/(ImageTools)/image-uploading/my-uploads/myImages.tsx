@@ -4,7 +4,7 @@ import { Button, IconButton } from "@shared/components/ui/Button";
 import { CopyInput } from "@shared/components/ui/Input";
 import ImageContent from "@shared/components/loader/ImageContent";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useSession } from "@shared/auth/client";
@@ -50,7 +50,7 @@ export default function MyImages() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    startTransition(() => setIsClient(true));
   }, []);
 
   useEffect(() => {

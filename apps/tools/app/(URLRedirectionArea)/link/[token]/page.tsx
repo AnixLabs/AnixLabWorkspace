@@ -8,28 +8,19 @@ const secretKey = new TextEncoder().encode(process.env.URL_SHORTENER_TOKEN);
 export default async function Page({ params }: { params: Promise<{ token: string }> }) {
   // Await params before using its properties, then extract the token
   const { token } = await params;
-  try {
 
+  let longUrl: string | number | undefined;
+  let adsLabel: unknown;
+
+  try {
     // Decode the token from Base64URL back to the original JWE string
     const decodedToken = Buffer.from(token, "base64url").toString("utf8");
 
     // Decrypt the token using the secret key
     const { payload } = await jwtDecrypt(decodedToken, secretKey);
 
-    const longUrl = payload?.longUrl;
-    const adsLabel = payload?.adsLabel;
-
-    // If payload contains a valid longUrl, redirect to it
-    if (typeof longUrl === "string" || typeof longUrl === "number") {
-      return (
-        <RedirectWithDelay
-          longUrl={String(longUrl)} // ensure it's a string for URL usage
-          adsLabel={adsLabel ? Number(adsLabel) : undefined}
-        />
-      );
-    } else {
-      return notFound();
-    }
+    longUrl = payload?.longUrl as string | number | undefined;
+    adsLabel = payload?.adsLabel;
   } catch (error) {
     console.error("Error during decryption:", error);
     if (error instanceof errors.JWEDecryptionFailed) {
@@ -37,4 +28,16 @@ export default async function Page({ params }: { params: Promise<{ token: string
     }
     return <Error />;
   }
+
+  // If payload contains a valid longUrl, redirect to it
+  if (typeof longUrl === "string" || typeof longUrl === "number") {
+    return (
+      <RedirectWithDelay
+        longUrl={String(longUrl)} // ensure it's a string for URL usage
+        adsLabel={adsLabel ? Number(adsLabel) : undefined}
+      />
+    );
+  }
+
+  return notFound();
 }

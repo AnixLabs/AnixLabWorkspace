@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { Button } from "./Button";
 import { cn } from "@shared/utils/cn";
@@ -70,7 +70,7 @@ export function PopUpBox({
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setIsVisible(visible);
+    startTransition(() => setIsVisible(visible));
   }, [visible]);
 
   const handleScroll = () => {

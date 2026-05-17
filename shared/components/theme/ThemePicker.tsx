@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const colors = [
@@ -31,8 +31,10 @@ export default function ThemePicker({ className = "" }) {
   };
 
   useEffect(() => {
-    if ("matchMedia" in window) setShowSystemButton(true);
-    setIsLocalhost(typeof window !== "undefined" && window.location.hostname === "localhost");
+    startTransition(() => {
+      if ("matchMedia" in window) setShowSystemButton(true);
+      setIsLocalhost(typeof window !== "undefined" && window.location.hostname === "localhost");
+    });
   }, []);
 
   // useEffect(() => {
