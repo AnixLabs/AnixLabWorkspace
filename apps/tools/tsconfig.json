@@ -1,7 +1,6 @@
 {
   "extends": "../../shared/config/typescript/tsconfig.app.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@shared/*": ["../../shared/*"],
       "@/*": ["./*"]

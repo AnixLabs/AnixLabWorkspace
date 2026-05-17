@@ -14,7 +14,8 @@ import { toPng } from "html-to-image";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { type IProps as QrProps, QRCode } from "react-qrcode-logo";
+import { QRCode } from "react-qrcode-logo";
+import type { IProps as QrProps } from "react-qrcode-logo/dist/esm/QRCode";
 import type { contentTab, InnerOuterEyeColor, InnerOuterRadii, QrData, QrFrame } from "./types";
 import {
   allContent,

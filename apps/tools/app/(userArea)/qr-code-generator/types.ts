@@ -1,4 +1,4 @@
-import type { IProps } from "react-qrcode-logo";
+import type { IProps } from "react-qrcode-logo/dist/esm/QRCode";
 
 // ✅ Types for images
 export interface ImageItem {

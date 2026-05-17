@@ -1,5 +1,6 @@
 import type { InnerOuterEyeColor, InnerOuterRadii } from "./types";
-import type { IProps as QrProps } from "react-qrcode-logo";
+import type { IProps as QrProps } from "react-qrcode-logo/dist/esm/QRCode";
+
 
 // Normalize always into tuple [InnerOuterRadii, InnerOuterRadii, InnerOuterRadii]
 export const normalizeEyeRadius = (
@@ -60,5 +61,5 @@ export const normalizeEyeColor = (
   }
 
   // already InnerOuterEyeColor
-  return [val as InnerOuterEyeColor, val as InnerOuterEyeColor, val as InnerOuterEyeColor];
+  return [val, val, val];
 };

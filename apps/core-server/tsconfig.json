@@ -1,10 +1,10 @@
 {
   "extends": "../../shared/config/typescript/tsconfig.node.json",
   "compilerOptions": {
-    "baseUrl": "./src",
+    "rootDir": "../..",
     "paths": {
-      "@shared/*": ["../../../shared/*"],
-      "@/*": ["./*"]
+      "@shared/*": ["../../shared/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*", "tsup.config.ts"],

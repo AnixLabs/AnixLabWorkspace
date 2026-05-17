@@ -1,4 +1,4 @@
-import type { IProps as QrProps } from "react-qrcode-logo";
+import type { IProps as QrProps } from "react-qrcode-logo/dist/esm/QRCode";
 import type { contentTab, DesignTab } from "./types";
 import type { SelectOption } from "@shared/components/ui/Input";
 
